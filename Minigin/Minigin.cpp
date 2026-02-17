@@ -105,6 +105,7 @@ void dae::Minigin::RunOneFrame()
 {
 	const auto currentTime = clock::now();
 	const float elapsedTime = std::chrono::duration<float, std::milli>(currentTime - m_PreviousTime).count();
+	float extraPolation{};
 	m_PreviousTime = currentTime;
 	m_Lag += elapsedTime;
 
@@ -119,5 +120,6 @@ void dae::Minigin::RunOneFrame()
 	}
 
 	//3) render
-	Renderer::GetInstance().Render();
+	extraPolation = m_Lag / MS_PER_UPDATE; //this is to fix the rendering that is not being called as much as the update, makes rendering smoother
+	Renderer::GetInstance().Render(extraPolation);
 }

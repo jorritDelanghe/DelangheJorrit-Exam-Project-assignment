@@ -12,7 +12,7 @@ namespace dae
 		std::shared_ptr<Texture2D> m_texture{};
 	public:
 		virtual void Update();
-		virtual void Render() const;
+		virtual void Render(float extraPolation) const;
 
 		void SetTexture(const std::string& filename);
 		void SetPosition(float x, float y);

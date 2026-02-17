@@ -9,11 +9,11 @@ void dae::SceneManager::Update()
 	}
 }
 
-void dae::SceneManager::Render()
+void dae::SceneManager::Render(float extraPolation)
 {
 	for (const auto& scene : m_scenes)
 	{
-		scene->Render();
+		scene->Render(extraPolation);
 	}
 }
 

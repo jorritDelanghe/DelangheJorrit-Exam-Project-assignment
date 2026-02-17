@@ -7,7 +7,7 @@ dae::GameObject::~GameObject() = default;
 
 void dae::GameObject::Update(){}
 
-void dae::GameObject::Render() const
+void dae::GameObject::Render(float /*extraPolation*/) const
 {
 	const auto& pos = m_transform.GetPosition();
 	Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);

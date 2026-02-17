@@ -12,7 +12,7 @@ namespace dae
 	{
 	public:
 		void Update() override;
-		void Render() const override;
+		void Render(float extraPolation) const override;
 
 		void SetText(const std::string& text);
 		void SetPosition(float x, float y);

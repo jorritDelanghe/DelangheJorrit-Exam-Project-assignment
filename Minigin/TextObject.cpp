@@ -29,7 +29,7 @@ void dae::TextObject::Update()
 	}
 }
 
-void dae::TextObject::Render() const
+void dae::TextObject::Render(float /*extraPolation*/) const
 {
 	if (m_textTexture != nullptr)
 	{

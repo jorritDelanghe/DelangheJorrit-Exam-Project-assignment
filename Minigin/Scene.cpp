@@ -34,11 +34,11 @@ void Scene::Update()
 	}
 }
 
-void Scene::Render() const
+void Scene::Render(float extraPolation) const
 {
 	for (const auto& object : m_objects)
 	{
-		object->Render();
+		object->Render(extraPolation);
 	}
 }
 
