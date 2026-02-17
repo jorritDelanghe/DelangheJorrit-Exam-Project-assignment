@@ -104,7 +104,9 @@ void dae::Minigin::Run(const std::function<void()>& load)
 void dae::Minigin::RunOneFrame()
 {
 	const auto currentTime = clock::now();
-	const float elapsedTime = std::chrono::duration<float, std::milli>(currentTime - m_PreviousTime).count();
+	const float elapsedTime = std::chrono::duration<float, std::milli>(currentTime - m_PreviousTime).count(); //real world time passed
+	constexpr int maxUpdatesPerFrame = 10;
+	int currentUpdateCount{};
 	float extraPolation{};
 	m_PreviousTime = currentTime;
 	m_Lag += elapsedTime;
@@ -112,11 +114,17 @@ void dae::Minigin::RunOneFrame()
 	//1) process input
 	m_quit = !InputManager::GetInstance().ProcessInput();
 
-	while (m_Lag >= MS_PER_UPDATE)
+	while (m_Lag >= MS_PER_UPDATE) //if the game is behind on real world time, update the game logic without rendering until it catches up
 	{
 		//2) update
 		SceneManager::GetInstance().Update();
 		m_Lag -= MS_PER_UPDATE;
+
+		if (++currentUpdateCount >= maxUpdatesPerFrame) //big number of updates when game freezes, prevents this
+		{
+			m_Lag = 0.0f; //reset lag
+			break;
+		}
 	}
 
 	//3) render
