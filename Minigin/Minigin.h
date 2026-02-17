@@ -26,7 +26,7 @@ namespace dae
 
 		//time gameloop
 		std::chrono::time_point<clock>m_PreviousTime{};
-		float m_Lag{};
+		float m_Lag{}; //how far game is behind on real world time
 		static constexpr float MS_PER_UPDATE{ 16.67f }; //60 updates per second, 1000ms/60 = 16.67ms per update 
 
 

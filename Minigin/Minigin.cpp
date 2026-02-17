@@ -103,31 +103,38 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 void dae::Minigin::RunOneFrame()
 {
-	const auto currentTime = clock::now();
-	const float elapsedTime = std::chrono::duration<float, std::milli>(currentTime - m_PreviousTime).count(); //real world time passed
 	constexpr int maxUpdatesPerFrame = 10;
+	constexpr float maxFrameTimeMs = 250.0f;
+	const auto currentTime = clock::now();
+	float elapsedTime = std::chrono::duration<float, std::milli>(currentTime - m_PreviousTime).count(); //real world time passed
 	int currentUpdateCount{};
 	float extraPolation{};
+
 	m_PreviousTime = currentTime;
+
+	if (elapsedTime > maxFrameTimeMs) // prevents spiral of death when game freezes
+	{
+		elapsedTime = maxFrameTimeMs;
+	}
 	m_Lag += elapsedTime;
 
-	//1) process input
+	//process input
 	m_quit = !InputManager::GetInstance().ProcessInput();
 
 	while (m_Lag >= MS_PER_UPDATE) //if the game is behind on real world time, update the game logic without rendering until it catches up
 	{
-		//2) update
+		//update
 		SceneManager::GetInstance().Update();
 		m_Lag -= MS_PER_UPDATE;
 
-		if (++currentUpdateCount >= maxUpdatesPerFrame) //big number of updates when game freezes, prevents this
+		if (++currentUpdateCount >= maxUpdatesPerFrame) //big number of updates when game freezes, prevents spiral of death
 		{
 			m_Lag = 0.0f; //reset lag
 			break;
 		}
 	}
 
-	//3) render
+	//render
 	extraPolation = m_Lag / MS_PER_UPDATE; //this is to fix the rendering that is not being called as much as the update, makes rendering smoother
 	Renderer::GetInstance().Render(extraPolation);
 }
