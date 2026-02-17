@@ -11,7 +11,7 @@ namespace dae
 	class TextObject final : public GameObject
 	{
 	public:
-		void Update() override;
+		void Update(float fixedDeltaTime) override;
 		void Render(float extraPolation) const override;
 
 		void SetText(const std::string& text);

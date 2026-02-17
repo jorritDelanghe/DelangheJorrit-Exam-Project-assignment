@@ -5,7 +5,7 @@
 
 dae::GameObject::~GameObject() = default;
 
-void dae::GameObject::Update(){}
+void dae::GameObject::Update(float /*fixedDeltaTime*/) {}
 
 void dae::GameObject::Render(float /*extraPolation*/) const
 {

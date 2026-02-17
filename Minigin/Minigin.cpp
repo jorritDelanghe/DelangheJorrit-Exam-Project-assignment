@@ -124,7 +124,7 @@ void dae::Minigin::RunOneFrame()
 	while (m_Lag >= MS_PER_UPDATE) //if the game is behind on real world time, update the game logic without rendering until it catches up
 	{
 		//update
-		SceneManager::GetInstance().Update();
+		SceneManager::GetInstance().Update(MS_PER_UPDATE);
 		m_Lag -= MS_PER_UPDATE;
 
 		if (++currentUpdateCount >= maxUpdatesPerFrame) //big number of updates when game freezes, prevents spiral of death
