@@ -16,6 +16,6 @@ public:
 	Component& operator=(const Component& other) = delete;
 	Component& operator=(Component&& other) = delete;
 
-private:
+protected:
 	GameObject* m_pOwner{}; //easy to pass components that the gameobject has to other components, components dont care by each others existance
 };
