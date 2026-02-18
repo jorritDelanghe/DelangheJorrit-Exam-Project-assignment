@@ -1,7 +1,7 @@
 #include "FPSComponent.h"
 #include <string>
 
-void FPSComponent::Update(float fixedDeltaTime) //goes trough this every frame
+void dae::FPSComponent::Update(float fixedDeltaTime) //goes trough this every frame
 {
 	++m_frameCount;
 	m_accumulatedTime += fixedDeltaTime;
@@ -23,7 +23,7 @@ void FPSComponent::Update(float fixedDeltaTime) //goes trough this every frame
 	}
 }
 
-int FPSComponent::GetFPS() const
+int dae::FPSComponent::GetFPS() const
 {
 	return m_fps;
 }
