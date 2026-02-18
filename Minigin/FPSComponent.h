@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include <chrono>
 namespace dae
 {
 	class FPSComponent final : public Component
@@ -17,7 +18,7 @@ namespace dae
 		FPSComponent& operator=(FPSComponent&& other) = delete;
 
 	private:
-		float m_accumulatedTime{};
+		std::chrono::time_point<std::chrono::steady_clock> m_lastTime{};
 		int m_frameCount{};
 		int m_fps{};
 	};
