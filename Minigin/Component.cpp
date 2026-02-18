@@ -1,11 +1,12 @@
 #include "Component.h"
 #include "stdexcept"
 
-void Component::Update(float fixedDeltaTime)
+void Component::Update(float /*fixedDeltaTime*/)
 {
+
 }
 
-void Component::Render(float extraPolation) const //not every game object needs a render so not virtual
+void Component::Render(float /*extraPolation*/) const //not every game object needs a render so not virtual
 {
 }
 
