@@ -1,5 +1,7 @@
 #include "Component.h"
 #include "stdexcept"
+#include "Gameobject.h"
+
 
 void Component::Update(float /*fixedDeltaTime*/)
 {
