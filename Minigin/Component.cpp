@@ -3,16 +3,16 @@
 #include "Gameobject.h"
 
 
-void Component::Update(float /*fixedDeltaTime*/)
+void dae:: Component::Update(float /*fixedDeltaTime*/)
 {
 
 }
 
-void Component::Render(float /*extraPolation*/) const //not every game object needs a render so not virtual
+void dae::Component::Render(float /*extraPolation*/) const //not every game object needs a render so not virtual
 {
 }
 
-void Component::SetOwner(GameObject* owner)
+void dae::Component::SetOwner(GameObject* owner)
 {
 	if (m_pOwner != nullptr)
 	{
@@ -21,7 +21,7 @@ void Component::SetOwner(GameObject* owner)
 	m_pOwner = owner; 
 }
 
-GameObject* Component::GetOwner() const
+dae::GameObject* dae::Component::GetOwner() const
 {
 	return m_pOwner;
 }
