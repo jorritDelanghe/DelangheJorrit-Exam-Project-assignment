@@ -3,16 +3,18 @@
 #include "Renderer.h"
 #include "TransformComponent.h"
 #include "Texture2D.h"
+#include "GameObject.h" 
 #include <stdexcept>
 
 
-TextComponent::TextComponent(std::shared_ptr<Font> font, SDL_Color color)
+
+dae::TextComponent::TextComponent(std::shared_ptr<Font> font, SDL_Color color)
 	: m_font(std::move(font))
 	, m_color(color)
 {
 
 }
-void TextComponent::Render(float extraPolation) const
+void dae::TextComponent::Render(float /*extraPolation*/) const
 {
 	if (!m_textTexture || !m_pOwner) return;
 
@@ -24,7 +26,7 @@ void TextComponent::Render(float extraPolation) const
 
 }
 
-void TextComponent::SetText(const std::string& text)
+void dae::TextComponent::SetText(const std::string& text)
 {
 	if (m_text == text) return;
 
@@ -33,7 +35,7 @@ void TextComponent::SetText(const std::string& text)
 	UpdateTexture();	
 }
 
-void TextComponent::UpdateTexture()
+void dae::TextComponent::UpdateTexture()
 {
 	if (!m_updateTexture) return;
 	if (!m_font) return;

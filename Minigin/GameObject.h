@@ -1,28 +1,45 @@
 #pragma once
 #include <string>
 #include <memory>
-#include "Transform.h"
+#include <vector>
+#include <typeindex>
+#include "Component.h"
 
 namespace dae
 {
-	class Texture2D;
-	class GameObject //final
+	class Component;
+	class GameObject final
 	{
 	public:
-		virtual void Update(float fixedDeltaTime);
-		virtual void Render(float extraPolation) const;
+		void Update(float fixedDeltaTime);
+		void Render(float extraPolation) const;
 
-		void SetTexture(const std::string& filename);
-		void SetPosition(float x, float y);
+		void AddComponent(std::unique_ptr<Component> component);
+		bool RemoveComponent(Component* component);
+
+		template <typename T> T* GetComponent() const
+		{
+			for (const auto& comp : m_components)
+			{
+				if (auto* typed = dynamic_cast<T*>(comp.get()))
+					return typed;
+			}
+			return nullptr;
+		}
+
+		template <typename T> bool HasComponent() const
+		{
+			return GetComponent<T>() != nullptr;
+		}
 
 		GameObject() = default;
-		virtual ~GameObject();
+		~GameObject() = default;
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 	private:
-		Transform m_transform{};
-		std::shared_ptr<Texture2D> m_texture{};
+		std::vector<std::unique_ptr<Component>> m_components{};
 	};
+	
 }

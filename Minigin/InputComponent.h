@@ -1,6 +1,9 @@
 #pragma once
 #include "Component.h"
-class InputComponent : public Component
+namespace dae
 {
+	class InputComponent : public Component
+	{
 
-};
+	};
+}

@@ -2,6 +2,7 @@
 #include <string>
 #include "Texture2D.h"
 #include "Component.h"
+#include <memory>
 
 namespace dae
 {
@@ -11,7 +12,6 @@ namespace dae
         RenderComponent(const std::string& filename);
         virtual ~RenderComponent() override = default;
 
-        virtual void Update(float fixedDeltaTime) override {}
         virtual void Render(float extraPolation) const override;
 
     private:
