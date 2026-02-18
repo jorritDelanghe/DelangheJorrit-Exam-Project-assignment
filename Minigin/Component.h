@@ -9,7 +9,8 @@ public:
 	virtual void Update(float fixedDeltaTime); 
 	virtual void Render(float extraPolation) const;
 	
-	void SetOWner(GameObject* owner);
+	void SetOwner(GameObject* owner);
+	GameObject* GetOwner() const;
 
 	Component(const Component& other) = delete;
 	Component(Component&& other) = delete;

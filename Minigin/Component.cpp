@@ -10,11 +10,16 @@ void Component::Render(float /*extraPolation*/) const //not every game object ne
 {
 }
 
-void Component::SetOWner(GameObject* owner)
+void Component::SetOwner(GameObject* owner)
 {
 	if (m_pOwner != nullptr)
 	{
 		throw std::logic_error("Component already has an owner");
 	}
 	m_pOwner = owner; 
+}
+
+GameObject* Component::GetOwner() const
+{
+	return m_pOwner;
 }
