@@ -14,6 +14,7 @@ public:
 	FPSComponent(FPSComponent&& other) = delete;
 	FPSComponent& operator=(const FPSComponent& other) = delete;
 	FPSComponent& operator=(FPSComponent&& other) = delete;
+
 private:
 	float m_accumulatedTime{};
 	int m_frameCount{};

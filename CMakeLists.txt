@@ -30,7 +30,8 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/Component.cpp 
   Minigin/InputComponent.cpp
   Minigin/TransformComponent.cpp 
-  Minigin/FPSComponent.cpp)
+  Minigin/FPSComponent.cpp
+  Minigin/TextComponent.cpp)
 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
