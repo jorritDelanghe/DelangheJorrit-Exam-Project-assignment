@@ -10,7 +10,7 @@ namespace dae
 		virtual ~FPSComponent() override = default;
 
 		virtual void Update(float fixedDeltaTime) override;
-		int GetFPS() const;
+		float GetFPS() const;
 
 		FPSComponent(const FPSComponent& other) = delete;
 		FPSComponent(FPSComponent&& other) = delete;
@@ -18,8 +18,8 @@ namespace dae
 		FPSComponent& operator=(FPSComponent&& other) = delete;
 
 	private:
-		std::chrono::time_point<std::chrono::steady_clock> m_lastTime{};
 		int m_frameCount{};
-		int m_fps{};
+		float m_fps{};
+		float m_accumulatedTime{};
 	};
 }
