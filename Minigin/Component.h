@@ -7,13 +7,12 @@ namespace dae
 	class Component
 	{
 	public:
-		Component() = default;
+		explicit Component(GameObject*pOwner);
 		virtual ~Component() = default;
 
 		virtual void Update(float deltaTime);
 		virtual void Render() const;
 
-		void SetOwner(GameObject* owner);
 		GameObject* GetOwner() const;
 
 		Component(const Component& other) = delete;
@@ -22,6 +21,7 @@ namespace dae
 		Component& operator=(Component&& other) = delete;
 
 	protected:
+		void SetOwner(GameObject* owner);
 		GameObject* m_pOwner{}; // pointer to the owning GameObject (namespaced)
 	};
 }
