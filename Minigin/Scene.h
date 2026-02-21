@@ -14,7 +14,7 @@ namespace dae
 		void RemoveAll();
 
 		void Update(float fixedDeltaTime);
-		void Render(float extraPolation) const;
+		void Render() const;
 
 		~Scene() = default;
 		Scene(const Scene& other) = delete;

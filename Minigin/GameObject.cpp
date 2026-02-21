@@ -3,19 +3,19 @@
 #include <algorithm>
 #include <typeindex>
 
-void dae::GameObject::Update(float fixedDeltaTime)
+void dae::GameObject::Update(float deltaTime)
 {
 	for (auto& component : m_components)
 	{
-		component->Update(fixedDeltaTime);
+		component->Update(deltaTime);
 	}
 }
 
-void dae::GameObject::Render(float extraPolation) const
+void dae::GameObject::Render() const
 {
 	for (auto& component : m_components)
 	{
-		component->Render(extraPolation);
+		component->Render();
 	}
 }
 

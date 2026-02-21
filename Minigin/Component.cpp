@@ -3,12 +3,12 @@
 #include "Gameobject.h"
 
 
-void dae:: Component::Update(float /*fixedDeltaTime*/)
+void dae:: Component::Update(float)
 {
 
 }
 
-void dae::Component::Render(float /*extraPolation*/) const //not every game object needs a render so not virtual
+void dae::Component::Render() const //not every game object needs a render so not virtual
 {
 }
 

@@ -27,19 +27,19 @@ void Scene::RemoveAll()
 	m_objects.clear();
 }
 
-void Scene::Update(float fixedDeltaTime)
+void Scene::Update(float deltaTime)
 {
 	for(auto& object : m_objects)
 	{
-		object->Update(fixedDeltaTime);
+		object->Update(deltaTime);
 	}
 }
 
-void Scene::Render(float extraPolation) const
+void Scene::Render() const
 {
 	for (const auto& object : m_objects)
 	{
-		object->Render(extraPolation);
+		object->Render();
 	}
 }
 

@@ -14,7 +14,7 @@ dae::TextComponent::TextComponent(std::shared_ptr<Font> font, SDL_Color color)
 {
 
 }
-void dae::TextComponent::Render(float /*extraPolation*/) const
+void dae::TextComponent::Render() const
 {
 	if (!m_textTexture || !m_pOwner) return;
 

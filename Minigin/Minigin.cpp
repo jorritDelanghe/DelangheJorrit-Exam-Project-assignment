@@ -91,7 +91,6 @@ void dae::Minigin::Run(const std::function<void()>& load)
 {
 	load();
 	m_previousTime = clock::now();
-	m_lag = 0.0f;
 
 #ifndef __EMSCRIPTEN__
 	while (!m_quit)
@@ -107,8 +106,6 @@ void dae::Minigin::RunOneFrame()
 	constexpr float maxFrameTimeMs = 250.0f;
 	const auto currentTime = clock::now();
 	float deltaTime = std::chrono::duration<float>(currentTime - m_previousTime).count(); //real world time passed
-	int currentUpdateCount{};
-	float extraPolation{};
 
 	m_previousTime = currentTime;
 
@@ -116,14 +113,11 @@ void dae::Minigin::RunOneFrame()
 	{
 		deltaTime = maxFrameTimeMs;
 	}
-	m_lag += deltaTime;
 
 	//process input
 	m_quit = !InputManager::GetInstance().ProcessInput();
-
 	//update
 	SceneManager::GetInstance().Update(deltaTime); // create normal update
 	//render
-	extraPolation = m_lag / FIXED_TIME_STEP; //this is to fix the rendering that is not being called as much as the update, makes rendering smoother
-	Renderer::GetInstance().Render(extraPolation);
+	Renderer::GetInstance().Render();
 }

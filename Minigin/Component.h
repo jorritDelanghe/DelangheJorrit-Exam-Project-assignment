@@ -10,8 +10,8 @@ namespace dae
 		Component() = default;
 		virtual ~Component() = default;
 
-		virtual void Update(float fixedDeltaTime);
-		virtual void Render(float extraPolation) const;
+		virtual void Update(float deltaTime);
+		virtual void Render() const;
 
 		void SetOwner(GameObject* owner);
 		GameObject* GetOwner() const;

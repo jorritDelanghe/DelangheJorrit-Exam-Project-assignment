@@ -12,7 +12,7 @@ namespace dae
 	{
 	public:
 		void Update(float fixedDeltaTime);
-		void Render(float extraPolation) const;
+		void Render() const;
 
 		void AddComponent(std::unique_ptr<Component> component);
 		bool RemoveComponent(Component* component);

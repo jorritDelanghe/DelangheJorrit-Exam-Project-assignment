@@ -14,7 +14,7 @@ namespace dae
 		Scene& CreateScene();
 
 		void Update(float fixedDeltaTime);
-		void Render(float extraPolation);
+		void Render();
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;

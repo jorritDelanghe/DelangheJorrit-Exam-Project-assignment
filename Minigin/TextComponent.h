@@ -15,7 +15,7 @@ namespace dae
 		TextComponent(std::shared_ptr<Font> font, SDL_Color color);
 		virtual ~TextComponent() override = default;
 
-		virtual void Render(float extraPolation) const override;
+		virtual void Render() const override;
 		void SetText(const std::string& text);
 
 		TextComponent(const TextComponent& other) = delete;

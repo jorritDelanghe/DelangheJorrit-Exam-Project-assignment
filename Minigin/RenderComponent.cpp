@@ -11,7 +11,7 @@ dae::RenderComponent::RenderComponent(const std::string& filename)
     m_texture = ResourceManager::GetInstance().LoadTexture(filename);
 }
 
-void dae::RenderComponent::Render(float /*extraPolation*/) const
+void dae::RenderComponent::Render() const
 {
     if (!m_texture || !m_pOwner) return;
 

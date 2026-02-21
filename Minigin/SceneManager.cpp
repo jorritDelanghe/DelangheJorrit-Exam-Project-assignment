@@ -1,19 +1,19 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
-void dae::SceneManager::Update(float fixedDeltaTime)
+void dae::SceneManager::Update(float deltaTime)
 {
-	for(auto& scene : m_scenes)
+	for (auto& scene : m_scenes)
 	{
-		scene->Update(fixedDeltaTime);
+		scene->Update(deltaTime);
 	}
 }
 
-void dae::SceneManager::Render(float extraPolation)
+void dae::SceneManager::Render()
 {
 	for (const auto& scene : m_scenes)
 	{
-		scene->Render(extraPolation);
+		scene->Render();
 	}
 }
 

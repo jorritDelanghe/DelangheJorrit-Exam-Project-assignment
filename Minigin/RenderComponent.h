@@ -12,7 +12,7 @@ namespace dae
         RenderComponent(const std::string& filename);
         virtual ~RenderComponent() override = default;
 
-        virtual void Render(float extraPolation) const override;
+        virtual void Render() const override;
 
     private:
         std::shared_ptr<dae::Texture2D> m_texture{};
