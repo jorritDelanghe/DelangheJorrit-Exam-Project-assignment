@@ -9,8 +9,8 @@ namespace dae
     class RenderComponent final : public Component
     {
     public:
-        explicit RenderComponent(GameObject*pOwner);
-        explicit RenderComponent(GameObject*pOwner,const std::string& filename);
+        RenderComponent(GameObject*pOwner);
+        RenderComponent(GameObject*pOwner,const std::string& filename);
         virtual ~RenderComponent() override = default;
 
         virtual void Render() const override;

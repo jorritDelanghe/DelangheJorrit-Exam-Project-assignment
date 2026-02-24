@@ -29,7 +29,9 @@ void Scene::Update(float deltaTime)
 	}
 
 	m_objects.erase(
-	std::remove_if(m_objects.begin(), m_objects.end()
+	std::remove_if(
+		m_objects.begin()
+		, m_objects.end()
 		,[&](const auto& obj)
 		{ 
 			return std::find(

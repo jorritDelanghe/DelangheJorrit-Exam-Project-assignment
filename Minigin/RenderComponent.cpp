@@ -6,14 +6,14 @@
 #include "GameObject.h" 
 #include "Texture2D.h"
 
+dae::RenderComponent::RenderComponent(GameObject* pOwner)
+    :Component(pOwner)
+{
+}
 dae::RenderComponent::RenderComponent(GameObject* pOwner,const std::string& filename)
 	:Component(pOwner)
 {
 	SetTexture(filename);
-}
-dae::RenderComponent::RenderComponent(GameObject* pOwner)
-    :Component(pOwner)
-{
 }
 void dae::RenderComponent::Render() const
 {

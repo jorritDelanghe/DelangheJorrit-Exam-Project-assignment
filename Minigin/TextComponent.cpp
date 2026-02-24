@@ -5,6 +5,7 @@
 #include "Texture2D.h"
 #include "GameObject.h" 
 #include <stdexcept>
+#include "RenderComponent.h"
 
 
 
