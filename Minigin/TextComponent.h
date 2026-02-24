@@ -1,9 +1,9 @@
 #pragma once
-#include "Component.h"
 #include <string>
 #include <memory>
 #include <SDL3_ttf/SDL_ttf.h>
-
+#include "Component.h"
+#include "RenderComponent.h"
 
 namespace dae
 {
@@ -12,7 +12,7 @@ namespace dae
 	class TextComponent final : public Component
 	{
 	public:
-		TextComponent(GameObject* pOwner, std::shared_ptr<Font> font, SDL_Color color);
+		explicit TextComponent(GameObject* pOwner, std::shared_ptr<Font> font, SDL_Color color);
 		virtual ~TextComponent() override = default;
 
 		virtual void Render() const override;
@@ -32,5 +32,6 @@ namespace dae
 		SDL_Color m_color{};
 		std::shared_ptr<Texture2D> m_textTexture{ nullptr };
 		bool m_updateTexture{ true };
+		RenderComponent m_renderComponent;
 	};
 }

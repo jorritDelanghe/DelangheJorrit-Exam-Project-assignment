@@ -9,16 +9,31 @@
 dae::RenderComponent::RenderComponent(GameObject* pOwner,const std::string& filename)
 	:Component(pOwner)
 {
-    m_texture = ResourceManager::GetInstance().LoadTexture(filename);
+	SetTexture(filename);
 }
-
+dae::RenderComponent::RenderComponent(GameObject* pOwner)
+    :Component(pOwner)
+{
+}
 void dae::RenderComponent::Render() const
 {
-    if (!m_texture || !m_pOwner) return;
+    RenderTexture(m_texture);
+}
+void dae::RenderComponent::RenderTexture(std::shared_ptr<dae::Texture2D> texture) const
+{
+    if (!texture || !m_pOwner) return;
 
     auto transform = m_pOwner->GetComponent<TransformComponent>();
     if (!transform) return;
 
-    dae::Renderer::GetInstance().RenderTexture(*m_texture,
+    Renderer::GetInstance().RenderTexture(*texture,
         transform->GetPosition().x, transform->GetPosition().y);
+}
+void dae::RenderComponent::SetTexture(const std::string& filename)
+{
+    m_texture = ResourceManager::GetInstance().LoadTexture(filename);
+}
+void dae::RenderComponent::SetTexture(std::shared_ptr<Texture2D> texture)
+{
+    m_texture = texture;
 }
