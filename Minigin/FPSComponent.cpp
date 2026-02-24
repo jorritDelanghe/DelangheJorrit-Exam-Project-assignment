@@ -7,6 +7,11 @@
 #include <iomanip>
 
 
+dae::FPSComponent::FPSComponent(GameObject* pOwner)
+	:Component(pOwner)
+{
+}
+
 void dae::FPSComponent::Update(float fixedDeltaTime) //goes trough this every frame
 {
 	++m_frameCount;

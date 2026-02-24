@@ -14,9 +14,16 @@ namespace dae
 		void Update(float fixedDeltaTime);
 		void Render() const;
 
-		void AddComponent(std::unique_ptr<Component> component);
 		bool RemoveComponent(Component* component);
 
+		template<typename T, typename... Args>
+		T* AddComponent(Args&&... args)
+		{
+			auto component = std::make_unique<T>(this, std::forward<Args>(args)...);
+			T* ptr = component.get();
+			m_components.emplace_back(std::move(component));
+			return ptr;
+		}
 		template <typename T> T* GetComponent() const
 		{
 			for (const auto& comp : m_components)

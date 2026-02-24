@@ -24,33 +24,30 @@ static void load()
 
 	//background
 	auto go = std::make_unique<dae::GameObject>();
-	go->AddComponent(std::make_unique<dae::TransformComponent>());
-	go->AddComponent(std::make_unique<dae::RenderComponent>("background.png"));
+	go->AddComponent<dae::TransformComponent>();
+	go->AddComponent<dae::RenderComponent>("background.png");
 	scene.Add(std::move(go));
 
 	//logo
 	go = std::make_unique<dae::GameObject>();
-	go->AddComponent(std::make_unique<dae::RenderComponent>("logo.png"));
-	auto transform = std::make_unique<dae::TransformComponent>();
+	go->AddComponent<dae::RenderComponent>("logo.png");
+	auto* transform = go->AddComponent<dae::TransformComponent>();
 	transform->SetPosition(100, 100);
-	go->AddComponent(std::move(transform));
 	scene.Add(std::move(go));
 
 	//fps counter
 	go = std::make_unique<dae::GameObject>();
-	transform = std::make_unique<dae::TransformComponent>();
+	transform = go->AddComponent<dae::TransformComponent>();
 	transform->SetPosition(10, 10);
-	go->AddComponent(std::move(transform));
 	auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 
 	// Explicitly construct the color to avoid passing a braced-init-list into make_unique
 	SDL_Color white{ 255, 255, 255, 255 };
-	auto textComp = std::make_unique<dae::TextComponent>(font, white);  // White
+	auto textComp = go->AddComponent<dae::TextComponent>(font, white);  // White
 	textComp->SetText("FPS: 0");
-	go->AddComponent(std::move(textComp));
 
 	// 2. Add FPSComponent (updates the text)
-	go->AddComponent(std::make_unique<dae::FPSComponent>());
+	go->AddComponent<dae::FPSComponent>();
 	scene.Add(std::move(go));
 
 	/*auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);

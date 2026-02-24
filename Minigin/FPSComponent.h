@@ -6,7 +6,7 @@ namespace dae
 	class FPSComponent final : public Component
 	{
 	public:
-		FPSComponent() = default;
+		FPSComponent(GameObject* pOwner);
 		virtual ~FPSComponent() override = default;
 
 		virtual void Update(float fixedDeltaTime) override;

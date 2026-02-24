@@ -1,5 +1,11 @@
 #include "TransformComponent.h"
 
+dae::TransformComponent::TransformComponent(GameObject* pOwner)
+	:Component(pOwner)
+{
+
+}
+
 void dae::TransformComponent::SetPosition(const glm::vec2& pos)
 {
 	m_position = pos;

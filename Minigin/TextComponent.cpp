@@ -8,8 +8,9 @@
 
 
 
-dae::TextComponent::TextComponent(std::shared_ptr<Font> font, SDL_Color color)
-	: m_font(std::move(font))
+dae::TextComponent::TextComponent(GameObject* pOwner,std::shared_ptr<Font> font, SDL_Color color)
+	: Component(pOwner)
+	,m_font(std::move(font))
 	, m_color(color)
 {
 

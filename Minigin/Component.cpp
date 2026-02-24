@@ -5,10 +5,7 @@
 
 dae::Component::Component(GameObject* pOwner)
 {
-	if (pOwner != nullptr)
-	{
-		SetOwner(pOwner);
-	}
+	SetOwner(pOwner);
 }
 
 void dae:: Component::Update(float) //not every game object needs an update so not pure virtual

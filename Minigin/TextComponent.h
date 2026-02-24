@@ -12,7 +12,7 @@ namespace dae
 	class TextComponent final : public Component
 	{
 	public:
-		TextComponent(std::shared_ptr<Font> font, SDL_Color color);
+		TextComponent(GameObject* pOwner, std::shared_ptr<Font> font, SDL_Color color);
 		virtual ~TextComponent() override = default;
 
 		virtual void Render() const override;

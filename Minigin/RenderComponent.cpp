@@ -6,7 +6,8 @@
 #include "GameObject.h" 
 #include "Texture2D.h"
 
-dae::RenderComponent::RenderComponent(const std::string& filename)
+dae::RenderComponent::RenderComponent(GameObject* pOwner,const std::string& filename)
+	:Component(pOwner)
 {
     m_texture = ResourceManager::GetInstance().LoadTexture(filename);
 }
