@@ -4,6 +4,7 @@
 #include <vector>
 #include <typeindex>
 #include "Component.h"
+#include <glm/glm.hpp>
 
 namespace dae
 {
@@ -38,9 +39,19 @@ namespace dae
 		{
 			return GetComponent<T>() != nullptr;
 		}
+		//scene graph
 		void SetParent(GameObject* parent);
 		GameObject* GetParent() const;
 
+		size_t GetChildCount() const;
+		GameObject* GetChildAt(unsigned int index)const;
+
+		//transform
+		void SetLocalPosition(const glm::vec3& pos);
+		const glm::vec3& GetLocalPosition() const;
+		const glm::vec3& GetWorldPosition();
+
+		//rule of 5
 		GameObject() = default;
 		~GameObject() = default;
 		GameObject(const GameObject& other) = delete;
@@ -50,10 +61,19 @@ namespace dae
 	private:
 		void AddChildren(GameObject* child);
 		void RemoveChildren(GameObject* child);
-		std::vector<std::unique_ptr<Component>> m_components{};
+		bool IsChild(GameObject* gameObject)const;
+		void SetPositionDirty();
+		void UpdateWorldPosition();
+
 
 		GameObject* m_parent{ nullptr };
-		std::vector<std::unique_ptr<GameObject>> m_children{};
+		std::vector<GameObject*> m_children{};
+
+		std::vector<std::unique_ptr<Component>> m_components{};
+
+		glm::vec3 m_localPosition{};
+		glm::vec3 m_worldPosition{};
+		bool m_positionDirty{ true };
 	};
 	
 }
