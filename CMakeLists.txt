@@ -1,12 +1,9 @@
 cmake_minimum_required(VERSION 3.26)
-
-set(EMSCRIPTEN_BUILD OFF)
-if(DEFINED EMSCRIPTEN OR DEFINED CMAKE_TOOLCHAIN_FILE)
-  set(EMSCRIPTEN_BUILD ON)
-  message("Using Emscripten!")
-endif()
 project(Minigin)
 
+if(EMSCRIPTEN)
+  message("Using Emscripten!")
+endif()
 
 if(EMSCRIPTEN)
   set(TARGET_NAME minigin_web)

@@ -1,6 +1,6 @@
 #include "Component.h"
 #include "stdexcept"
-#include "Gameobject.h"
+#include "GameObject.h"
 
 
 dae::Component::Component(GameObject* pOwner)
