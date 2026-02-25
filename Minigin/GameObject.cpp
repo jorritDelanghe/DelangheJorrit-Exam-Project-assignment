@@ -31,3 +31,100 @@ bool dae::GameObject::RemoveComponent(Component* component)
 	return false;
 }
 
+void dae::GameObject::SetParent(GameObject* parent)
+{
+	if (IsChild(parent) || parent == this || parent == m_parent)return;
+
+	if (parent == nullptr)
+	{
+		SetLocalPosition(GetWorldPosition());
+	}
+	else
+	{
+		SetLocalPosition(GetWorldPosition() - parent->GetWorldPosition());
+	}
+	if (m_parent) m_parent->RemoveChildren(this); //if already exist delete from old parent
+	m_parent = parent;
+	if (m_parent)m_parent->AddChildren(this); //if new parent exist add to new parent
+}
+
+void dae::GameObject::SetLocalPosition(const glm::vec3& pos)
+{
+	m_localPosition = pos;
+	SetPositionDirty();
+}
+
+const glm::vec3& dae::GameObject::GetLocalPosition() const
+{
+	return m_localPosition;
+}
+
+const glm::vec3& dae::GameObject::GetWorldPosition()
+{
+	if (m_positionDirty)
+	{
+		UpdateWorldPosition();
+	}
+	return m_worldPosition;
+}
+
+dae::GameObject* dae::GameObject::GetParent() const
+{
+	return m_parent;
+}
+
+size_t dae::GameObject::GetChildCount() const
+{
+	return m_children.size();
+}
+
+dae::GameObject* dae::GameObject::GetChildAt(unsigned int index) const
+{
+	return m_children[index];
+}
+
+void dae::GameObject::AddChildren(GameObject* child)
+{
+	m_children.emplace_back(child);
+}
+
+void dae::GameObject::RemoveChildren(GameObject* child)
+{
+	m_children.erase(std::remove(m_children.begin(), m_children.end(), child),m_children.end());
+}
+
+bool dae::GameObject::IsChild(GameObject* gameObject) const
+{
+	for (const auto& child : m_children)
+	{
+		if (child == gameObject)return true;
+		if(child->IsChild(gameObject))return true; //looks at the grand children
+	}
+	return false;
+}
+
+void dae::GameObject::SetPositionDirty()
+{
+	m_positionDirty = true;
+	for (auto* child : m_children) //set position for all children also dirty
+	{
+		child->SetPositionDirty();
+	}
+}
+
+void dae::GameObject::UpdateWorldPosition()
+{
+	if (m_parent == nullptr)
+	{
+		m_worldPosition = m_localPosition;
+
+	}
+	else
+	{
+		m_worldPosition = m_parent->GetWorldPosition() + m_localPosition;
+	}
+	m_positionDirty = false;
+
+
+}
+

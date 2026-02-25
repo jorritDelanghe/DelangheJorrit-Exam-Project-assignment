@@ -38,6 +38,8 @@ namespace dae
 		{
 			return GetComponent<T>() != nullptr;
 		}
+		void SetParent(GameObject* parent);
+		GameObject* GetParent() const;
 
 		GameObject() = default;
 		~GameObject() = default;
@@ -46,7 +48,12 @@ namespace dae
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 	private:
+		void AddChildren(GameObject* child);
+		void RemoveChildren(GameObject* child);
 		std::vector<std::unique_ptr<Component>> m_components{};
+
+		GameObject* m_parent{ nullptr };
+		std::vector<std::unique_ptr<GameObject>> m_children{};
 	};
 	
 }
