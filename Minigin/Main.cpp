@@ -13,10 +13,12 @@
 #include "RenderComponent.h"
 #include "TextComponent.h"
 #include "FPSComponent.h"
+#include "RotatorComponent.h"
 #include "Scene.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
+using namespace dae;
 
 static void load()
 {
@@ -31,14 +33,11 @@ static void load()
 	//logo
 	go = std::make_unique<dae::GameObject>();
 	go->AddComponent<dae::RenderComponent>("logo.png");
-	auto* transform = go->AddComponent<dae::TransformComponent>();
-	transform->SetPosition(100, 100);
+	go->SetLocalPosition({ 400.f,240.f,0.f });
 	scene.Add(std::move(go));
 
 	//fps counter
 	go = std::make_unique<dae::GameObject>();
-	transform = go->AddComponent<dae::TransformComponent>();
-	transform->SetPosition(10, 10);
 	auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 
 	// Explicitly construct the color to avoid passing a braced-init-list into make_unique
@@ -46,9 +45,30 @@ static void load()
 	auto textComp = go->AddComponent<dae::TextComponent>(font, white);  // White
 	textComp->SetText("FPS: 0");
 
-	// 2. Add FPSComponent (updates the text)
+	//Add FPSComponent (updates the text)
 	go->AddComponent<dae::FPSComponent>();
 	scene.Add(std::move(go));
+
+	//add rotating digger
+	auto centerWidget = std::make_unique<GameObject>();
+	centerWidget->SetLocalPosition({ 500.f, 500.f, 0.f });
+
+	auto childCharacter1 = std::make_unique<GameObject>();
+	auto childCharacter2 = std::make_unique<GameObject>();
+
+	childCharacter1->SetParent(centerWidget.get());
+	childCharacter1->AddComponent<RenderComponent>("digger2.png");
+	childCharacter1->AddComponent<RotatorComponent>(10.f, 10.f);
+
+	childCharacter2->SetParent(childCharacter1.get());
+	childCharacter2->AddComponent<RenderComponent>("digger2.png");
+	childCharacter2->AddComponent<RotatorComponent>(-5.f, 50.f);
+
+	scene.Add(std::move(centerWidget));
+	scene.Add(std::move(childCharacter1));
+	scene.Add(std::move(childCharacter2));
+
+
 
 	/*auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 	auto to = std::make_unique<dae::TextObject>("Programming 4 Assignment", font);

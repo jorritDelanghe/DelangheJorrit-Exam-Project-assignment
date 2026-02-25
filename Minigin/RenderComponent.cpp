@@ -23,11 +23,9 @@ void dae::RenderComponent::RenderTexture(std::shared_ptr<dae::Texture2D> texture
 {
     if (!texture || !m_pOwner) return;
 
-    auto transform = m_pOwner->GetComponent<TransformComponent>();
-    if (!transform) return;
-
+    const auto& pos = m_pOwner->GetWorldPosition();
     Renderer::GetInstance().RenderTexture(*texture,
-        transform->GetPosition().x, transform->GetPosition().y);
+        pos.x, pos.y);
 }
 void dae::RenderComponent::SetTexture(const std::string& filename)
 {

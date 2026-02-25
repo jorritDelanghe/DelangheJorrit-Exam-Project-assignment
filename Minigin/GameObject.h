@@ -12,6 +12,14 @@ namespace dae
 	class GameObject final
 	{
 	public:
+		//rule of 5
+		GameObject() = default;
+		~GameObject();
+		GameObject(const GameObject& other) = delete;
+		GameObject(GameObject&& other) = delete;
+		GameObject& operator=(const GameObject& other) = delete;
+		GameObject& operator=(GameObject&& other) = delete;
+
 		void Update(float fixedDeltaTime);
 		void Render() const;
 
@@ -51,13 +59,6 @@ namespace dae
 		const glm::vec3& GetLocalPosition() const;
 		const glm::vec3& GetWorldPosition();
 
-		//rule of 5
-		GameObject() = default;
-		~GameObject() = default;
-		GameObject(const GameObject& other) = delete;
-		GameObject(GameObject&& other) = delete;
-		GameObject& operator=(const GameObject& other) = delete;
-		GameObject& operator=(GameObject&& other) = delete;
 	private:
 		void AddChildren(GameObject* child);
 		void RemoveChildren(GameObject* child);

@@ -3,6 +3,21 @@
 #include <algorithm>
 #include <typeindex>
 
+dae::GameObject::~GameObject()
+{
+	if (m_parent)
+	{
+		m_parent->RemoveChildren(this);
+	}
+	for (auto* child : m_children)
+	{
+		if (child->m_parent != nullptr)
+		{
+			child->m_parent = nullptr;
+		}
+	}
+}
+
 void dae::GameObject::Update(float deltaTime)
 {
 	for (auto& component : m_components)
