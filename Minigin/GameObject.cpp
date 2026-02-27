@@ -3,20 +3,6 @@
 #include <algorithm>
 #include <typeindex>
 
-dae::GameObject::~GameObject()
-{
-	if (m_parent)
-	{
-		m_parent->RemoveChildren(this);
-	}
-	for (auto* child : m_children)
-	{
-		if (child->m_parent != nullptr)
-		{
-			child->m_parent = nullptr;
-		}
-	}
-}
 
 void dae::GameObject::Update(float deltaTime)
 {
@@ -58,9 +44,9 @@ void dae::GameObject::SetParent(GameObject* parent)
 	{
 		SetLocalPosition(GetWorldPosition() - parent->GetWorldPosition());
 	}
-	if (m_parent) m_parent->RemoveChildren(this); //if already exist delete from old parent
+	if (m_parent) m_parent->RemoveChild(this); //if already exist delete from old parent
 	m_parent = parent;
-	if (m_parent)m_parent->AddChildren(this); //if new parent exist add to new parent
+	if (m_parent)m_parent->AddChild(this); //if new parent exist add to new parent
 }
 
 void dae::GameObject::SetLocalPosition(const glm::vec3& pos)
@@ -69,7 +55,7 @@ void dae::GameObject::SetLocalPosition(const glm::vec3& pos)
 	SetPositionDirty();
 }
 
-const glm::vec3& dae::GameObject::GetLocalPosition() const
+const glm::vec3& dae::GameObject::GetLocalPosition() const //if not used later on in the assigment delete it
 {
 	return m_localPosition;
 }
@@ -95,24 +81,28 @@ size_t dae::GameObject::GetChildCount() const
 
 dae::GameObject* dae::GameObject::GetChildAt(unsigned int index) const
 {
-	return m_children[index];
+	return m_children[index].get();
 }
 
-void dae::GameObject::AddChildren(GameObject* child)
+void dae::GameObject::AddChild(GameObject* child)
 {
 	m_children.emplace_back(child);
 }
 
-void dae::GameObject::RemoveChildren(GameObject* child)
+void dae::GameObject::RemoveChild(GameObject* child)
 {
-	m_children.erase(std::remove(m_children.begin(), m_children.end(), child),m_children.end());
+	auto iterator = std::find_if(m_children.begin(), m_children.end(), [child](const auto& currentChild) {return currentChild.get() == child; });
+	if (iterator != m_children.end())
+	{
+		m_children.erase(iterator);
+	}
 }
 
 bool dae::GameObject::IsChild(GameObject* gameObject) const
 {
 	for (const auto& child : m_children)
 	{
-		if (child == gameObject)return true;
+		if (child.get() == gameObject)return true;
 		if(child->IsChild(gameObject))return true; //looks at the grand children
 	}
 	return false;
@@ -121,7 +111,7 @@ bool dae::GameObject::IsChild(GameObject* gameObject) const
 void dae::GameObject::SetPositionDirty()
 {
 	m_positionDirty = true;
-	for (auto* child : m_children) //set position for all children also dirty
+	for (auto& child : m_children) //set position for all children also dirty
 	{
 		child->SetPositionDirty();
 	}

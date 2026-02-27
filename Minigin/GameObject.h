@@ -14,7 +14,7 @@ namespace dae
 	public:
 		//rule of 5
 		GameObject() = default;
-		~GameObject();
+		~GameObject() = default;
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
@@ -60,15 +60,15 @@ namespace dae
 		const glm::vec3& GetWorldPosition();
 
 	private:
-		void AddChildren(GameObject* child);
-		void RemoveChildren(GameObject* child);
+		void AddChild(GameObject* child);
+		void RemoveChild(GameObject* child);
 		bool IsChild(GameObject* gameObject)const;
 		void SetPositionDirty();
 		void UpdateWorldPosition();
 
 
 		GameObject* m_parent{ nullptr };
-		std::vector<GameObject*> m_children{};
+		std::vector<std::unique_ptr<GameObject>> m_children{};
 
 		std::vector<std::unique_ptr<Component>> m_components{};
 

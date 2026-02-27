@@ -26,7 +26,6 @@ static void load()
 
 	//background
 	auto go = std::make_unique<dae::GameObject>();
-	go->AddComponent<dae::TransformComponent>();
 	go->AddComponent<dae::RenderComponent>("background.png");
 	scene.Add(std::move(go));
 
@@ -49,7 +48,7 @@ static void load()
 	go->AddComponent<dae::FPSComponent>();
 	scene.Add(std::move(go));
 
-	//add rotating digger
+	//rotating diggers
 	auto centerWidget = std::make_unique<GameObject>();
 	centerWidget->SetLocalPosition({ 500.f, 500.f, 0.f });
 
