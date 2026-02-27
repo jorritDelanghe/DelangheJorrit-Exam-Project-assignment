@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <typeindex>
 
-
 void dae::GameObject::Update(float deltaTime)
 {
 	for (auto& component : m_components)
@@ -85,7 +84,7 @@ size_t dae::GameObject::GetChildCount() const
 
 dae::GameObject* dae::GameObject::GetChildAt(unsigned int index) const
 {
-	return m_children[index].get();
+	return m_children[index];
 }
 
 void dae::GameObject::AddChild(GameObject* child)
@@ -95,18 +94,16 @@ void dae::GameObject::AddChild(GameObject* child)
 
 void dae::GameObject::RemoveChild(GameObject* child)
 {
-	auto iterator = std::find_if(m_children.begin(), m_children.end(), [child](const auto& currentChild) {return currentChild.get() == child; });
-	if (iterator != m_children.end())
-	{
-		m_children.erase(iterator);
-	}
+	auto it = std::find(m_children.begin(), m_children.end(), child);
+	if (it != m_children.end())
+		m_children.erase(it);
 }
 
 bool dae::GameObject::IsChild(GameObject* gameObject) const
 {
 	for (const auto& child : m_children)
 	{
-		if (child.get() == gameObject)return true;
+		if (child == gameObject)return true;
 		if(child->IsChild(gameObject))return true; //looks at the grand children
 	}
 	return false;
