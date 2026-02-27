@@ -42,7 +42,11 @@ void dae::GameObject::SetParent(GameObject* parent)
 	}
 	else
 	{
-		SetLocalPosition(GetWorldPosition() - parent->GetWorldPosition());
+		if (m_keepWorldPosition)
+		{
+			SetLocalPosition(GetWorldPosition() - parent->GetWorldPosition());
+		}
+		SetPositionDirty();
 	}
 	if (m_parent) m_parent->RemoveChild(this); //if already exist delete from old parent
 	m_parent = parent;
@@ -129,7 +133,5 @@ void dae::GameObject::UpdateWorldPosition()
 		m_worldPosition = m_parent->GetWorldPosition() + m_localPosition;
 	}
 	m_positionDirty = false;
-
-
 }
 
