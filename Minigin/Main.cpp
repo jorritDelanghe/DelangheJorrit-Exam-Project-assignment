@@ -14,6 +14,7 @@
 #include "TextComponent.h"
 #include "FPSComponent.h"
 #include "RotatorComponent.h"
+#include "CacheTestComponent.h"
 #include "Scene.h"
 
 #include <filesystem>
@@ -45,7 +46,7 @@ static void load()
 	textComp->SetText("FPS: 0");
 
 	//Add FPSComponent (updates the text)
-	go->AddComponent<dae::FPSComponent>();
+	go->AddComponent<FPSComponent>();
 	scene.Add(std::move(go));
 
 	//rotating diggers
@@ -67,7 +68,10 @@ static void load()
 	scene.Add(std::move(childCharacter1));
 	scene.Add(std::move(childCharacter2));
 
-
+	//add IMGUI Trash The Cash
+	auto cacheTestObj = std::make_unique<GameObject>();
+	cacheTestObj->AddComponent<CacheTestComponent>();
+	scene.Add(std::move(cacheTestObj));
 
 	/*auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 	auto to = std::make_unique<dae::TextObject>("Programming 4 Assignment", font);
