@@ -10,7 +10,6 @@ namespace dae
 		explicit CacheTestComponent(GameObject* pOwner);
 		virtual ~CacheTestComponent() override = default;
 
-		virtual void Update(float deltaTime) override;
 		virtual void Render()const override;
 
 		//rule of 5
@@ -22,10 +21,11 @@ namespace dae
 
 	private:
 		void RunExceriseOne() const;
-		void RunExerciseTwo();
-		void RunExerciseTwoAlternative();
+		void RunExerciseTwo() const;
+		void RunExerciseTwoAlternative() const;
 
-		mutable int m_numSamples{10};
+		mutable int m_numSamplesExc1{10};
+		mutable int m_numSamplesExc2{10};
 		mutable std::vector<float> m_timingsExc1;
 		mutable std::vector<float> m_timingsExc2;
 		mutable std::vector<float> m_timingsExc2Alternative;

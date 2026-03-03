@@ -7,7 +7,22 @@
 namespace dae
 {
 
-
+    struct transform
+    {
+        float matrix[16] =
+        {
+            1,0,0,0
+            ,0,1,0,0
+            ,0,0,1,0
+            ,0,0,0,1
+        };
+    };
+    class GameObject3D
+    {
+    public:
+        transform* local;
+        int id;
+    };
 
     template<typename Fn>
     static std::vector<float> RunCachTimeTest(Fn loopfn, int numSamples)
@@ -35,33 +50,44 @@ namespace dae
 	    :Component(pOwner)
     {
     }
-    void CacheTestComponent::Update(float)
-    {
-    
-    }
     void CacheTestComponent::Render()const
     {
-        ImGui::Begin("Cache");
-        ImGui::SliderInt("Sample Count", &m_numSamples, 1, 50);
-
         //exercise1
-        ImGui::SeparatorText("Excersie 1 - int buffer");
-        if (ImGui::Button("Run##exc1"))
+        ImGui::Begin("Excersie 1 - int buffer");
+        ImGui::SliderInt("Sample Count", &m_numSamplesExc1, 1, 50);
+      
+        if (ImGui::Button("Trash the cache"))
         {
             RunExceriseOne();
         }
         if (!m_timingsExc1.empty())
         {
             const float maxValue = *std::max_element(m_timingsExc1.begin(), m_timingsExc1.end());
-            ImGui::PlotLines("##exc1Plot", m_timingsExc1.data(), static_cast<int>(m_timingsExc1.size()),
+            ImGui::PlotLines("##exc1", m_timingsExc1.data(), static_cast<int>(m_timingsExc1.size()),
                 0, nullptr, 0.0f, maxValue, ImVec2(400, 120));
-            int step = 1;
-            for (float t : m_timingsExc1)
-            {
-                ImGui::Text("Step %4d: %.0f us", step, t);
-                step *= 2;
-            }
         }
+        ImGui::End();
+        //excerise2
+        ImGui::Begin("exercise 2 -struct buffer");
+        ImGui::InputInt("Sample Count", &m_numSamplesExc2);
+        if (ImGui::Button("Trash The cash with GameObject3D"))
+        {
+			RunExerciseTwo();   
+        }
+        if (ImGui::Button("Trash The cash with GameObject3D alternative"))
+        {
+			RunExerciseTwoAlternative();    
+        }
+        if (!m_timingsExc2.empty())
+        {
+            ImGui::PlotLines("##exc2", m_timingsExc2.data(), static_cast<int>(m_timingsExc2.size()),
+				0, nullptr, 0.0f, *std::max_element(m_timingsExc2.begin(), m_timingsExc2.end()), ImVec2(400, 120));
+        }
+        if(!m_timingsExc2Alternative.empty())
+        {
+            ImGui::PlotLines("##exc2alt", m_timingsExc2Alternative.data(), static_cast<int>(m_timingsExc2Alternative.size()),
+                0, nullptr, 0.0f, *std::max_element(m_timingsExc2Alternative.begin(), m_timingsExc2Alternative.end()), ImVec2(400, 120));
+		}
         ImGui::End();
     }
 
@@ -77,15 +103,26 @@ namespace dae
                     arr[i] *= 2;
                 }
 
-            }, m_numSamples);
+            }, m_numSamplesExc1);
         delete[] arr;
     }
 
-    void CacheTestComponent::RunExerciseTwo()
+    void CacheTestComponent::RunExerciseTwo() const
     {
+        constexpr int size = 1 << 22;
+        GameObject3D* arr = new GameObject3D[size]();
+        m_timingsExc2 = RunCachTimeTest([&](int stepSize)
+            {
+                for (int i{}; i < size; i += stepSize)
+                {
+					arr[i].id *= 2;
+                }
+            }, m_numSamplesExc2);
+
+        delete[]arr;
     }
 
-    void CacheTestComponent::RunExerciseTwoAlternative()
+    void CacheTestComponent::RunExerciseTwoAlternative() const
     {
 
     }
