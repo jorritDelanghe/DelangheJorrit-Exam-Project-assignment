@@ -36,7 +36,8 @@ namespace dae
     {
         using clock = std::chrono::high_resolution_clock;
         std::vector<float> times;
-        times.reserve(numSamples);
+        constexpr int total = 11;
+        times.reserve(total);
         std::vector<long long>samples;
 		numSamples = std::max(3, numSamples); //need at least 3 samples to be able to remove the min and max outliers
        
