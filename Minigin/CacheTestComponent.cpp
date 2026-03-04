@@ -3,6 +3,8 @@
 #include <backends/imgui_impl_sdlrenderer3.h>
 #include "CacheTestComponent.h"
 #include <chrono>
+#include <algorithm>
+#include <numeric>
 
 namespace dae
 {
@@ -20,29 +22,43 @@ namespace dae
     class GameObject3D
     {
     public:
-        transform* local;
-        int id;
+        transform local;
+        int id{};
     };
-
+    class GameObject3DAlternative
+    {
+    public: 
+        int id{};
+        //transform is stored somewhere else to not load in 68 bytes into the cache, but just 4 for the id
+    };
     template<typename Fn>
     static std::vector<float> RunCachTimeTest(Fn loopfn, int numSamples)
     {
         using clock = std::chrono::high_resolution_clock;
         std::vector<float> times;
         times.reserve(numSamples);
-
+        std::vector<long long>samples;
+		numSamples = std::max(3, numSamples); //need at least 3 samples to be able to remove the min and max outliers
+       
         for (int stepsize = 1; stepsize <= 1024; stepsize *= 2)
         {
-            long long total{};
+           samples.clear();
+		   samples.reserve(numSamples);
             for (int index{}; index < numSamples; ++index)
             {
                 const auto start = clock::now();
                 loopfn(stepsize);
                 const auto end = clock::now();
-                total += std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+                samples.push_back( std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
             }
-            const auto average = static_cast<float>(total / numSamples);
-            times.push_back(average);
+             //sort and remove outliers
+			std::sort(samples.begin(), samples.end());
+            samples.erase(samples.begin()); //delete min outlier
+			samples.pop_back(); //delete max outlier
+           
+            //average
+			long long average = std::accumulate(samples.begin(), samples.end(), 0LL) / static_cast<long long>(samples.size());
+            times.push_back(static_cast<float>(average));
         }
         return times;
     }
@@ -68,7 +84,7 @@ namespace dae
         }
         ImGui::End();
         //excerise2
-        ImGui::Begin("exercise 2 -struct buffer");
+        ImGui::Begin("exercise 2 - struct buffer");
         ImGui::InputInt("Sample Count", &m_numSamplesExc2);
         if (ImGui::Button("Trash The cash with GameObject3D"))
         {
@@ -124,6 +140,16 @@ namespace dae
 
     void CacheTestComponent::RunExerciseTwoAlternative() const
     {
+        constexpr int size = 1 << 22;
+        GameObject3DAlternative* arr = new GameObject3DAlternative[size]();
+        m_timingsExc2Alternative = RunCachTimeTest([&](int stepSize)
+            {
+                for (int i{}; i < size; i += stepSize)
+                {
+                    arr[i].id *= 2;
+                }
+            }, m_numSamplesExc2);
 
+        delete[]arr;
     }
 }
