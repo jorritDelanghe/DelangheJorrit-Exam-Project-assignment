@@ -8,7 +8,6 @@
 
 namespace dae
 {
-
     struct transform
     {
         float matrix[16] =
