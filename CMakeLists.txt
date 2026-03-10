@@ -28,7 +28,6 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/Texture2D.cpp
   Minigin/Transform.cpp
   Minigin/Component.cpp
-  Minigin/InputComponent.cpp
   Minigin/TransformComponent.cpp 
   Minigin/FPSComponent.cpp
   Minigin/TextComponent.cpp
