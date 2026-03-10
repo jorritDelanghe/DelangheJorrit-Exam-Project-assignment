@@ -1,0 +1,41 @@
+#pragma once
+#include "Command.h"
+#include <glm/glm.h>
+namespace dae
+{
+	class GameObjectCommand :public Command
+	{
+	public:
+		explicit GameObjectCommand(GameObject* gameObject);
+		virtual ~GameObjectCommand() noexcept override = default;
+
+		GameObjectCommand(const GameObjectCommand& other) = delete;
+		GameObjectCommand(GameObjectCommand&& other) = delete;
+		GameObjectCommand& operator=(const GameObjectCommand& other) = delete;
+		GameObjectCommand& operator=(GameObjectCommand&& other) = delete;
+
+	protected:
+		GameObject* GetGameObject()const;
+	private:
+		GameObject* m_pGameObject;
+	};
+
+	class MoveGameObjectCommand final : public GameObjectCommand
+	{
+	public:
+		explicit MoveGameObjectCommand(GameObject* gameObject, float speed, const glm::vec3& direction);
+		virtual ~MoveGameObjectCommand() noexcept override = default;
+
+		MoveGameObjectCommand(const MoveGameObjectCommand& other) = delete;
+		MoveGameObjectCommand(MoveGameObjectCommand&& other) = delete;
+		MoveGameObjectCommand& operator= (const MoveGameObjectCommand& other) = delete;
+		MoveGameObjectCommand& operator= (MoveGameObjectCommand&& other) = delete;
+
+		virtual void Execute() override;
+
+	private:
+		glm::vec3 m_direction;
+		float m_speed;
+	};
+}
+
