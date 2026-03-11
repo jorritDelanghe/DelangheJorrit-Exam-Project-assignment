@@ -16,6 +16,11 @@
 #include "RotatorComponent.h"
 #include "CacheTestComponent.h"
 #include "Scene.h"
+#include "GameObjectCommand.h"
+#include "InputManager.h"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <XInput.h>
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -69,9 +74,36 @@ static void load()
 	scene.Add(std::move(childCharacter2));
 
 	//add IMGUI Trash The Cash
-	auto cacheTestObj = std::make_unique<GameObject>();
+	/*auto cacheTestObj = std::make_unique<GameObject>();
 	cacheTestObj->AddComponent<CacheTestComponent>();
-	scene.Add(std::move(cacheTestObj));
+	scene.Add(std::move(cacheTestObj));*/
+
+	//add move player
+	auto player = std::make_unique<GameObject>();
+	GameObject* pPlayer = player.get();
+	player->AddComponent<RenderComponent>("digger2.png");
+	scene.Add(std::move(player));
+
+	auto& input = InputManager::GetInstance();
+	input.BindCommand(XINPUT_GAMEPAD_DPAD_UP, InputManager::TriggerType::Isdown,
+		std::make_unique<MoveGameObjectCommand>
+	(pPlayer,100.f,glm::vec3{0.f,-1.f,0.f}));
+
+	input.BindCommand(XINPUT_GAMEPAD_DPAD_DOWN, InputManager::TriggerType::Isdown
+		, std::make_unique<MoveGameObjectCommand>
+		(pPlayer, 100.f, glm::vec3{ 0.f,1.f,0.f }));
+
+	input.BindCommand(XINPUT_GAMEPAD_DPAD_RIGHT, InputManager::TriggerType::Isdown
+	,std::make_unique<MoveGameObjectCommand>
+	(pPlayer,100.f,glm::vec3{1.f,0.f,0.f}));
+
+	input.BindCommand(XINPUT_GAMEPAD_DPAD_LEFT, InputManager::TriggerType::Isdown
+		, std::make_unique<MoveGameObjectCommand>
+		(pPlayer, 100.f, glm::vec3{ -1.f,0.f,0.f }));
+
+
+
+
 
 	/*auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 	auto to = std::make_unique<dae::TextObject>("Programming 4 Assignment", font);
