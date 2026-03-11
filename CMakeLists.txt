@@ -33,11 +33,12 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/RenderComponent.cpp 
   Minigin/RotatorComponent.cpp 
   Minigin/CacheTestComponent.cpp 
-  Minigin/GameObjectCommand.cpp
-  Minigin/Controller.cpp)
+  Minigin/GameObjectCommand.cpp)
 
  if(WIN32 AND NOT EMSCRIPTEN)
-  target_sources(${TARGET_NAME} PRIVATE Minigin/Main.cpp)
+  target_sources(${TARGET_NAME} PRIVATE 
+   Minigin/Main.cpp
+   Minigin/Controller.cpp)
 else()
   target_sources(${TARGET_NAME} PRIVATE Minigin/Main_web.cpp)
 endif()
