@@ -37,6 +37,15 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/GameObjectCommand.cpp
   Minigin/Controller.cpp)
 
+#window-emscripting
+ if(WIN32 AND NOT EMSCRIPTEN)
+  target_sources(${TARGET_NAME} PRIVATE Minigin/Main_win32.cpp)
+elseif(NOT EMSCRIPTEN)
+  target_sources(${TARGET_NAME} PRIVATE Minigin/Main.cpp)
+else()
+  target_sources(${TARGET_NAME} PRIVATE Minigin/Main.cpp)  # Web version (no XInput)
+endif()
+
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
 
