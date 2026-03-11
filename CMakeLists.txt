@@ -34,7 +34,8 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/RenderComponent.cpp 
   Minigin/RotatorComponent.cpp 
   Minigin/CacheTestComponent.cpp 
-  Minigin/GameObjectCommand.cpp)
+  Minigin/GameObjectCommand.cpp
+  Minigin/Controller.cpp)
 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)

@@ -1,24 +1,36 @@
 #include <SDL3/SDL.h>
 #include <backends/imgui_impl_sdl3.h>
 #include "InputManager.h"
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include "Xinput.h" //not in the header so I get pimple, needs things in windows.h always put under windows.h
-#pragma comment(lib,"xinput.lib")
+#include "Controller.h"
 namespace dae
 {
 	class InputManager::InputManagerImpl 
 	{
-
 	public:
+		InputManagerImpl()
+		{
+			constexpr int numControllers{ 1 };
+			for (int index{}; index < numControllers; ++index)
+			{
+				m_Controllers.emplace_back(std::make_unique<Controller>(index));
+			}
+		}
 		struct ControllerBinding
 		{
 			unsigned int button{};
 			InputManager::TriggerType triggerType{};
 			std::unique_ptr<Command> command{};
+			int controllerIndex{ 0 };
 		};
 		std::vector<ControllerBinding> m_controllerBindings{};
 
+		void UpdateControllers()
+		{
+			for (auto& controller : m_Controllers)
+			{
+				controller->Update();
+			}
+		}
 		void BindCommand(unsigned int button, TriggerType triggerType, std::unique_ptr<Command> pCommand)
 		{
 			m_controllerBindings.emplace_back(
@@ -39,59 +51,42 @@ namespace dae
 		{
 			for (auto& controllerBinding : m_controllerBindings)
 			{
+				if (controllerBinding.controllerIndex >= m_controllerBindings.size()) continue;
+				auto& controller = m_Controllers[controllerBinding.controllerIndex];
+
 				switch (controllerBinding.triggerType)
 				{
 				case TriggerType::IsDownThisFrame:
-					if (IsDownThisFrame(controllerBinding.button))
-					{
-						controllerBinding.command->Execute();
-					}
+					
+						if (controller->IsDownThisFrame(controllerBinding.button))
+						{
+							controllerBinding.command->Execute();
+						}
+
+					
 					break;
 				case TriggerType::IsUpThisFrame:
-					if (IsUpThisFrame(controllerBinding.button))
-					{
-						controllerBinding.command->Execute();
-					}
+					
+						if (controller->IsUpThisFrame(controllerBinding.button))
+						{
+							controllerBinding.command->Execute();
+						}
+					
 					break;
 				case TriggerType::Isdown:
-					if (IsButtonPressed(controllerBinding.button))
-					{
-						controllerBinding.command->Execute();
-					}
+					
+						if (controller->IsDown(controllerBinding.button))
+						{
+							controllerBinding.command->Execute();
+						}
+					
 					break;
 				}
 			}
 		}
-		void UpdateXInput()
-		{
-			CopyMemory(&m_previousState, &m_currentState, sizeof(XINPUT_STATE)); //copies values of states
-			ZeroMemory(&m_currentState, sizeof(XINPUT_STATE)); //cleans memory state
-			XInputGetState(m_controllerIndex, &m_currentState); //get new state
-
-			auto buttonChanges = m_currentState.Gamepad.wButtons ^ m_previousState.Gamepad.wButtons; //xor
-			m_buttonsPressedThisFrame = buttonChanges & m_currentState.Gamepad.wButtons; //and
-			m_buttonsReleasedThisFrame = buttonChanges & (~m_currentState.Gamepad.wButtons); //and not
-
-		}
-		bool IsDownThisFrame(unsigned int button) const //unsinged because bitmasks are never negative
-		{
-			return m_buttonsPressedThisFrame & button;
-		}
-		bool IsUpThisFrame(unsigned int button) const
-		{
-			return m_buttonsReleasedThisFrame & button;
-		}
-		bool IsButtonPressed(unsigned int button) const
-		{
-			return m_currentState.Gamepad.wButtons & button;
-		}
 	private:
-		XINPUT_STATE m_previousState{};
-		XINPUT_STATE m_currentState{};
-		int m_controllerIndex{ 0 }; //0 = first controller
-		WORD m_buttonsPressedThisFrame{};
-		WORD m_buttonsReleasedThisFrame{};
-
+		std::vector<std::unique_ptr<Controller>> m_Controllers{};
+	
 	};
 
 	InputManager::InputManager()
@@ -116,7 +111,7 @@ namespace dae
 			//process event for IMGUI
 			//ImGui_ImplSDL3_ProcessEvent(&e);
 		}
-		m_pInputManagerImpl->UpdateXInput();
+		m_pInputManagerImpl->UpdateControllers();
 		m_pInputManagerImpl->ProcessBindings();
 		return true;
 	}
