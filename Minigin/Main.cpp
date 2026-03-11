@@ -78,31 +78,70 @@ static void load()
 	cacheTestObj->AddComponent<CacheTestComponent>();
 	scene.Add(std::move(cacheTestObj));*/
 
-	//add move player
-	auto player = std::make_unique<GameObject>();
-	GameObject* pPlayer = player.get();
-	player->AddComponent<RenderComponent>("digger2.png");
-	scene.Add(std::move(player));
+	//add move player 1
+	constexpr float speed{ 1.f };
+	auto controllerPlayer = std::make_unique<GameObject>();
+	controllerPlayer->SetLocalPosition({ 300.f,300.f,0.f });
+	GameObject* pPlayer = controllerPlayer.get();
+	controllerPlayer->AddComponent<RenderComponent>("digger2.png");
+	scene.Add(std::move(controllerPlayer));
 
 	auto& input = InputManager::GetInstance();
 	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_UP, InputManager::TriggerType::Isdown,
 		std::make_unique<MoveGameObjectCommand>
-	(pPlayer,100.f,glm::vec3{0.f,-1.f,0.f}));
+	(pPlayer, speed, glm::vec3{ 0.f,-1.f,0.f }));
 
 	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_DOWN, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>
-		(pPlayer, 100.f, glm::vec3{ 0.f,1.f,0.f }));
+		(pPlayer, speed, glm::vec3{ 0.f,1.f,0.f }));
 
 	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_RIGHT, InputManager::TriggerType::Isdown
-	,std::make_unique<MoveGameObjectCommand>
-	(pPlayer,100.f,glm::vec3{1.f,0.f,0.f}));
+		, std::make_unique<MoveGameObjectCommand>
+		(pPlayer, speed, glm::vec3{ 1.f,0.f,0.f }));
 
 	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_LEFT, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>
-		(pPlayer, 100.f, glm::vec3{ -1.f,0.f,0.f }));
+		(pPlayer, speed, glm::vec3{ -1.f,0.f,0.f }));
 
+	//add move player2
+	auto keyBoardPlayer = std::make_unique<GameObject>();
+	keyBoardPlayer->SetLocalPosition({ 300.f,350.f,0.f });
+	GameObject* pKeyPlayer = keyBoardPlayer.get();
+	keyBoardPlayer->AddComponent<RenderComponent>("digger2.png");
+	scene.Add(std::move(keyBoardPlayer));
 
+	//wasd
+	input.BindKeyboardCommand(SDL_SCANCODE_W, InputManager::TriggerType::Isdown
+		, std::make_unique<MoveGameObjectCommand>(
+			pKeyPlayer, speed, glm::vec3{ 0.f,-1.f,0.f }));
 
+	input.BindKeyboardCommand(SDL_SCANCODE_A, InputManager::TriggerType::Isdown
+		, std::make_unique<MoveGameObjectCommand>(
+			pKeyPlayer, speed, glm::vec3{ -1.f,0.f,0.f }));
+
+	input.BindKeyboardCommand(SDL_SCANCODE_S, InputManager::TriggerType::Isdown
+		, std::make_unique<MoveGameObjectCommand>(
+			pKeyPlayer, speed, glm::vec3{ 0.f,1.f,0.f }));
+
+	input.BindKeyboardCommand(SDL_SCANCODE_D, InputManager::TriggerType::Isdown
+		, std::make_unique<MoveGameObjectCommand>(
+			pKeyPlayer, speed, glm::vec3{ 1.f,0.f,0.f }));
+	//arrows
+	input.BindKeyboardCommand(SDL_SCANCODE_UP, InputManager::TriggerType::Isdown
+		, std::make_unique<MoveGameObjectCommand>(
+			pKeyPlayer, speed, glm::vec3{ 0.f,-1.f,0.f }));
+
+	input.BindKeyboardCommand(SDL_SCANCODE_LEFT, InputManager::TriggerType::Isdown
+		, std::make_unique<MoveGameObjectCommand>(
+			pKeyPlayer, speed, glm::vec3{ -1.f,0.f,0.f }));
+
+	input.BindKeyboardCommand(SDL_SCANCODE_DOWN, InputManager::TriggerType::Isdown
+		, std::make_unique<MoveGameObjectCommand>(
+			pKeyPlayer, speed, glm::vec3{ 0.f,1.f,0.f }));
+
+	input.BindKeyboardCommand(SDL_SCANCODE_RIGHT, InputManager::TriggerType::Isdown
+		, std::make_unique<MoveGameObjectCommand>(
+			pKeyPlayer, speed, glm::vec3{ 1.f,0.f,0.f }));
 
 
 	/*auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);

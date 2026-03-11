@@ -85,9 +85,7 @@ namespace dae
 						if (controller->IsDownThisFrame(controllerBinding.button))
 						{
 							controllerBinding.command->Execute();
-						}
-
-					
+						}		
 					break;
 				case TriggerType::IsUpThisFrame:
 					
@@ -120,12 +118,20 @@ namespace dae
 		}
 		void ProcessHeldKeys(const bool*pKeyBoardState)
 		{
+			SDL_Log("ProcessHeldKeys called! Bindings: %d",
+				(int)m_keyBoardBindings.size());
 			for (auto& binding : m_keyBoardBindings)
 			{
+				SDL_Log("Binding: key=%d trigger=%d state=%d",
+					binding.key,
+					static_cast<int>(binding.trigger),
+					pKeyBoardState[binding.key]);
+
 				if (binding.trigger == TriggerType::Isdown)
 				{
 					if (pKeyBoardState[binding.key])
 					{
+						SDL_Log("Key pressed! Executing command!");
 						binding.command->Execute();
 					}
 				}
@@ -169,6 +175,7 @@ namespace dae
 			//ImGui_ImplSDL3_ProcessEvent(&e);
 		}
 		//keyboard
+		SDL_PumpEvents();
 		const bool* pKeyBoardState = SDL_GetKeyboardState(nullptr);
 		m_pInputManagerImpl->ProcessHeldKeys(pKeyBoardState);
 		//controller
