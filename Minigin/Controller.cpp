@@ -1,16 +1,13 @@
 #include "Controller.h"
-#ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include "Xinput.h" //not in the header so I get pimple, needs things in windows.h always put under windows.h
 #pragma comment(lib,"xinput.lib")
-#endif
 namespace dae
 {
 	class Controller::ControllerImpl
 	{
 	public:
-		#ifdef _WIN32
 		ControllerImpl(int controllerIndex)
 			:m_controllerIndex{ controllerIndex }
 		{
@@ -72,6 +69,4 @@ namespace dae
 	{
 		return m_pControllerImpl->IsUpThisFrame(button);
 	}
-
-#endif
 }
