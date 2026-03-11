@@ -18,10 +18,6 @@
 #include "Scene.h"
 #include "GameObjectCommand.h"
 #include "InputManager.h"
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
-
 #include <filesystem>
 namespace fs = std::filesystem;
 using namespace dae;
@@ -80,6 +76,7 @@ static void load()
 
 	//add move player 1
 	constexpr float speed{ 1.f };
+	constexpr float doubleSpeed{ speed * 2.f };
 	auto WASDPlayer = std::make_unique<GameObject>();
 	WASDPlayer->SetLocalPosition({ 300.f,300.f,0.f });
 	GameObject* pWASDPlayer = WASDPlayer.get();
@@ -115,19 +112,19 @@ static void load()
 	//arrows
 	input.BindKeyboardCommand(SDL_SCANCODE_UP, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>(
-			pKeyPlayer, speed, glm::vec3{ 0.f,-1.f,0.f }));
+			pKeyPlayer, doubleSpeed, glm::vec3{ 0.f,-1.f,0.f }));
 
 	input.BindKeyboardCommand(SDL_SCANCODE_LEFT, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>(
-			pKeyPlayer, speed, glm::vec3{ -1.f,0.f,0.f }));
+			pKeyPlayer, doubleSpeed, glm::vec3{ -1.f,0.f,0.f }));
 
 	input.BindKeyboardCommand(SDL_SCANCODE_DOWN, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>(
-			pKeyPlayer, speed, glm::vec3{ 0.f,1.f,0.f }));
+			pKeyPlayer, doubleSpeed, glm::vec3{ 0.f,1.f,0.f }));
 
 	input.BindKeyboardCommand(SDL_SCANCODE_RIGHT, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>(
-			pKeyPlayer, speed, glm::vec3{ 1.f,0.f,0.f }));
+			pKeyPlayer, doubleSpeed, glm::vec3{ 1.f,0.f,0.f }));
 
 
 	/*auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
