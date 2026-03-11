@@ -38,7 +38,8 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
 
  if(WIN32 AND NOT EMSCRIPTEN)
   target_sources(${TARGET_NAME} PRIVATE 
-   Minigin/Main.cpp)
+   Minigin/Main.cpp
+  Minigin/Controller.cpp)
 else()
   target_sources(${TARGET_NAME} PRIVATE Minigin/Main_web.cpp)
 endif()
