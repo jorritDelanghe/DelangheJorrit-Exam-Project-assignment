@@ -75,7 +75,7 @@ namespace dae
 		{
 			for (auto& controllerBinding : m_controllerBindings)
 			{
-				if (controllerBinding.controllerIndex >= m_controllerBindings.size()) continue;
+				if (controllerBinding.controllerIndex >= static_cast<int>(m_controllerBindings.size())) continue;
 				auto& controller = m_Controllers[controllerBinding.controllerIndex];
 
 				switch (controllerBinding.triggerType)
@@ -118,20 +118,13 @@ namespace dae
 		}
 		void ProcessHeldKeys(const bool*pKeyBoardState)
 		{
-			SDL_Log("ProcessHeldKeys called! Bindings: %d",
-				(int)m_keyBoardBindings.size());
 			for (auto& binding : m_keyBoardBindings)
 			{
-				SDL_Log("Binding: key=%d trigger=%d state=%d",
-					binding.key,
-					static_cast<int>(binding.trigger),
-					pKeyBoardState[binding.key]);
 
 				if (binding.trigger == TriggerType::Isdown)
 				{
 					if (pKeyBoardState[binding.key])
 					{
-						SDL_Log("Key pressed! Executing command!");
 						binding.command->Execute();
 					}
 				}

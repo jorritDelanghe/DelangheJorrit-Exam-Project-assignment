@@ -55,7 +55,7 @@ static void load()
 	scene.Add(std::move(go));
 
 	//rotating diggers
-	auto centerWidget = std::make_unique<GameObject>();
+	/*auto centerWidget = std::make_unique<GameObject>();
 	centerWidget->SetLocalPosition({ 500.f, 500.f, 0.f });
 
 	auto childCharacter1 = std::make_unique<GameObject>();
@@ -71,7 +71,7 @@ static void load()
 
 	scene.Add(std::move(centerWidget));
 	scene.Add(std::move(childCharacter1));
-	scene.Add(std::move(childCharacter2));
+	scene.Add(std::move(childCharacter2));*/
 
 	//add IMGUI Trash The Cash
 	/*auto cacheTestObj = std::make_unique<GameObject>();
