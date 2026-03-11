@@ -11,8 +11,8 @@ namespace dae
 	}
 	MoveGameObjectCommand::MoveGameObjectCommand(GameObject* gameObject, float speed, const glm::vec3& direction)
 		:GameObjectCommand(gameObject)
-		,m_speed{speed}
 		,m_direction{direction}
+		,m_speed{speed}
 	{
 
 	}
