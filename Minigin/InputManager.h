@@ -23,8 +23,10 @@ namespace dae
 			,IsDownThisFrame
 			,IsUpThisFrame
 		};
-		void BindCommand(unsigned int button,TriggerType trigger, std::unique_ptr<Command> pCommand);
-		void UnbindCommand(unsigned int button);
+		void BindControllerCommand(unsigned int button,TriggerType trigger, std::unique_ptr<Command> pCommand);
+		void UnbindControllerCommand(unsigned int button);
+		void BindKeyboardCommand(SDL_Scancode key,TriggerType trigger, std::unique_ptr<Command> pCommand);
+		void UnbindKeyboardCommand(SDL_Scancode key);
 
 		class InputManagerImpl;
 	private:

@@ -85,19 +85,19 @@ static void load()
 	scene.Add(std::move(player));
 
 	auto& input = InputManager::GetInstance();
-	input.BindCommand(XINPUT_GAMEPAD_DPAD_UP, InputManager::TriggerType::Isdown,
+	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_UP, InputManager::TriggerType::Isdown,
 		std::make_unique<MoveGameObjectCommand>
 	(pPlayer,100.f,glm::vec3{0.f,-1.f,0.f}));
 
-	input.BindCommand(XINPUT_GAMEPAD_DPAD_DOWN, InputManager::TriggerType::Isdown
+	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_DOWN, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>
 		(pPlayer, 100.f, glm::vec3{ 0.f,1.f,0.f }));
 
-	input.BindCommand(XINPUT_GAMEPAD_DPAD_RIGHT, InputManager::TriggerType::Isdown
+	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_RIGHT, InputManager::TriggerType::Isdown
 	,std::make_unique<MoveGameObjectCommand>
 	(pPlayer,100.f,glm::vec3{1.f,0.f,0.f}));
 
-	input.BindCommand(XINPUT_GAMEPAD_DPAD_LEFT, InputManager::TriggerType::Isdown
+	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_LEFT, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>
 		(pPlayer, 100.f, glm::vec3{ -1.f,0.f,0.f }));
 
