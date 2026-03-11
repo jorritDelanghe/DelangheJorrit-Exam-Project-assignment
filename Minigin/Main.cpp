@@ -78,8 +78,9 @@ static void load()
 	cacheTestObj->AddComponent<CacheTestComponent>();
 	scene.Add(std::move(cacheTestObj));*/
 
-	//add move player 1
+	//add move player 2
 	constexpr float speed{ 1.f };
+	constexpr float doubleSpeed{ speed * 2.f };
 	auto controllerPlayer = std::make_unique<GameObject>();
 	controllerPlayer->SetLocalPosition({ 300.f,300.f,0.f });
 	GameObject* pPlayer = controllerPlayer.get();
@@ -89,21 +90,21 @@ static void load()
 	auto& input = InputManager::GetInstance();
 	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_UP, InputManager::TriggerType::Isdown,
 		std::make_unique<MoveGameObjectCommand>
-	(pPlayer, speed, glm::vec3{ 0.f,-1.f,0.f }));
+	(pPlayer, doubleSpeed, glm::vec3{ 0.f,-1.f,0.f }));
 
 	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_DOWN, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>
-		(pPlayer, speed, glm::vec3{ 0.f,1.f,0.f }));
+		(pPlayer, doubleSpeed, glm::vec3{ 0.f,1.f,0.f }));
 
 	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_RIGHT, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>
-		(pPlayer, speed, glm::vec3{ 1.f,0.f,0.f }));
+		(pPlayer, doubleSpeed, glm::vec3{ 1.f,0.f,0.f }));
 
 	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_LEFT, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>
-		(pPlayer, speed, glm::vec3{ -1.f,0.f,0.f }));
+		(pPlayer, doubleSpeed, glm::vec3{ -1.f,0.f,0.f }));
 
-	//add move player2
+	//add move player1
 	auto keyBoardPlayer = std::make_unique<GameObject>();
 	keyBoardPlayer->SetLocalPosition({ 300.f,350.f,0.f });
 	GameObject* pKeyPlayer = keyBoardPlayer.get();

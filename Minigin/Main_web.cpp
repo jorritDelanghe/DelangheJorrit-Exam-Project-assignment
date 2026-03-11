@@ -20,7 +20,7 @@
 #include "InputManager.h"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <XInput.h>
+
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -90,19 +90,19 @@ static void load()
 	//wasd
 	input.BindKeyboardCommand(SDL_SCANCODE_W, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>(
-			pKeyPlayer, speed, glm::vec3{ 0.f,-1.f,0.f }));
+			pWASDPlayer, speed, glm::vec3{ 0.f,-1.f,0.f }));
 
 	input.BindKeyboardCommand(SDL_SCANCODE_A, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>(
-			pKeyPlayer, speed, glm::vec3{ -1.f,0.f,0.f }));
+			pWASDPlayer, speed, glm::vec3{ -1.f,0.f,0.f }));
 
 	input.BindKeyboardCommand(SDL_SCANCODE_S, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>(
-			pKeyPlayer, speed, glm::vec3{ 0.f,1.f,0.f }));
+			pWASDPlayer, speed, glm::vec3{ 0.f,1.f,0.f }));
 
 	input.BindKeyboardCommand(SDL_SCANCODE_D, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>(
-			pKeyPlayer, speed, glm::vec3{ 1.f,0.f,0.f }));
+			pWASDPlayer, speed, glm::vec3{ 1.f,0.f,0.f }));
 
 	//add move player2
 	auto keyBoardPlayer = std::make_unique<GameObject>();
