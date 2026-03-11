@@ -18,7 +18,6 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/Font.cpp
   Minigin/GameObject.cpp
   Minigin/InputManager.cpp
-  Minigin/Main.cpp
   Minigin/Minigin.cpp
   Minigin/Renderer.cpp
   Minigin/ResourceManager.cpp
@@ -37,13 +36,10 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/GameObjectCommand.cpp
   Minigin/Controller.cpp)
 
-#window-emscripting
  if(WIN32 AND NOT EMSCRIPTEN)
-  target_sources(${TARGET_NAME} PRIVATE Minigin/Main_win32.cpp)
-elseif(NOT EMSCRIPTEN)
   target_sources(${TARGET_NAME} PRIVATE Minigin/Main.cpp)
 else()
-  target_sources(${TARGET_NAME} PRIVATE Minigin/Main.cpp)  # Web version (no XInput)
+  target_sources(${TARGET_NAME} PRIVATE Minigin/Main_web.cpp)
 endif()
 
 # enable c++20 features
