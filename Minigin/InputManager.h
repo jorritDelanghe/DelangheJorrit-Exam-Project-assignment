@@ -9,7 +9,7 @@ namespace dae
 	{
 	public:
 		InputManager();
-		~InputManager() = default;
+		~InputManager();
 
 		InputManager(const InputManager& other) = delete;
 		InputManager(InputManager&& other) = delete;
@@ -24,6 +24,7 @@ namespace dae
 			,IsUpThisFrame
 		};
 		void BindCommand(unsigned int button,TriggerType trigger, std::unique_ptr<Command> pCommand);
+		void UnbindCommand(unsigned int button);
 
 		class InputManagerImpl;
 	private:

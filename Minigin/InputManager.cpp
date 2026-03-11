@@ -4,6 +4,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include "Xinput.h" //not in the header so I get pimple, needs things in windows.h always put under windows.h
+#pragma comment(lib,"xinput.lib")
 namespace dae
 {
 	class InputManager::InputManagerImpl 
@@ -26,9 +27,40 @@ namespace dae
 					,triggerType
 					,std::move(pCommand) });
 		}
+		void UnBindCommand(unsigned int button)
+		{
+			std::erase_if(m_controllerBindings,
+				[button](const ControllerBinding& binding)
+				{
+					return(button == binding.button);
+				});
+		}
 		void ProcessBindings()
 		{
-
+			for (auto& controllerBinding : m_controllerBindings)
+			{
+				switch (controllerBinding.triggerType)
+				{
+				case TriggerType::IsDownThisFrame:
+					if (IsDownThisFrame(controllerBinding.button))
+					{
+						controllerBinding.command->Execute();
+					}
+					break;
+				case TriggerType::IsUpThisFrame:
+					if (IsUpThisFrame(controllerBinding.button))
+					{
+						controllerBinding.command->Execute();
+					}
+					break;
+				case TriggerType::Isdown:
+					if (IsButtonPressed(controllerBinding.button))
+					{
+						controllerBinding.command->Execute();
+					}
+					break;
+				}
+			}
 		}
 		void UpdateXInput()
 		{
@@ -88,10 +120,15 @@ namespace dae
 		m_pInputManagerImpl->ProcessBindings();
 		return true;
 	}
-
+	InputManager::~InputManager() = default;
 	void InputManager::BindCommand(unsigned int button, TriggerType trigger, std::unique_ptr<Command> pCommand)
 	{
 		m_pInputManagerImpl->BindCommand(button, trigger, std::move(pCommand));
+	}
+
+	void InputManager::UnbindCommand(unsigned int button)
+	{
+		m_pInputManagerImpl->UnBindCommand(button);
 	}
 
 }
