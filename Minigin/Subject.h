@@ -25,8 +25,8 @@ namespace dae
 		{
 			m_observers.erase(std::remove(m_observers.begin(), m_observers.end(), observer));
 		}
-	protected:
-		void NotifyObservers(Event event, GameObject* gameObject)
+
+		void NotifyObservers(GameEvent event, GameObject* gameObject)
 		{
 			for (const auto& observer : m_observers)
 			{

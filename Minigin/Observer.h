@@ -10,7 +10,7 @@ namespace dae
 		explicit Observer() = default;
 		virtual ~Observer() = default;
 
-		virtual void Notify(Event event, GameObject* gameObject) = 0;
+		virtual void Notify(GameEvent event, GameObject* gameObject) = 0;
 	};
 
 }
