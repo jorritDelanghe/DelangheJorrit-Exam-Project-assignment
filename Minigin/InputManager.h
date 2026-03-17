@@ -32,6 +32,16 @@ namespace dae
 	private:
 		std::unique_ptr<InputManagerImpl> m_pInputManagerImpl;
 	};
-	
 
+	namespace GamepadButton
+	{
+		constexpr unsigned int DpadUp = 0x0001;
+		constexpr unsigned int DpadDown = 0x0002;
+		constexpr unsigned int DpadLeft = 0x0004;
+		constexpr unsigned int DpadRight = 0x0008;
+		constexpr unsigned int A = 0x1000;
+		constexpr unsigned int B = 0x2000;
+		constexpr unsigned int X = 0x4000;
+		constexpr unsigned int Y = 0x8000;
+	}
 }
