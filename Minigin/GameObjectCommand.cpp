@@ -1,4 +1,5 @@
 #include "GameObjectCommand.h"
+#include "HealthComponent.h"
 #include "Time.h"
 namespace dae
 {
@@ -20,5 +21,9 @@ namespace dae
 	void MoveGameObjectCommand::Execute()
 	{
 		GetGameObject()->SetLocalPosition(GetGameObject()->GetLocalPosition() + (m_speed * m_direction* dae::Time::deltaTime));
+	}
+	void DieCommand::Execute()
+	{
+		GetGameObject()->GetComponent<HealthComponent>()->Die();
 	}
 }

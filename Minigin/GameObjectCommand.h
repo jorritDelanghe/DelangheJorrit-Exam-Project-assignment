@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 namespace dae
 {
+	//gameobject
 	class GameObjectCommand :public Command
 	{
 	public:
@@ -20,6 +21,7 @@ namespace dae
 		GameObject* m_pGameObject;
 	};
 
+	//move
 	class MoveGameObjectCommand final : public GameObjectCommand
 	{
 	public:
@@ -36,6 +38,20 @@ namespace dae
 	private:
 		glm::vec3 m_direction;
 		float m_speed;
+	};
+
+	//die
+	class DieCommand : public GameObjectCommand
+	{
+		explicit DieCommand(GameObject* gameObject);
+		virtual ~DieCommand() noexcept override = default;
+
+		DieCommand(const DieCommand& other) = delete;
+		DieCommand(DieCommand&& other) = delete;
+		DieCommand& operator=(const DieCommand& other) = delete;
+		DieCommand& operator=(DieCommand&& other) = delete;
+
+		virtual void Execute()override;
 	};
 }
 
