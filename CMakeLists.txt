@@ -34,15 +34,9 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/RotatorComponent.cpp 
   Minigin/CacheTestComponent.cpp 
   Minigin/Controller.cpp
-  Minigin/GameObjectCommand.cpp)
-
- if(WIN32 AND NOT EMSCRIPTEN)
-  target_sources(${TARGET_NAME} PRIVATE 
-   Minigin/Main.cpp
+  Minigin/GameObjectCommand.cpp
+  Minigin/Main.cpp
   Minigin/Controller.cpp)
-else()
-  target_sources(${TARGET_NAME} PRIVATE Minigin/Main_web.cpp)
-endif()
 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
