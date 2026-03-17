@@ -1,4 +1,5 @@
 #include "GameObjectCommand.h"
+#include "Time.h"
 namespace dae
 {
 	GameObjectCommand::GameObjectCommand(GameObject* gameObject)
@@ -18,6 +19,7 @@ namespace dae
 	}
 	void MoveGameObjectCommand::Execute()
 	{
-		GetGameObject()->SetLocalPosition(GetGameObject()->GetLocalPosition() + (m_speed * m_direction));
+		const float dt = Time::GetInstance().GetDeltaTime();
+		GetGameObject()->SetLocalPosition(GetGameObject()->GetLocalPosition() + (m_speed * m_direction*dt));
 	}
 }
