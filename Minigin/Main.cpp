@@ -18,10 +18,6 @@
 #include "Scene.h"
 #include "GameObjectCommand.h"
 #include "InputManager.h"
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <XInput.h>
-
 #include <filesystem>
 namespace fs = std::filesystem;
 using namespace dae;
@@ -88,19 +84,19 @@ static void load()
 	scene.Add(std::move(controllerPlayer));
 
 	auto& input = InputManager::GetInstance();
-	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_UP, InputManager::TriggerType::Isdown,
+	input.BindControllerCommand(dae::GamepadButton::DpadUp, InputManager::TriggerType::Isdown,
 		std::make_unique<MoveGameObjectCommand>
 	(pPlayer, doubleSpeed, glm::vec3{ 0.f,-1.f,0.f }));
 
-	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_DOWN, InputManager::TriggerType::Isdown
+	input.BindControllerCommand(dae::GamepadButton::DpadDown, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>
 		(pPlayer, doubleSpeed, glm::vec3{ 0.f,1.f,0.f }));
 
-	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_RIGHT, InputManager::TriggerType::Isdown
+	input.BindControllerCommand(dae::GamepadButton::DpadRight, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>
 		(pPlayer, doubleSpeed, glm::vec3{ 1.f,0.f,0.f }));
 
-	input.BindControllerCommand(XINPUT_GAMEPAD_DPAD_LEFT, InputManager::TriggerType::Isdown
+	input.BindControllerCommand(dae::GamepadButton::DpadLeft, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>
 		(pPlayer, doubleSpeed, glm::vec3{ -1.f,0.f,0.f }));
 
