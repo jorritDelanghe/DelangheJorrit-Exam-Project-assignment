@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#define USE_SDL
+
 namespace dae
 {
 	class Controller
