@@ -115,7 +115,7 @@ void dae::Minigin::RunOneFrame()
 		deltaTime = maxFrameTimeMs;
 	}
 
-	Time::GetInstance().SetDeltaTime(deltaTime); //set deltatime as global variable
+	dae::Time::deltaTime = deltaTime; //set deltatime as global variable
 
 	//process input
 	m_quit = !InputManager::GetInstance().ProcessInput();

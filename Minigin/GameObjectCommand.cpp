@@ -19,7 +19,6 @@ namespace dae
 	}
 	void MoveGameObjectCommand::Execute()
 	{
-		const float dt = Time::GetInstance().GetDeltaTime();
-		GetGameObject()->SetLocalPosition(GetGameObject()->GetLocalPosition() + (m_speed * m_direction*dt));
+		GetGameObject()->SetLocalPosition(GetGameObject()->GetLocalPosition() + (m_speed * m_direction* dae::Time::deltaTime));
 	}
 }
