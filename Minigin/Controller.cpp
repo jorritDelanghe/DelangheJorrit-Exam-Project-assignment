@@ -4,10 +4,9 @@
 	#include <windows.h>
 	#include "Xinput.h" //not in the header so I get pimple, needs things in windows.h always put under windows.h
 	#pragma comment(lib,"xinput.lib")
-
+#else
 	#include <SDl3/SDL.h>
 	#include <SDL3/SDL_gamepad.h>
-#else
 #endif
 namespace dae
 {
