@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#define USE_SDL
 namespace dae
 {
 	class Controller
@@ -19,8 +20,13 @@ namespace dae
 		bool IsUpThisFrame(unsigned int button) const;
 
 	private:
-		class ControllerImpl;
-		std::unique_ptr<ControllerImpl> m_pControllerImpl;
+		#if _WIN32
+		class ControllerXInputImpl;
+		std::unique_ptr<ControllerXInputImpl> m_pControllerXInputImpl;
+		#else
+		class ControllerSdlImpl;
+		std::unique_ptr<ControllerSdlImpl> m_pControllerSDLImpl;
+		#endif
 	};
 
 }
