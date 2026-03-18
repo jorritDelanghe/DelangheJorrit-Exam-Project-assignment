@@ -15,7 +15,7 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
-#include "Time.h"
+#include "GameTime.h"
 
 SDL_Window* g_window{};
 
@@ -115,7 +115,7 @@ void dae::Minigin::RunOneFrame()
 		deltaTime = maxFrameTimeMs;
 	}
 
-	dae::Time::deltaTime = deltaTime; //set deltatime as global variable
+	dae::GameTime::deltaTime = deltaTime; //set deltatime as global variable
 
 	//process input
 	m_quit = !InputManager::GetInstance().ProcessInput();
