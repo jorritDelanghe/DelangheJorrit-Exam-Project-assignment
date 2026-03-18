@@ -22,6 +22,7 @@
 #include "LivesDisplayComponent.h"
 #include "PointsComponent.h"
 #include "PointsDisplayComponent.h"
+#include "AchievementComponent.h"
 #include <filesystem>
 namespace fs = std::filesystem;
 using namespace dae;
@@ -101,6 +102,7 @@ static void load()
 	controllerPlayer->AddComponent<RenderComponent>("digger2.png");
 	auto* health = controllerPlayer->AddComponent<HealthComponent>(3);
 	auto* points = controllerPlayer->AddComponent<PointsComponent>();
+	auto* achieve = controllerPlayer->AddComponent<AchievementComponent>();
 	scene.Add(std::move(controllerPlayer));
 
 	// lives display object
@@ -118,12 +120,13 @@ static void load()
 	//observers
 	health->OnDied().AddObservers(livesDisplay);
 	points->OnPointsChanged().AddObservers(pointsDisplay);
+	points->OnPointsChanged().AddObservers(achieve);
 
 	auto& input = InputManager::GetInstance();
 	//dead bind input
 	input.BindKeyboardCommand(SDL_SCANCODE_SPACE, InputManager::TriggerType::IsDownThisFrame, std::make_unique<DieCommand>(pPlayer));
 	input.BindKeyboardCommand(SDL_SCANCODE_E, InputManager::TriggerType::IsDownThisFrame,
-		std::make_unique<GainPointsCommand>(pPlayer, 10));
+		std::make_unique<GainPointsCommand>(pPlayer, 100));
 
 	input.BindControllerCommand(dae::GamepadButton::DpadUp, InputManager::TriggerType::Isdown,
 		std::make_unique<MoveGameObjectCommand>
@@ -148,6 +151,7 @@ static void load()
 	keyBoardPlayer->AddComponent<RenderComponent>("digger2.png");
 	auto* health1 = keyBoardPlayer->AddComponent<HealthComponent>(3);
 	auto* points1 = keyBoardPlayer->AddComponent<PointsComponent>();
+	auto* achieve1 = keyBoardPlayer->AddComponent<AchievementComponent>();
 	scene.Add(std::move(keyBoardPlayer));
 
 	// lives display object
@@ -165,11 +169,12 @@ static void load()
 	//observers
 	health1->OnDied().AddObservers(livesDisplayPlayer1);
 	points1->OnPointsChanged().AddObservers(pointsDisplayPlayer1);
+	points1->OnPointsChanged().AddObservers(achieve1);
 
 
 	//dead bind input
 	input.BindKeyboardCommand(SDL_SCANCODE_Q, InputManager::TriggerType::IsDownThisFrame, std::make_unique<DieCommand>(pKeyPlayer));
-	input.BindKeyboardCommand(SDL_SCANCODE_Z, InputManager::TriggerType::IsDownThisFrame, std::make_unique<GainPointsCommand>(pKeyPlayer, 10));
+	input.BindKeyboardCommand(SDL_SCANCODE_Z, InputManager::TriggerType::IsDownThisFrame, std::make_unique<GainPointsCommand>(pKeyPlayer, 100));
 	//wasd
 	input.BindKeyboardCommand(SDL_SCANCODE_W, InputManager::TriggerType::Isdown
 		, std::make_unique<MoveGameObjectCommand>(
