@@ -1,8 +1,8 @@
 #pragma once
+#include "Event.h"
 namespace dae
 {
 	class GameObject;
-	enum class Event;
 
 	class Observer
 	{

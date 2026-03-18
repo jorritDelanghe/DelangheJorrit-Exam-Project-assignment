@@ -4,7 +4,7 @@
 #include <memory>
 namespace dae
 {
-	enum class Event;
+	enum class GameEvent;
 	class GameObject;
 	class Subject final
 	{
@@ -23,7 +23,7 @@ namespace dae
 		}
 		void RemoveObserver(Observer* observer)
 		{
-			m_observers.erase(std::remove(m_observers.begin(), m_observers.end(), observer));
+			m_observers.erase(std::remove(m_observers.begin(), m_observers.end(), observer), m_observers.end());
 		}
 
 		void NotifyObservers(GameEvent event, GameObject* gameObject)
