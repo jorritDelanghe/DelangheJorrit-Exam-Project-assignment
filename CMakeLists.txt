@@ -39,6 +39,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/LivesDisplayComponent.cpp
   Minigin/PointsComponent.cpp
   Minigin/PointsDisplayComponent.cpp
+  Minigin/AchievementComponent.cpp
   Minigin/Main.cpp
   Minigin/Controller.cpp)
 
