@@ -12,7 +12,7 @@ dae::HealthComponent::HealthComponent(GameObject* gameObject, int lives)
 
 void dae::HealthComponent::Die()
 {
-	if (m_lives < 0) return;
+	if (m_lives <= 0) return;
 	--m_lives;
 	m_onDied.NotifyObservers(GameEvent::PlayerDied, Component::GetOwner());
 }

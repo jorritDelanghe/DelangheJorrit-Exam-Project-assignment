@@ -22,7 +22,6 @@ namespace dae
 
 	private:
 		int m_lives{};
-		bool m_isDead{ false };
 		dae::Subject m_onDied{};
 	};
 
