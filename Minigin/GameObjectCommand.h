@@ -41,7 +41,7 @@ namespace dae
 	};
 
 	//die
-	class DieCommand : public GameObjectCommand
+	class DieCommand final: public GameObjectCommand
 	{
 	public:
 		explicit DieCommand(GameObject* gameObject);
@@ -53,6 +53,22 @@ namespace dae
 		DieCommand& operator=(DieCommand&& other) = delete;
 
 		virtual void Execute()override;
+	};
+	//points command
+	class GainPointsCommand final: public GameObjectCommand
+	{
+	public:
+		explicit GainPointsCommand(GameObject* gameObject, int points);
+		virtual~GainPointsCommand()noexcept override = default;
+
+		GainPointsCommand(const GainPointsCommand& other) = delete;
+		GainPointsCommand(GainPointsCommand&& other) = delete;
+		GainPointsCommand& operator=(const GainPointsCommand& other) = delete;
+		GainPointsCommand& operator=(GainPointsCommand&& other) = delete;
+
+		virtual void Execute() override;
+	private:
+		int m_points{};
 	};
 }
 

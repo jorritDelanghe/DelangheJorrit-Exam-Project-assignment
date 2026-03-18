@@ -1,5 +1,6 @@
 #include "GameObjectCommand.h"
 #include "HealthComponent.h"
+#include "PointsComponent.h"
 #include "GameTime.h"
 namespace dae
 {
@@ -29,5 +30,14 @@ namespace dae
 	void DieCommand::Execute()
 	{
 		GetGameObject()->GetComponent<HealthComponent>()->Die();
+	}
+	GainPointsCommand::GainPointsCommand(GameObject* gameObject, int points)
+		: GameObjectCommand(gameObject)
+		,m_points(points)
+	{
+	}
+	void GainPointsCommand::Execute()
+	{
+		GetGameObject()->GetComponent<PointsComponent>()->AddScore(m_points);
 	}
 }
