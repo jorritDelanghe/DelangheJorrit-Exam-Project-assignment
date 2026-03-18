@@ -4,6 +4,7 @@ namespace dae
 	enum class GameEvent
 	{
 		PlayerDied,
-		PlayerPickedUp
+		PlayerPickedUp,
+		EnemyDied
 	};
 }
