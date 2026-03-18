@@ -1,5 +1,4 @@
 # include "PointsDisplayComponent.h"
-#include "PointsDisplayComponent.h"
 #include "TextComponent.h"
 #include "PointsComponent.h"
 #include "GameObject.h"

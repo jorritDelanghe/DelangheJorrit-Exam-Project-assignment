@@ -19,7 +19,7 @@ void dae::AchievementComponent::Notify(GameEvent event, GameObject* pGameObject)
 	if (m_achieved) return;
 	if (event != GameEvent::PlayerPickedUp) return;
 	auto* score = pGameObject->GetComponent<PointsComponent>();
-	if (score && score->GetScore() > maxPoints)
+	if (score && score->GetScore() >= maxPoints)
 	{
 		UnlockAchievement();
 	}
