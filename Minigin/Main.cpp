@@ -18,6 +18,8 @@
 #include "Scene.h"
 #include "GameObjectCommand.h"
 #include "InputManager.h"
+#include "HealthComponent.h"
+#include "LivesDisplayComponent.h"
 #include <filesystem>
 namespace fs = std::filesystem;
 using namespace dae;
@@ -75,15 +77,26 @@ static void load()
 	scene.Add(std::move(cacheTestObj));*/
 
 	//add move player 2
-	constexpr float speed{ 1.f };
+	constexpr float speed{ 100.f };
 	constexpr float doubleSpeed{ speed * 2.f };
 	auto controllerPlayer = std::make_unique<GameObject>();
 	controllerPlayer->SetLocalPosition({ 300.f,300.f,0.f });
 	GameObject* pPlayer = controllerPlayer.get();
 	controllerPlayer->AddComponent<RenderComponent>("digger2.png");
+	auto* health = controllerPlayer->AddComponent<HealthComponent>(3);
 	scene.Add(std::move(controllerPlayer));
 
+	// lives display object
+	auto livesDisplayObj = std::make_unique<GameObject>();
+	auto* livesDisplay = livesDisplayObj->AddComponent<LivesDisplayComponent>(font, SDL_Color{ 255,255,255,255 },3);
+	livesDisplayObj->SetLocalPosition({ 10.f, 50.f, 0.f });
+	scene.Add(std::move(livesDisplayObj));
+
+	health->OnDied().AddObservers(livesDisplay);
+
 	auto& input = InputManager::GetInstance();
+	//dead bind input
+	input.BindKeyboardCommand(SDL_SCANCODE_SPACE, InputManager::TriggerType::IsDownThisFrame, std::make_unique<DieCommand>(pPlayer));
 	input.BindControllerCommand(dae::GamepadButton::DpadUp, InputManager::TriggerType::Isdown,
 		std::make_unique<MoveGameObjectCommand>
 	(pPlayer, doubleSpeed, glm::vec3{ 0.f,-1.f,0.f }));
