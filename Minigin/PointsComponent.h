@@ -1,11 +1,12 @@
 #pragma once
 #include "Component.h"
 #include "Subject.h"
+#include "Observer.h"
 
 namespace dae
 {
 	class GameObject;
-	class PointsComponent final : public Component
+	class PointsComponent final : public Component, public Observer
 	{
 	public:
 		explicit PointsComponent(GameObject* gameObject);
@@ -13,7 +14,7 @@ namespace dae
 		virtual ~PointsComponent()noexcept override  = default;
 		PointsComponent(const PointsComponent& other) = delete;
 		PointsComponent(PointsComponent&& other) = delete;
-		PointsComponent& operator=(const PointsComponent* other) = delete;
+		PointsComponent& operator=(const PointsComponent& other) = delete;
 		PointsComponent& operator=(PointsComponent&& other) = delete;
 
 		void AddScore(int points);
