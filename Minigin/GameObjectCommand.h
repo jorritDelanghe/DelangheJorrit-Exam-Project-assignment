@@ -43,6 +43,7 @@ namespace dae
 	//die
 	class DieCommand : public GameObjectCommand
 	{
+	public:
 		explicit DieCommand(GameObject* gameObject);
 		virtual ~DieCommand() noexcept override = default;
 
