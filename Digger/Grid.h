@@ -23,6 +23,7 @@ namespace dae
 		int GetRows() const;
 		float GetTileSize() const;
 
+
 	private:
 		int m_rows{};
 		int m_cols{};
