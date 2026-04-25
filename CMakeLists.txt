@@ -43,7 +43,10 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/Main.cpp
   Minigin/Controller.cpp
 
-  Digger/Grid.cpp)
+  Digger/Grid.cpp
+  Digger/LevelLoader.cpp
+  Digger/GridComponent.cpp
+)
 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
