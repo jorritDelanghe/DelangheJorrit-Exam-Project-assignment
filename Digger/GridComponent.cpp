@@ -1,11 +1,13 @@
 #include "GridComponent.h"
 #include "renderer.h"
 #include "ResourceManager.h"
+#include"DataTypes.h"
+#include "LevelLoader.h"
 
-dae::GridComponent::GridComponent(GameObject* pOwner, int cols, int rows, float tileSize)
+dae::GridComponent::GridComponent(GameObject* pOwner, const std::string& filePath)
 	:Component(pOwner)
-	, m_grid{ cols, rows, tileSize }
 {
+	LevelLoader(filePath, m_grid);
 	m_dirtTexture = ResourceManager::GetInstance().LoadTexture("Resources/dirt.png");
 	m_tunnelTexture = ResourceManager::GetInstance().LoadTexture("Resources/tunnel.png");
 }
@@ -45,7 +47,7 @@ float dae::GridComponent::RowToWorld(int row) const
 	return row * m_grid.GetTileSize();
 }
 
-const Grid& dae::GridComponent::GetGrid()const
+const dae::Grid& dae::GridComponent::GetGrid()const
 {
 	return m_grid;
 }
@@ -56,7 +58,7 @@ void dae::GridComponent::RenderTile(int col, int row) const
 
 	switch (m_grid.GetTile(col, row))
 	{
-		case TileType::Dirt:
+		case TileType::DirtWall:
 			texture = m_dirtTexture;
 			break;
 		case TileType::Tunnel:

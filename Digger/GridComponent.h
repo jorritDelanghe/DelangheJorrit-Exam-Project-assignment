@@ -4,13 +4,15 @@
 #include "GameObject.h"
 #include "texture2D.h"
 #include <memory>
+#include"Grid.h"
+
 namespace dae
 {
 	class GridComponent final : public Component
 	{
-		explicit GridComponent(GameObject*pOwner, int cols, int rows, float tileSize);
+		explicit GridComponent(GameObject*pOwner, const std::string& filePath);
 
-		virtual void Render() override const;
+		virtual void Render() const override;
 		void DiggedTile(int col, int row);
 
 		int WorldToCol(float x) const;
@@ -22,10 +24,10 @@ namespace dae
 		const Grid& GetGrid()const;
 
 	private:
-		Grid m_grid{};
+		dae::Grid m_grid{};
 
 		std::shared_ptr<Texture2D> m_dirtTexture{};
-		std::sahred_ptr<Texture2D> m_tunnelTexture{};
+		std::shared_ptr<Texture2D> m_tunnelTexture{};
 
 		void RenderTile(int col, int row) const;
 	};
