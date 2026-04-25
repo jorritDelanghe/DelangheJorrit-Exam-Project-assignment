@@ -1,19 +1,15 @@
 #pragma once
 #include <vector>
+#include <string>
+#include "DataTypes.h"
 
 namespace dae
 {
-	enum class TileType
-	{
-		Dirt
-		,Tunnel
-		,Empty
-	};
-
 	class Grid
 	{
 	public:
-		explicit Grid(int cols, int rows, float tileSize);
+		Grid() = default; //problem otherwise in gridcomponent with intializing
+		explicit Grid(int cols, int rows, float tileSize,const std::vector<TileType>& tiles);
 
 		TileType GetTile(int col, int row) const;
 		void SetTileType(int col, int row, const TileType& type);

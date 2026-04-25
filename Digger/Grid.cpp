@@ -1,11 +1,13 @@
 #include "Grid.h"
 
-dae::Grid::Grid(int cols, int rows, float tileSize)
+
+dae::Grid::Grid(int cols, int rows, float tileSize, const std::vector<TileType>& tiles)
 	:m_cols(cols)
 	,m_rows(rows)
 	,m_tileSize(tileSize)
-	,m_tiles(cols * rows, TileType::Dirt)
+	,m_tiles(tiles)
 {
+
 }
 
 dae::TileType dae::Grid::GetTile(int col, int row) const
