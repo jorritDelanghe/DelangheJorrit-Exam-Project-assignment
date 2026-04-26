@@ -20,8 +20,8 @@ void dae::PointsDisplayComponent::Notify(GameEvent event, GameObject* pGameObjec
     if (points && m_pText)
     {
         const std::string score{ std::to_string(points->GetScore()) };
-        const std::string scoreText{ std::string(5 - std::min(score.size(),size_t(5)),'0') + score};
+        const std::string scoreText{ std::string(5 - std::min(static_cast<int>(score.size()), 5),'0') + score};
 
-        m_pText->SetText("Points: " + std::to_string(points->GetScore()));
+        m_pText->SetText(scoreText);
     }
 }
