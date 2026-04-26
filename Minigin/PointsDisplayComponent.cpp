@@ -10,7 +10,7 @@ dae::PointsDisplayComponent::PointsDisplayComponent(GameObject* pGameObject,
     : Component(pGameObject)
 {
     m_pText = pGameObject->AddComponent<TextComponent>(font, color);
-    m_pText->SetText("Score: 0");
+    m_pText->SetText("00000");
 }
 
 void dae::PointsDisplayComponent::Notify(GameEvent event, GameObject* pGameObject)
@@ -19,6 +19,9 @@ void dae::PointsDisplayComponent::Notify(GameEvent event, GameObject* pGameObjec
     auto* points = pGameObject->GetComponent<PointsComponent>();
     if (points && m_pText)
     {
+        const std::string score{ std::to_string(points->GetScore()) };
+        const std::string scoreText{ std::string(5 - std::min(score.size(),size_t(5)),'0') + score};
+
         m_pText->SetText("Points: " + std::to_string(points->GetScore()));
     }
 }
