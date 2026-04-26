@@ -46,6 +46,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Digger/Grid.cpp
   Digger/LevelLoader.cpp
   Digger/GridComponent.cpp
+  Digger/DiggerScene.cpp
 )
 
 # enable c++20 features
@@ -157,6 +158,7 @@ find_package(Steamworks QUIET)
 
 target_include_directories("${TARGET_NAME}" PUBLIC
   ${CMAKE_SOURCE_DIR}/Minigin/
+  ${CMAKE_SOURCE_DIR}/Digger/
     ${glm_SOURCE_DIR}
   ${sdl3_SOURCE_DIR}/include
   ${sdl3_image_SOURCE_DIR}/include
