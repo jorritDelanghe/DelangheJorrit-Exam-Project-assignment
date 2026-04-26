@@ -1,4 +1,4 @@
-#include <SDL3/SDL.h>
+
 #include <SDL3/SDL_main.h>
 
 #if _DEBUG && __has_include(<vld.h>)
