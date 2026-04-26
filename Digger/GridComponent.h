@@ -1,5 +1,4 @@
 #pragma once
-#include "Grid.h"
 #include "Component.h"
 #include "GameObject.h"
 #include "texture2D.h"
@@ -10,6 +9,7 @@ namespace dae
 {
 	class GridComponent final : public Component
 	{
+	public:
 		explicit GridComponent(GameObject*pOwner, const std::string& filePath);
 
 		virtual void Render() const override;
