@@ -10,6 +10,8 @@ dae::GridComponent::GridComponent(GameObject* pOwner, const std::string& filePat
 	LevelLoader levelLoader(filePath, m_grid); //needs to be temp object or else gets deleted for filling grid
 	m_dirtTexture = ResourceManager::GetInstance().LoadTexture("Resources/dirt.png");
 	m_tunnelTexture = ResourceManager::GetInstance().LoadTexture("Resources/tunnel.png");
+	m_emeraldTexture = ResourceManager::GetInstance().LoadTexture("resources/emerald.png");
+	m_goldTexture = ResourceManager::GetInstance().LoadTexture("resources/goldBagSingle.png");
 }
 
 void dae::GridComponent::Render() const
@@ -63,6 +65,12 @@ void dae::GridComponent::RenderTile(int col, int row) const
 			break;
 		case TileType::Tunnel:
 			texture = m_tunnelTexture;
+			break;
+		case TileType::Emerald:
+			texture = m_emeraldTexture;
+			break;
+		case TileType::GoldBag:
+			texture = m_goldTexture;
 			break;
 		default:
 			return;

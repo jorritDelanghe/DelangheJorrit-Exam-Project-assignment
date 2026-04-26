@@ -28,6 +28,8 @@ namespace dae
 
 		std::shared_ptr<Texture2D> m_dirtTexture{};
 		std::shared_ptr<Texture2D> m_tunnelTexture{};
+		std::shared_ptr<Texture2D> m_emeraldTexture{};
+		std::shared_ptr<Texture2D> m_goldTexture{};
 
 		void RenderTile(int col, int row) const;
 	};
