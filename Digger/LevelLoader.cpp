@@ -4,6 +4,7 @@
 #include <fstream>
 #include <stdexcept>
 #include <string>
+#include <windows.h>
 
 dae::LevelLoader::LevelLoader(const std::string& filePath, Grid& grid)
 {
@@ -15,6 +16,7 @@ void dae::LevelLoader::loadLevelFromFile(const std::string& filePath, Grid& grid
 	std::ifstream file(filePath);
 	if (!file.is_open())
 	{
+		OutputDebugStringA(("Could not open file: " + filePath + "\n").c_str());
 		throw std::runtime_error("Could not open file: " + filePath);
 	}
 	int cols{};
@@ -26,17 +28,16 @@ void dae::LevelLoader::loadLevelFromFile(const std::string& filePath, Grid& grid
 	while (std::getline(file, line))
 	{
 		if (line.empty()) continue;
+		if(line.rfind("TileSize:",0) == 0)
+		{
+			tileSize = std::stof(line.substr(9));
+			continue;
+		}
 		if (cols == 0)
 		{
 			cols = static_cast<int>(line.size());
 		}
 
-		if(line == "TileSize:")
-		{
-			std::getline(file, line);
-			tileSize = std::stof(line);
-			continue;
-		}
 		for (char character : line)
 		{
 			switch (character)
@@ -59,4 +60,7 @@ void dae::LevelLoader::loadLevelFromFile(const std::string& filePath, Grid& grid
 		++rows;
 	}
 	grid = Grid(cols, rows, tileSize, tiles);
+	OutputDebugStringA((std::to_string(cols) + "\n").c_str());
+	OutputDebugStringA((std::to_string(rows) + "\n").c_str());
+	OutputDebugStringA((std::to_string(tileSize) + "\n").c_str());
 }
