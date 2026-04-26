@@ -3,6 +3,7 @@
 #include "Observer.h"
 #include <memory>
 #include <SDL3/SDL.h>  
+#include "Texture2D.h"
 
 namespace dae
 {
@@ -14,7 +15,7 @@ namespace dae
 	class LivesDisplayComponent final : public Component, public Observer
 	{
 	public:
-		explicit LivesDisplayComponent(GameObject* gameObject, std::shared_ptr<Font> font, SDL_Color color, int startLives);
+		explicit LivesDisplayComponent(GameObject* gameObject, const std::string& fileName, float size, float spacing, int startLives);
 		virtual ~LivesDisplayComponent() noexcept override = default;
 
 		LivesDisplayComponent(const LivesDisplayComponent& other) = delete;
@@ -22,9 +23,15 @@ namespace dae
 		LivesDisplayComponent& operator=(const LivesDisplayComponent& other) = delete;
 		LivesDisplayComponent& operator= (LivesDisplayComponent&& other) = delete;
 
+		virtual void Render() const override;
 		virtual void Notify(GameEvent event, GameObject* gameObject) override;
 	private:
-		TextComponent* m_text{nullptr};
+		void DrawLives() const;
+
+		std::shared_ptr<Texture2D>m_texture;
+		float m_size{};
+		float m_spacing{};
+		int m_lives{};
 	};
 
 }
