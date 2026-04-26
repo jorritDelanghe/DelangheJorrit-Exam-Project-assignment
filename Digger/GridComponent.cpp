@@ -7,7 +7,7 @@
 dae::GridComponent::GridComponent(GameObject* pOwner, const std::string& filePath)
 	:Component(pOwner)
 {
-	LevelLoader(filePath, m_grid);
+	LevelLoader levelLoader(filePath, m_grid); //needs to be temp object or else gets deleted for filling grid
 	m_dirtTexture = ResourceManager::GetInstance().LoadTexture("Resources/dirt.png");
 	m_tunnelTexture = ResourceManager::GetInstance().LoadTexture("Resources/tunnel.png");
 }
