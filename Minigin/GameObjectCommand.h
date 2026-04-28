@@ -21,28 +21,6 @@ namespace dae
 		GameObject* m_pGameObject;
 	};
 
-	//move
-	class GridComponent;
-	class MoveGameObjectCommand final : public GameObjectCommand
-	{
-	public:
-		explicit MoveGameObjectCommand(GameObject* gameObject, float speed, const glm::vec3& direction, GridComponent* grid);
-		virtual ~MoveGameObjectCommand() noexcept override = default;
-
-		MoveGameObjectCommand(const MoveGameObjectCommand& other) = delete;
-		MoveGameObjectCommand(MoveGameObjectCommand&& other) = delete;
-		MoveGameObjectCommand& operator= (const MoveGameObjectCommand& other) = delete;
-		MoveGameObjectCommand& operator= (MoveGameObjectCommand&& other) = delete;
-
-		virtual void Execute() override;
-
-	private:
-		glm::vec3 m_direction;
-		float m_speed;
-		GridComponent* m_grid;
-
-	};
-
 	//die
 	class DieCommand final: public GameObjectCommand
 	{
