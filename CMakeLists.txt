@@ -12,9 +12,8 @@ else()
   set(TARGET_NAME minigin)
   set(TARGET_PARAM WIN32)
 endif()
-
-# list source files here
-add_executable(${TARGET_NAME} ${TARGET_PARAM}
+# engine static library
+add_library(Minigin STATIC
   Minigin/Font.cpp
   Minigin/GameObject.cpp
   Minigin/InputManager.cpp
@@ -40,16 +39,17 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/PointsComponent.cpp
   Minigin/PointsDisplayComponent.cpp
   Minigin/AchievementComponent.cpp
-  Minigin/Main.cpp
   Minigin/Controller.cpp
-  Minigin/SDLSoundSystem.cpp
+  Minigin/SDLSoundSystem.cpp)
 
+# list source files here
+add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Digger/Grid.cpp
   Digger/LevelLoader.cpp
   Digger/GridComponent.cpp
   Digger/DiggerScene.cpp
-
-
+  Digger/MoveDiggerCommand.cpp
+  Minigin/Main.cpp
 )
 
 # enable c++20 features
@@ -206,13 +206,17 @@ target_include_directories("${TARGET_NAME}" PUBLIC
 )
 
 target_link_libraries("${TARGET_NAME}" PUBLIC
+  Minigin #Link the engine into the game
+ 
+)
+
+target_link_libraries(Minigin PUBLIC
   SDL3::SDL3
   SDL3_ttf::SDL3_ttf
   SDL3_mixer::SDL3_mixer
   glm::glm
   imgui
-  ${VLD_LIBRARIES}
-)
+  ${VLD_LIBRARIES})
 
 if(MSVC)
   # compile at warning level 4 + treat warnings as errors
