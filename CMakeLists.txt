@@ -40,6 +40,7 @@ add_library(Minigin STATIC
   Minigin/PointsDisplayComponent.cpp
   Minigin/AchievementComponent.cpp
   Minigin/Controller.cpp
+  Minigin/ServiceLocator.cpp
   Minigin/SDLSoundSystem.cpp)
 
 # list source files here
