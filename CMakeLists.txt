@@ -195,13 +195,13 @@ target_include_directories("${TARGET_NAME}" PUBLIC
 
 target_link_libraries("${TARGET_NAME}" PUBLIC
   Minigin #Link the engine into the game
+  SDL3_mixer::SDL3_mixer
  
 )
 
 target_link_libraries(Minigin PUBLIC
   SDL3::SDL3
   SDL3_ttf::SDL3_ttf
-  SDL3_mixer::SDL3_mixer
   glm::glm
   imgui
   ${VLD_LIBRARIES})
