@@ -6,18 +6,6 @@
 #include <queue>
 #include <string>
 
-dae::SDLSoundSystem::~SDLSoundSystem()
-{
-}
-
-void dae::SDLSoundSystem::Play(SoundID soundID, float volume)
-{
-}
-
-void dae::SDLSoundSystem::Stop(SoundID soundID)
-{
-}
-
 //SDLSoundSystemImpl
 namespace dae
 {
@@ -95,7 +83,7 @@ namespace dae
 						{
 							MIX_Track* track = MIX_CreateTrack(m_mixer);
 							MIX_SetTrackAudio(track, audio);
-							MIX_SetTrackGain(track, soundReq.soundId); //set volume
+							MIX_SetTrackGain(track, soundReq.volume); //set volume
 							MIX_PlayTrack(track,0);
 						}
 						lock.lock(); //lock so the queue can safely be accessed 
@@ -106,7 +94,7 @@ namespace dae
 
 		std::jthread m_thread{};
 		MIX_Mixer* m_mixer{nullptr};
-		SoundID m_currentNumId; //gets higher every time new sound
+		SoundID m_currentNumId{}; //gets higher every time new sound
 		std::map<SoundID, std::string> m_nameSoundsMap;
 		std::map<SoundID, MIX_Audio*>m_audiosMap;
 
@@ -116,4 +104,27 @@ namespace dae
 		std::condition_variable m_conditionVar{};
 
 	};
+}
+
+dae::SDLSoundSystem::SDLSoundSystem()
+	:m_pSDLSoundSystemImpl(std::make_unique<SDLSoundSystemImpl>())
+{
+}
+
+dae::SDLSoundSystem::~SDLSoundSystem()
+{
+}
+
+void dae::SDLSoundSystem::Play(SoundID soundID, float volume)
+{
+	m_pSDLSoundSystemImpl->Play(soundID, volume);
+}
+
+void dae::SDLSoundSystem::Stop(SoundID soundID)
+{
+
+}
+dae::SoundID dae::SDLSoundSystem::AddSound(const std::string& soundName)
+{
+	return m_pSDLSoundSystemImpl->AddSound(soundName);
 }

@@ -7,7 +7,7 @@ namespace dae
 	class SDLSoundSystem final : public SoundService
 	{
 	public:
-		explicit SDLSoundSystem() = default;
+		explicit SDLSoundSystem();
 		virtual ~SDLSoundSystem()  override;
 
 		SDLSoundSystem(const SDLSoundSystem& other) = delete;
@@ -17,6 +17,8 @@ namespace dae
 
 		virtual void Play(SoundID soundID, float volume) override;
 		virtual void Stop(SoundID soundID) override;
+		virtual SoundID AddSound(const std::string& soundName) override;
+	
 
 	private:
 		class SDLSoundSystemImpl;
