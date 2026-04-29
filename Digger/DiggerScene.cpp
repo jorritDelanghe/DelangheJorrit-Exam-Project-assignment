@@ -21,6 +21,10 @@
 //sound
 #include "ServiceLocator.h"
 #include "SDLSoundSystem.h"
+
+//text 
+#include "TextComponent.h"
+#include "Font.h"
 namespace dae
 {
 	void diggerScene::loadScene()
@@ -68,6 +72,19 @@ namespace dae
 		health->OnDied().AddObservers(livesDisplay);
 		points->OnPointsChanged().AddObservers(pointsDisplay);
 	
+		//instructions
+		SDL_Color white{ 255, 255, 255, 255 };
+		auto instructionP1 = std::make_unique<GameObject>();
+		instructionP1->SetLocalPosition({ 10.f, 450.f, 0.f });
+		auto* textP1 = instructionP1->AddComponent<TextComponent>(font, white);
+		textP1->SetText("Dig dirt or gather gems for sound");
+		scene.Add(std::move(instructionP1));
+
+		auto instructionP2 = std::make_unique<GameObject>();
+		instructionP2->SetLocalPosition({ 10.f, 500.f, 0.f });
+		auto* textP2 = instructionP2->AddComponent<TextComponent>(font, white);
+		textP2->SetText("Move WASD, arrows, dont press two keys same time");
+		scene.Add(std::move(instructionP2));
 
 		//controls keyboard
 		auto& input = InputManager::GetInstance();
