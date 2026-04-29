@@ -11,7 +11,7 @@ class GameObject;
 class MoveDiggerCommand final : public GameObjectCommand
 {
 public:
-	explicit MoveDiggerCommand(dae::GameObject* gameObject, float speed, const glm::vec3& direction, dae::GridComponent* grid, dae::SoundID soundID);
+	explicit MoveDiggerCommand(dae::GameObject* gameObject, float speed, const glm::vec3& direction, dae::GridComponent* grid, dae::SoundID soundID, dae::SoundID gemSound);
 	virtual ~MoveDiggerCommand() noexcept override = default;
 
 	MoveDiggerCommand(const MoveDiggerCommand& other) = delete;
@@ -26,4 +26,5 @@ private:
 	float m_speed;
 	dae::GridComponent* m_grid;
 	dae::SoundID m_digSound;
+	dae::SoundID m_gemSound;
 };

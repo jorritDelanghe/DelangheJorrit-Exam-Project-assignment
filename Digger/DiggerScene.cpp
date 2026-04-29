@@ -37,6 +37,7 @@ namespace dae
 		//sound
 		ServiceLocator::RegisterSounSystem(std::make_unique<SDLSoundSystem>());
 		SoundID digSound{ ServiceLocator::GetSoundSystem().AddSound("Data/Resources/DeathSound.wav") };
+		SoundID gemSound{ ServiceLocator::GetSoundSystem().AddSound("Data/Resources/piano2.wav") };
 
 		//player
 		constexpr int numLives{ 3 };
@@ -76,44 +77,44 @@ namespace dae
 		input.BindKeyboardCommand(SDL_SCANCODE_W
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>(
-				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound));
+				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_A
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound));
+			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_S
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_D
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound));
 
 		//arrows
 
 		input.BindKeyboardCommand(SDL_SCANCODE_UP
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>(
-				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound));
+				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_LEFT
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound));
+			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_DOWN
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_RIGHT
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound));
 		
 	}
 

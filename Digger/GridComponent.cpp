@@ -26,14 +26,14 @@ void dae::GridComponent::Render() const
 	}
 
 }
-bool dae::GridComponent::DiggedTile(int col, int row)
+dae::TileType dae::GridComponent::DiggedTile(int col, int row)
 {
-	if (m_grid.GetTile(col, row) == TileType::DirtWall)
-	{
-		m_grid.SetTileType(col, row, TileType::Tunnel);
-		return true;
-	}
-	return false;
+
+	TileType tempTileType = m_grid.GetTile(col, row);
+
+	m_grid.SetTileType(col, row, TileType::Tunnel); //set digged
+
+	return tempTileType;
 }
 
 int dae::GridComponent::WorldToCol(float x) const
