@@ -13,7 +13,7 @@ namespace dae
 		explicit GridComponent(GameObject*pOwner, const std::string& filePath);
 
 		virtual void Render() const override;
-		void DiggedTile(int col, int row);
+		bool DiggedTile(int col, int row);
 
 		int WorldToCol(float x) const;
 		int WorldToRow(float y) const;

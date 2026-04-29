@@ -22,8 +22,10 @@ void MoveDiggerCommand::Execute()
 		const int col{ m_grid->WorldToCol(currentPos.x) };
 		const int row{ m_grid->WorldToRow(currentPos.y) };
 
-		m_grid->DiggedTile(col, row); //set tile digged
-		dae::ServiceLocator::GetSoundSystem().Play(m_digSound, 0.8f);
+		if (m_grid->DiggedTile(col, row)) //set tile digged
+		{
+			dae::ServiceLocator::GetSoundSystem().Play(m_digSound, 0.8f);
+		}
 	}
 	gameObject->SetLocalPosition(currentPos + (m_speed * m_direction * dae::GameTime::deltaTime));
 }
