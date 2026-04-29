@@ -27,9 +27,9 @@ namespace dae
 	class NullSoundService final : public SoundService
 	{
 	public:
-		virtual void Play(SoundID soundID, float volume) override {}
-		virtual void Stop(SoundID sounID) override {}
-		virtual SoundID AddSound(const std::string& soundPathName) override {return 0;}
+		virtual void Play(SoundID , float ) override {}
+		virtual void Stop(SoundID ) override {}
+		virtual SoundID AddSound(const std::string& ) override {return 0;}
 	};
 
 }
