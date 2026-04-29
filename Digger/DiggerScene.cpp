@@ -36,7 +36,7 @@ namespace dae
 
 		//sound
 		ServiceLocator::RegisterSounSystem(std::make_unique<SDLSoundSystem>());
-		SoundID digSound{ ServiceLocator::GetSoundSystem().AddSound("Resources/DeathSound.wav") };
+		SoundID digSound{ ServiceLocator::GetSoundSystem().AddSound("Data/Resources/DeathSound.wav") };
 
 		//player
 		constexpr int numLives{ 3 };

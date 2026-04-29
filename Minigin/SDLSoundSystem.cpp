@@ -20,17 +20,56 @@ namespace dae
 	public:
 		SDLSoundSystemImpl()
 		{
-			MIX_Init();
-			m_mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK,nullptr);
+			if (!MIX_Init())
+			{
+				SDL_Log("MIX_Init failed: %s", SDL_GetError());
+				return;
+			}
+
+			m_mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
+			if (!m_mixer)
+			{
+				SDL_Log("MIX_CreateMixerDevice failed: %s", SDL_GetError());
+				return;
+			}
+
 			m_thread = std::jthread(&SDLSoundSystemImpl::ProcessQueue, this);
 
 		}
 		~SDLSoundSystemImpl()
 		{
 			//free all loaded sounds
+			{
+				std::lock_guard lock(m_mutex);
+				m_isRunning = false;
+			}
+			m_conditionVar.notify_one();
+			m_thread.join();
 
-			MIX_DestroyMixer(m_mixer);
-			MIX_Quit();
+			for (MIX_Track* track : m_tracks)
+			{
+				if (track)
+				{
+					MIX_DestroyTrack(track);
+				}
+				m_tracks.clear();
+			}
+
+			for (auto& [id, audio] : m_audiosMap)
+			{
+				if (audio)
+				{
+					MIX_DestroyAudio(audio);
+					audio = nullptr;
+				}
+			}
+			m_audiosMap.clear();
+
+			if (m_mixer)
+			{
+				SDL_CloseAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK);
+				m_mixer = nullptr;
+			}
 		}
 		void Play(SoundID soundID, float volume)
 		{
@@ -52,7 +91,7 @@ namespace dae
 		
 		void ProcessQueue()
 		{
-			while (m_isRunning)
+			while (true)
 			{
 				std::unique_lock lock(m_mutex); // can lock and unlock
 
@@ -76,19 +115,21 @@ namespace dae
 						//true= audio is fully decoded into raw PCM upfront when loading, uses more memory but has lower latency during playback
 						m_audiosMap[soundReq.soundId] = MIX_LoadAudio(m_mixer,m_nameSoundsMap[soundReq.soundId].c_str(),false);
 
-						//play the sound
-						MIX_Audio* audio = m_audiosMap[soundReq.soundId];
-
-						if (audio)
-						{
-							MIX_Track* track = MIX_CreateTrack(m_mixer);
-							MIX_SetTrackAudio(track, audio);
-							MIX_SetTrackGain(track, soundReq.volume); //set volume
-							MIX_PlayTrack(track,0);
-						}
-						lock.lock(); //lock so the queue can safely be accessed 
 					}
+					//play the sound
+					MIX_Audio* audio = m_audiosMap[soundReq.soundId];
+					if (audio)
+					{
+						MIX_Track* track = MIX_CreateTrack(m_mixer);
+						MIX_SetTrackAudio(track, audio);
+						MIX_SetTrackGain(track, soundReq.volume); //set volume
+						MIX_PlayTrack(track, 0);
+						m_tracks.push_back(track);
+					}
+					lock.lock(); //lock so the queue can safely be accessed 
 				}
+				if (!m_isRunning)
+					break;
 			}
 		}
 
@@ -102,6 +143,8 @@ namespace dae
 		std::mutex m_mutex{};
 		std::queue<soundRequest> m_soundQueue{};
 		std::condition_variable m_conditionVar{};
+
+		std::vector<MIX_Track*> m_tracks{};
 
 	};
 }
