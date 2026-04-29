@@ -138,6 +138,8 @@ if(NOT SDL3_mixer_FOUND)
     GIT_PROGRESS TRUE
   )
   set(SDL3MIXER_INSTALL OFF)
+  set(SDL3MIXER_BUILD_SHARED_LIBS OFF)
+  set(BUILD_SHARED_LIBS OFF)
   if(EMSCRIPTEN)
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/emscripten")
     set(SDL3MIXER_USE_SYSTEM_FREETYPE ON)
@@ -148,7 +150,6 @@ if(NOT SDL3_mixer_FOUND)
   endif()
   FetchContent_MakeAvailable(SDL3_mixer)
 endif()
-
 # Dear ImGui
 FetchContent_Declare(
   imgui
@@ -202,6 +203,7 @@ target_link_libraries("${TARGET_NAME}" PUBLIC
 target_link_libraries(Minigin PUBLIC
   SDL3::SDL3
   SDL3_ttf::SDL3_ttf
+  SDL3_mixer::SDL3_mixer  
   glm::glm
   imgui
   ${VLD_LIBRARIES})
