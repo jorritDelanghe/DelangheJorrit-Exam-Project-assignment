@@ -40,7 +40,7 @@ add_library(Minigin STATIC
   Minigin/AchievementComponent.cpp
   Minigin/Controller.cpp
   Minigin/ServiceLocator.cpp
-  Minigin/SDLSoundSystem.cpp)
+  Minigin/SDLSoundSystem.cpp "Digger/GoldBagState.h")
 
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
@@ -49,8 +49,9 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Digger/GridComponent.cpp
   Digger/DiggerScene.cpp
   Digger/MoveDiggerCommand.cpp
+  Digger/GoldBagComponent.cpp
   Minigin/Main.cpp
-)
+  Digger/MovingState.cpp)
 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
@@ -166,7 +167,7 @@ add_library(imgui STATIC
   ${imgui_SOURCE_DIR}/imgui_widgets.cpp
   ${imgui_SOURCE_DIR}/imgui_demo.cpp
   ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl3.cpp
-  ${imgui_SOURCE_DIR}/backends/imgui_impl_sdlrenderer3.cpp)
+  ${imgui_SOURCE_DIR}/backends/imgui_impl_sdlrenderer3.cpp "Digger/GoldBagState.h")
 
 target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR} ${sdl3_SOURCE_DIR}/include)
 target_link_libraries(imgui PUBLIC SDL3::SDL3)
