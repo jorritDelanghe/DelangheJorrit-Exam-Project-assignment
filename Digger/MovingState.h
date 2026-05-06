@@ -8,8 +8,8 @@ namespace dae
 	public:
 		MovingState(float moveSpeed);
 		virtual ~MovingState() override = default;
-		virtual void HandleInputs(GoldBagComponent* goldBagComponent, GridComponent* grid, glm::vec3 playerPos) override;
-		virtual void Update(GoldBagComponent* goldBagComponent, float deltaTime) override;
+		virtual GoldBagState* HandleInputs(GoldBagComponent* goldBagComponent, GridComponent* grid, glm::vec3 playerPos) override;
+		virtual GoldBagState* Update(GoldBagComponent* goldBagComponent,float deltaTime) override;
 	private:
 		struct GridPos
 		{
@@ -18,10 +18,8 @@ namespace dae
 
 		};
 		float m_moveSpeed{};
-		GridPos m_gridPosGoldBag{};
 		glm::vec3 m_newPosition{};
-		glm::vec3 m_oldPlayerPos{};
-		bool m_isDirty{ false };
+		bool m_hasMoved{ false };
 
 	};
 
