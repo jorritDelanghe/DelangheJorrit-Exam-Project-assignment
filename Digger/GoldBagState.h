@@ -4,14 +4,13 @@
 namespace dae
 {
 	class GridComponent;
-	class GameObject;
 	class GoldBagComponent;
 	class GoldBagState
 	{
 	public:
-		virtual ~GoldBagState() {};
-		virtual void HandleInputs(GoldBagComponent* goldBagComponent, GridComponent* grid, glm::vec3 playerPos) {};
-		virtual void Update(GoldBagComponent* goldBagComponent, float deltaTime) {};
+		virtual ~GoldBagState() = default;
+		virtual GoldBagState* HandleInputs(GoldBagComponent* goldBagComponent, GridComponent* grid, glm::vec3 playerPos) {return nullptr};
+		virtual GoldBagState* Update(GoldBagComponent* goldBagComponent, GridComponent* grid, float deltaTime) {return nullptr};
 	};
 
 }
