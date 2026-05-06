@@ -13,8 +13,8 @@ namespace dae
 	private:
 		struct GridPos
 		{
-			int row;
 			int col;
+			int row;
 
 		};
 		float m_moveSpeed{};

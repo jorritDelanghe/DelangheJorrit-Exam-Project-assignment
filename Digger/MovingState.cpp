@@ -12,17 +12,18 @@ dae::MovingState::MovingState(float moveSpeed)
 }
 dae::GoldBagState* dae::MovingState::HandleInputs(GoldBagComponent* goldBagComponent, GridComponent* grid, glm::vec3 playerPos)
 {
-
 	const glm::vec2 GoldBagPos{ 
 		goldBagComponent->GetOwner()->GetLocalPosition().x
 		,goldBagComponent->GetOwner()->GetLocalPosition().y };
+
+	if (!((std::abs(playerPos.y - GoldBagPos.y)) <= grid->GetGrid().GetTileSize()/3.f)) return new IdleState;
 
 	const GridPos BagOnGrid{ 
 		grid->WorldToCol(GoldBagPos.x)
 		, grid->WorldToRow(GoldBagPos.y) };
 
-	const float directionX{ GoldBagPos.x - playerPos.x };
-	const int colOffset{ (directionX > 0) ? 1 : -1 };
+	const float directionX{ playerPos.x- GoldBagPos.x  };
+	const int colOffset{ (directionX > 0) ? -1 : 1 };
 
 	const GridPos targetTile{ 
 		BagOnGrid.col + colOffset, 
@@ -30,7 +31,7 @@ dae::GoldBagState* dae::MovingState::HandleInputs(GoldBagComponent* goldBagCompo
 
 	//bounds
 	if (targetTile.col<0
-		|| targetTile.col > grid->GetGrid().GetCols())
+		|| targetTile.col >= grid->GetGrid().GetCols())
 	{
 		return new IdleState();
 	}
