@@ -3,8 +3,9 @@
 #include "GameTime.h"
 #include "ServiceLocator.h"
 
-MoveDiggerCommand::MoveDiggerCommand(dae::GameObject* gameObject, float speed, const glm::vec3& direction
-	, dae::GridComponent* grid,dae::SoundID soundID, dae::SoundID gemSound, PointsComponent* pPoints)
+dae::MoveDiggerCommand::MoveDiggerCommand(dae::GameObject* gameObject, float speed, const glm::vec3& direction
+	, dae::GridComponent* grid,dae::SoundID soundID, dae::SoundID gemSound, PointsComponent* pPoints
+	, std::vector<GoldBagComponent*> goldBags)
 	:GameObjectCommand(gameObject)
 	, m_direction{ direction }
 	, m_speed{ speed }
@@ -12,10 +13,11 @@ MoveDiggerCommand::MoveDiggerCommand(dae::GameObject* gameObject, float speed, c
 	, m_digSound{ soundID }
 	, m_gemSound{ gemSound }
 	,m_pPoints{pPoints}
+	,m_bags(goldBags)
 {
 
 }
-void MoveDiggerCommand::Execute()
+void dae::MoveDiggerCommand::Execute()
 {
 	auto* gameObject{ GetGameObject() };
 	glm::vec3 currentPos{ gameObject->GetLocalPosition() };
@@ -42,6 +44,10 @@ void MoveDiggerCommand::Execute()
 			dae::ServiceLocator::GetSoundSystem().Play(m_gemSound, 0.8f);
 			m_pPoints->AddScore(goldBagPoints);
 			break;
+		}
+		for (auto* bag : m_bags)
+		{
+			bag->HandleInput(currentPos);
 		}
 		
 	}

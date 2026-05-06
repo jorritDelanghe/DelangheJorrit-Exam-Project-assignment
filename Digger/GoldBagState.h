@@ -9,8 +9,8 @@ namespace dae
 	{
 	public:
 		virtual ~GoldBagState() = default;
-		virtual GoldBagState* HandleInputs(GoldBagComponent* goldBagComponent, GridComponent* grid, glm::vec3 playerPos) {return nullptr};
-		virtual GoldBagState* Update(GoldBagComponent* goldBagComponent, GridComponent* grid, float deltaTime) {return nullptr};
+		virtual GoldBagState* HandleInputs(GoldBagComponent* /*goldBagComponent*/, GridComponent* /*grid*/, glm::vec3 /*playerPos*/) { return nullptr; }
+		virtual GoldBagState* Update(GoldBagComponent* /*goldBagComponent*/, float /*deltaTime*/) { return nullptr;  }
 	};
 
 }

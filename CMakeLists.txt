@@ -51,6 +51,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Digger/MoveDiggerCommand.cpp
   Digger/GoldBagComponent.cpp
   Minigin/Main.cpp
+  Digger/IdleState.cpp
   Digger/MovingState.cpp)
 
 # enable c++20 features

@@ -10,6 +10,7 @@
 
 
 #include "GridComponent.h"
+#include "GoldBagComponent.h"
 #include "GameObject.h"
 
 #include "LivesDisplayComponent.h"
@@ -37,6 +38,7 @@ namespace dae
 		gridObject->SetLocalPosition({ 0.f,80.f,0.f });
 		auto* rawPtrGrid{ gridObject->GetComponent<GridComponent>()};
 		scene.Add(std::move(gridObject)); //then add the gameobject to the scene	
+
 
 		//sound
 		ServiceLocator::RegisterSounSystem(std::make_unique<SDLSoundSystem>());
@@ -72,6 +74,33 @@ namespace dae
 		health->OnDied().AddObservers(livesDisplay);
 		points->OnPointsChanged().AddObservers(pointsDisplay);
 	
+		// add gold bagcomponents
+		const Grid& grid{ rawPtrGrid->GetGrid() };
+		std::vector<GoldBagComponent*> m_bags;
+		for (int r{}; r < grid.GetRows();++r)
+		{
+			for (int c{}; c < grid.GetCols();++c)
+			{
+				if (grid.GetTile(c, r) == TileType::GoldBag)
+				{
+
+					auto goldBagObj = std::make_unique<GameObject>();
+					auto* bag = goldBagObj->AddComponent<GoldBagComponent>(rawPtrGrid, points);
+					goldBagObj->AddComponent<RenderComponent>("Resources/goldBagSingle.png");
+
+					goldBagObj->SetLocalPosition(
+						{
+						rawPtrGrid->ColToWorld(c)
+						, rawPtrGrid->RowToWorld(r)
+						, 0.0f
+						});
+
+					m_bags.push_back(bag);
+					scene.Add(std::move(goldBagObj));
+				}
+			}
+		}
+
 		//instructions
 		SDL_Color white{ 255, 255, 255, 255 };
 		auto instructionP1 = std::make_unique<GameObject>();
@@ -94,44 +123,44 @@ namespace dae
 		input.BindKeyboardCommand(SDL_SCANCODE_W
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>(
-				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound, points));
+				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_A
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points));
+			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_S
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound, points));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_D
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
 
 		//arrows
 
 		input.BindKeyboardCommand(SDL_SCANCODE_UP
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>(
-				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound, points));
+				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_LEFT
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points));
+			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_DOWN
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound, points));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_RIGHT
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
 		
 	}
 

@@ -75,7 +75,7 @@ void dae::GridComponent::RenderTile(int col, int row) const
 			texture = m_emeraldTexture;
 			break;
 		case TileType::GoldBag:
-			texture = m_goldTexture;
+			texture = m_dirtTexture;
 			break;
 		default:
 			return;

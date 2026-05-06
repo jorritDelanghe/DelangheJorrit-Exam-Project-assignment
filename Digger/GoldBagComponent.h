@@ -7,17 +7,21 @@ namespace dae
 {
 	class GridComponent;
 	class GameObject;
+	class PointsComponent;
 	class GoldBagComponent final: public Component
 	{
 	public:
 
-		explicit GoldBagComponent(GameObject*pGameObject);
+		explicit GoldBagComponent(GameObject*pGameObject, GridComponent* grid, PointsComponent* points);
 		virtual ~GoldBagComponent() override = default;
 
-		virtual void HandleInput( GridComponent* grid, glm::vec3 playerPos);
+		virtual void HandleInput(glm::vec3 playerPos);
 		virtual void Update(float deltaTime) override;
+		void SetState(GoldBagState* newState);
 	private:
 		std::unique_ptr<GoldBagState> m_state;
+		GridComponent* m_grid{ nullptr };   
+		PointsComponent* m_points{ nullptr };
 	};
 
 }

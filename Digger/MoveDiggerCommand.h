@@ -5,29 +5,36 @@
 #include <glm/glm.hpp>
 #include "SoundService.h"
 #include "PointsComponent.h"
+#include "GoldBagComponent.h"
+#include <vector>
 
-using namespace dae;
-class GridComponent;
-class GameObject;
-class MoveDiggerCommand final : public GameObjectCommand
+namespace dae
 {
-public:
-	explicit MoveDiggerCommand(dae::GameObject* gameObject, float speed, const glm::vec3& direction
-		, dae::GridComponent* grid, dae::SoundID soundID, dae::SoundID gemSound, PointsComponent* pPoints);
-	virtual ~MoveDiggerCommand() noexcept override = default;
+	class GridComponent;
+	class GameObject;
+	class MoveDiggerCommand final : public GameObjectCommand
+	{
+	public:
+		explicit MoveDiggerCommand(dae::GameObject* gameObject, float speed, const glm::vec3& direction
+			, dae::GridComponent* grid, dae::SoundID soundID, dae::SoundID gemSound, PointsComponent* pPoints
+			, std::vector<GoldBagComponent*> goldBags);
+		virtual ~MoveDiggerCommand() noexcept override = default;
 
-	MoveDiggerCommand(const MoveDiggerCommand& other) = delete;
-	MoveDiggerCommand(MoveDiggerCommand&& other) = delete;
-	MoveDiggerCommand& operator= (const MoveDiggerCommand& other) = delete;
-	MoveDiggerCommand& operator= (MoveDiggerCommand&& other) = delete;
+		MoveDiggerCommand(const MoveDiggerCommand& other) = delete;
+		MoveDiggerCommand(MoveDiggerCommand&& other) = delete;
+		MoveDiggerCommand& operator= (const MoveDiggerCommand& other) = delete;
+		MoveDiggerCommand& operator= (MoveDiggerCommand&& other) = delete;
 
-	virtual void Execute() override;
+		virtual void Execute() override;
 
-private:
-	glm::vec3 m_direction;
-	float m_speed;
-	dae::GridComponent* m_grid;
-	dae::SoundID m_digSound;
-	dae::SoundID m_gemSound;
-	PointsComponent* m_pPoints{};
-};
+	private:
+		glm::vec3 m_direction;
+		float m_speed;
+		dae::GridComponent* m_grid;
+		dae::SoundID m_digSound;
+		dae::SoundID m_gemSound;
+		PointsComponent* m_pPoints{};
+		std::vector<GoldBagComponent*>m_bags{};
+	};
+
+}
