@@ -18,6 +18,7 @@ namespace dae
 		virtual void HandleInput(glm::vec3 playerPos);
 		virtual void Update(float deltaTime) override;
 		void SetState(GoldBagState* newState);
+		GridComponent* GetGrid() const { return m_grid; }
 	private:
 		std::unique_ptr<GoldBagState> m_state;
 		GridComponent* m_grid{ nullptr };   

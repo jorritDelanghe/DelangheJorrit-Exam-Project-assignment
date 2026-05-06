@@ -2,6 +2,7 @@
 #include "GoldBagComponent.h"
 #include "GridComponent.h"
 #include "MovingState.h"
+#include "FallingState.h"
 
 dae::GoldBagState* dae::IdleState::HandleInputs(GoldBagComponent* goldBagComponent, GridComponent* grid, glm::vec3 playerPos)
 {
@@ -19,6 +20,23 @@ dae::GoldBagState* dae::IdleState::HandleInputs(GoldBagComponent* goldBagCompone
 	if (isOnSameRow && isNextToGoldBag)
 	{
 		return new MovingState(speed);
+	}
+	return nullptr;
+}
+dae::GoldBagState* dae::IdleState::Update(GoldBagComponent* goldBagComponent, float /*deltaTime*/)
+{
+	GridComponent* grid = goldBagComponent->GetGrid();
+	const glm::vec3 pos = goldBagComponent->GetOwner()->GetLocalPosition();
+
+	const int col = grid->WorldToCol(pos.x);
+	const int row = grid->WorldToRow(pos.y);
+
+	const TileType tileBelow = grid->GetGrid().GetTile(col, row + 1);
+
+	if (tileBelow == TileType::Tunnel)
+	{
+		constexpr float fallSpeed{ 100.f };
+		return new FallingState(fallSpeed);
 	}
 	return nullptr;
 }
