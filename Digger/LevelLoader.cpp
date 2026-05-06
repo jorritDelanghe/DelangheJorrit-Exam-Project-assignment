@@ -28,6 +28,7 @@ void dae::LevelLoader::loadLevelFromFile(const std::string& filePath, Grid& grid
 	while (std::getline(file, line))
 	{
 		if (line.empty()) continue;
+
 		if(line.rfind("TileSize:",0) == 0)
 		{
 			tileSize = std::stof(line.substr(9));
