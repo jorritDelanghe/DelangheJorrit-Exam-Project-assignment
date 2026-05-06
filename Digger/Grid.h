@@ -21,8 +21,8 @@ namespace dae
 
 
 	private:
-		int m_rows{};
 		int m_cols{};
+		int m_rows{};
 		float m_tileSize{};
 
 		std::vector<TileType> m_tiles;

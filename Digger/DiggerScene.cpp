@@ -106,7 +106,7 @@ namespace dae
 		auto instructionP1 = std::make_unique<GameObject>();
 		instructionP1->SetLocalPosition({ 10.f, 450.f, 0.f });
 		auto* textP1 = instructionP1->AddComponent<TextComponent>(font, white);
-		textP1->SetText("Dig dirt or gather gems for sound");
+		textP1->SetText("GoldBag moves has Idle, moveState");
 		scene.Add(std::move(instructionP1));
 
 		auto instructionP2 = std::make_unique<GameObject>();

@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "GoldBagComponent.h"
 #include "IdleState.h"
+#include "FallingState.h"
 
 
 dae::MovingState::MovingState(float moveSpeed)
@@ -16,7 +17,7 @@ dae::GoldBagState* dae::MovingState::HandleInputs(GoldBagComponent* goldBagCompo
 		goldBagComponent->GetOwner()->GetLocalPosition().x
 		,goldBagComponent->GetOwner()->GetLocalPosition().y };
 
-	if (!((std::abs(playerPos.y - GoldBagPos.y)) <= grid->GetGrid().GetTileSize()/3.f)) return new IdleState;
+	if (!((std::abs(playerPos.y - GoldBagPos.y)) <= grid->GetGrid().GetTileSize())) return new IdleState;
 
 	const GridPos BagOnGrid{ 
 		grid->WorldToCol(GoldBagPos.x)
@@ -29,6 +30,7 @@ dae::GoldBagState* dae::MovingState::HandleInputs(GoldBagComponent* goldBagCompo
 		BagOnGrid.col + colOffset, 
 		BagOnGrid.row };
 
+
 	//bounds
 	if (targetTile.col<0
 		|| targetTile.col >= grid->GetGrid().GetCols())
@@ -37,6 +39,7 @@ dae::GoldBagState* dae::MovingState::HandleInputs(GoldBagComponent* goldBagCompo
 	}
 
 	const TileType typeTargetTile{ grid->GetGrid().GetTile(targetTile.col,targetTile.row) };
+	const TileType typeTargetFallTile{ grid->GetGrid().GetTile(targetTile.col,targetTile.row+1) };
 
 	if (typeTargetTile == TileType::Tunnel)
 	{
@@ -45,6 +48,11 @@ dae::GoldBagState* dae::MovingState::HandleInputs(GoldBagComponent* goldBagCompo
 			, grid->RowToWorld(targetTile.row),0.f};
 		m_hasMoved = true;
 
+	}
+	else if (typeTargetFallTile == TileType::Tunnel)
+	{
+		//constexpr float fallSpeed{ 100.f };
+		//return new FallingState(fallSpeed);
 	}
 	else
 	{
