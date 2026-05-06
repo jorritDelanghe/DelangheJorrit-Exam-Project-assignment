@@ -1,5 +1,9 @@
 #include "LevelLoader.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 //file loading
 #include <fstream>
 #include <stdexcept>

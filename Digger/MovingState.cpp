@@ -51,8 +51,8 @@ dae::GoldBagState* dae::MovingState::HandleInputs(GoldBagComponent* goldBagCompo
 	}
 	else if (typeTargetFallTile == TileType::Tunnel)
 	{
-		//constexpr float fallSpeed{ 100.f };
-		//return new FallingState(fallSpeed);
+		constexpr float fallSpeed{ 100.f };
+		return new FallingState(fallSpeed);
 	}
 	else
 	{

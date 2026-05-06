@@ -40,7 +40,7 @@ add_library(Minigin STATIC
   Minigin/AchievementComponent.cpp
   Minigin/Controller.cpp
   Minigin/ServiceLocator.cpp
-  Minigin/SDLSoundSystem.cpp "Digger/GoldBagState.h")
+  Minigin/SDLSoundSystem.cpp)
 
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
