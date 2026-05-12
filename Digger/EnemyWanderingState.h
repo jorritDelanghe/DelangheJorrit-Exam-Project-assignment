@@ -21,7 +21,9 @@ namespace dae
 	private:
 		float m_moveSpeed{};
 		glm::vec3 m_targetPos{};
+		glm::vec3 m_previousPos{};
 		bool m_isTargettingTile{ false };
+		bool m_hasPreviousPos{ false };
 		GridComponent* m_grid{ nullptr };
 
 		std::vector<glm::vec3> GetNeighbouringTunnels(const glm::vec3& enemyPos);

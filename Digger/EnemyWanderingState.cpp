@@ -3,6 +3,7 @@
 #include "DataTypes.h"
 #include "EnemyComponent.h"
 #include <Windows.h>
+#include <algorithm>
 dae::EnemyWanderingState::EnemyWanderingState(float moveSpeed)
 	:m_moveSpeed(moveSpeed)
 {
@@ -32,6 +33,7 @@ dae::EnemyState* dae::EnemyWanderingState::Update(EnemyComponent* enemyComponent
 	{
 		enemyComponent->GetOwner()->SetLocalPosition(m_targetPos);
 		m_isTargettingTile = false;
+
 		ChooseNewTargetTile(enemyComponent);
 		return nullptr;
 	}
@@ -48,7 +50,6 @@ dae::EnemyState* dae::EnemyWanderingState::OnExit(EnemyComponent* )
 
 std::vector<glm::vec3> dae::EnemyWanderingState::GetNeighbouringTunnels(const glm::vec3& enemyPos)
 {
-
 	const int colEnemy{ m_grid->WorldToCol(enemyPos.x) };
 	const int rowEnemy{ m_grid->WorldToRow(enemyPos.y) };
 	constexpr std::pair<int, int> direction[] ={ {1,0},{-1,0},{0,1},{0,-1} };
@@ -85,22 +86,24 @@ void dae::EnemyWanderingState::ChooseNewTargetTile(EnemyComponent* enemyComponen
 {
 	auto tunnelPositions{ GetNeighbouringTunnels(enemyComponent->GetOwner()->GetLocalPosition()) };
 
-	const glm::vec3 pos = enemyComponent->GetOwner()->GetLocalPosition();
-	OutputDebugStringA(("Enemy pos: " + std::to_string(pos.x) + ", " + std::to_string(pos.y) + "\n").c_str());
-	OutputDebugStringA(("Tunnels found: " + std::to_string(tunnelPositions.size()) + "\n").c_str());
-
-
 	if (tunnelPositions.empty())
 	{
 		m_isTargettingTile = false ;
 		return;
 	}
+	if (m_hasPreviousPos&& tunnelPositions.size() >= 2) //otherwise no options left
+	{
+		tunnelPositions.erase(std::remove(tunnelPositions.begin()
+			, tunnelPositions.end()
+			,m_previousPos)
+			, tunnelPositions.end());
+	}
+	m_previousPos = enemyComponent->GetOwner()->GetLocalPosition();
+	m_hasPreviousPos = true;
 
 	const int randNumber{ static_cast<int>(rand() % (tunnelPositions.size())) };
 	m_targetPos = tunnelPositions[randNumber];
 	m_isTargettingTile = true;
-
-	OutputDebugStringA(("Target: " + std::to_string(m_targetPos.x) + ", " + std::to_string(m_targetPos.y) + "\n").c_str());
 }
 
 
