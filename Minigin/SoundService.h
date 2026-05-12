@@ -8,14 +8,8 @@ namespace dae
 	class SoundService
 	{
 	public:
-		SoundService() = default; // not necessary constructor is default constructed
+		SoundService() = default; 
 		virtual ~SoundService() = default;
-
-		//rule of 5 not really need because abstract class needs to be inherited from
-		SoundService(const SoundService& other) =delete;
-		SoundService( SoundService&& other) =delete;
-		SoundService& operator=(const SoundService& other) =delete;
-		SoundService& operator=(SoundService&& other) =delete;
 
 		virtual void Play(SoundID soundID, float volume) = 0;
 		virtual void Stop(SoundID sounID) = 0;
