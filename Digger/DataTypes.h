@@ -9,7 +9,6 @@ namespace dae
 		, Tunnel
 		, Emerald
 		, GoldBag
+		, EnemySpawn
 	};
-
-
 }

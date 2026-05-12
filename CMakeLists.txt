@@ -53,6 +53,10 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/Main.cpp
   Digger/IdleState.cpp
   Digger/FallingState.cpp
+  Digger/EnemyComponent.cpp
+  Digger/EnemyWanderingState.cpp
+  Digger/EnemySearchingState.cpp
+  Digger/EnemyDiggingState.cpp
   Digger/MovingState.cpp)
 
 # enable c++20 features

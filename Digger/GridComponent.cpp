@@ -77,6 +77,9 @@ void dae::GridComponent::RenderTile(int col, int row) const
 		case TileType::GoldBag:
 			texture = m_dirtTexture;
 			break;
+		case TileType::EnemySpawn:
+			texture = m_tunnelTexture;
+			break;
 		default:
 			return;
 	}

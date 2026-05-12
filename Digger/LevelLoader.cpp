@@ -59,6 +59,9 @@ void dae::LevelLoader::loadLevelFromFile(const std::string& filePath, Grid& grid
 			case'E':
 				tiles.push_back(dae::TileType::Emerald);
 				break;
+			case'N':
+				tiles.push_back(dae::TileType::EnemySpawn);
+				break;
 
 			}
 		}

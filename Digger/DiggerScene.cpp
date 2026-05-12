@@ -26,6 +26,10 @@
 //text 
 #include "TextComponent.h"
 #include "Font.h"
+
+//enemy
+#include "GameTime.h"
+#include "EnemyComponent.h"
 namespace dae
 {
 	void diggerScene::loadScene()
@@ -77,6 +81,7 @@ namespace dae
 		// add gold bagcomponents
 		const Grid& grid{ rawPtrGrid->GetGrid() };
 		std::vector<GoldBagComponent*> m_bags;
+		std::vector<EnemyComponent*> m_enemies;
 		for (int r{}; r < grid.GetRows();++r)
 		{
 			for (int c{}; c < grid.GetCols();++c)
@@ -98,9 +103,27 @@ namespace dae
 					m_bags.push_back(bag);
 					scene.Add(std::move(goldBagObj));
 				}
+				if (grid.GetTile(c, r) == TileType::EnemySpawn)
+				{
+
+					auto enemyObj = std::make_unique<GameObject>();
+					auto* enemy = enemyObj->AddComponent<EnemyComponent>(rawPtrGrid);
+					enemyObj->AddComponent<RenderComponent>("Resources/diggerSingle.png");
+
+					enemyObj->SetLocalPosition(
+						{
+						rawPtrGrid->ColToWorld(c)
+						, rawPtrGrid->RowToWorld(r)
+						, 0.0f
+						});
+
+					m_enemies.push_back(enemy);
+					scene.Add(std::move(enemyObj));
+				}
 			}
 		}
-
+		
+		
 		//instructions
 		SDL_Color white{ 255, 255, 255, 255 };
 		auto instructionP1 = std::make_unique<GameObject>();
