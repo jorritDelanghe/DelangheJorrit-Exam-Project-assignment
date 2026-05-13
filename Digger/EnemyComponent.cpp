@@ -1,12 +1,14 @@
 #include "EnemyComponent.h"
 #include "EnemyWanderingState.h"
 #include "GridComponent.h"
+#include "EnemyChasingState.h"
 
-dae::EnemyComponent::EnemyComponent(GameObject* pGameObject, GridComponent* grid)
+dae::EnemyComponent::EnemyComponent(GameObject* pGameObject, GridComponent* grid, GameObject*player)
 	:Component(pGameObject)
 	,m_grid(grid)
-	,m_state(std::make_unique<EnemyWanderingState>(100.f))
+	,m_state(std::make_unique<EnemyChasingState>(100.f))
 	, m_pendingEnter{true}
+	,m_player(player)
 {
 }
 
@@ -14,7 +16,7 @@ void dae::EnemyComponent::Update(float deltaTime)
 {
 	if (m_pendingEnter)
 	{
-		m_state->OnEnter(this, m_grid, GetOwner()->GetLocalPosition());
+		m_state->OnEnter(this, m_grid, m_player->GetLocalPosition());
 		m_pendingEnter = false;
 	}
 
@@ -29,6 +31,6 @@ void dae::EnemyComponent::SetState(EnemyState* newState)
 {
 	m_state->OnExit(this);
 	m_state.reset(newState);
-	m_state->OnEnter(this, m_grid, {});
+	m_state->OnEnter(this, m_grid, m_player->GetLocalPosition());
 
 }

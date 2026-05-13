@@ -8,7 +8,7 @@ namespace dae
 	class EnemyComponent final : public Component
 	{
 	public:
-		explicit EnemyComponent(GameObject* pGameObject, GridComponent* grid);
+		explicit EnemyComponent(GameObject* pGameObject, GridComponent* grid,GameObject* player);
 		~EnemyComponent() = default;
 
 		EnemyComponent(const EnemyComponent& other) = delete;
@@ -22,6 +22,7 @@ namespace dae
 		GridComponent* m_grid{};
 		std::unique_ptr<EnemyState> m_state;
 		bool m_pendingEnter{};
+		GameObject* m_player{};
 
 		void SetState(EnemyState* newState);
 

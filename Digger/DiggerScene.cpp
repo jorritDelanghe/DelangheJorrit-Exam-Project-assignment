@@ -52,6 +52,7 @@ namespace dae
 		//player
 		constexpr int numLives{ 3 };
 		auto diggerPlayer{ std::make_unique<GameObject>() };
+		auto* diggerRawPtr = diggerPlayer.get();
 		diggerPlayer->AddComponent<RenderComponent>("digger2.png");
 		auto* points = diggerPlayer->AddComponent<PointsComponent>();
 		auto* health = diggerPlayer->AddComponent<HealthComponent>(numLives);
@@ -102,12 +103,13 @@ namespace dae
 
 					m_bags.push_back(bag);
 					scene.Add(std::move(goldBagObj));
+				
 				}
 				if (grid.GetTile(c, r) == TileType::EnemySpawn)
 				{
 
 					auto enemyObj = std::make_unique<GameObject>();
-					auto* enemy = enemyObj->AddComponent<EnemyComponent>(rawPtrGrid);
+					auto* enemy = enemyObj->AddComponent<EnemyComponent>(rawPtrGrid, diggerRawPtr);
 					enemyObj->AddComponent<RenderComponent>("Resources/diggerSingle.png");
 
 					enemyObj->SetLocalPosition(
@@ -119,6 +121,7 @@ namespace dae
 
 					m_enemies.push_back(enemy);
 					scene.Add(std::move(enemyObj));
+					rawPtrGrid->DiggedTile(c, r);
 				}
 			}
 		}

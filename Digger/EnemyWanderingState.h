@@ -6,7 +6,7 @@ namespace dae
 	class EnemyWanderingState final : public EnemyState
 	{
 	public:
-		EnemyWanderingState(float moveSpeed);
+		explicit EnemyWanderingState(float moveSpeed);
 		virtual~EnemyWanderingState() override = default;
 		virtual EnemyState* OnEnter(EnemyComponent* enemyComponent, GridComponent* grid, glm::vec3)override;
 		virtual EnemyState* Update(EnemyComponent* enemyComponent, float deltaTime)override; 

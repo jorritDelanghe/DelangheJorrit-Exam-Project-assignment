@@ -55,7 +55,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Digger/FallingState.cpp
   Digger/EnemyComponent.cpp
   Digger/EnemyWanderingState.cpp
-  Digger/EnemySearchingState.cpp
+  Digger/EnemyChasingState.cpp
   Digger/EnemyDiggingState.cpp
   Digger/MovingState.cpp)
 
