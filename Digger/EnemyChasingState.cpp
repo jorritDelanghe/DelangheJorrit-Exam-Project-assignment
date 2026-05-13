@@ -2,6 +2,7 @@
 #include "GridComponent.h"
 #include "EnemyComponent.h"
 #include <MovingState.h>
+#include "EnemyHelpers.h"
 dae::EnemyChasingState::EnemyChasingState(float moveSpeed)
 	:m_speed(moveSpeed)
 {
@@ -26,18 +27,11 @@ dae::EnemyState* dae::EnemyChasingState::Update(EnemyComponent* enemyComponent, 
 		constexpr float snapDistance{ 2.f };
 		const glm::vec3 targetPos{ m_shortestPath[m_shortestPathIdx]};
 
-		const glm::vec3 enemyPos{ enemyComponent->GetOwner()->GetLocalPosition() };
-		const glm::vec3 direction{ targetPos - enemyPos };
-		const float distance{ static_cast<float>(glm::length(direction)) };
-
-		if (distance <= snapDistance)
+		if (EnemyMovement::MoveTowardsTile(enemyComponent, targetPos,m_speed, deltaTime,snapDistance))
 		{
-			enemyComponent->GetOwner()->SetLocalPosition(targetPos);
 			++m_shortestPathIdx;
 			return nullptr;
-		}
-		enemyComponent->GetOwner()->SetLocalPosition(enemyPos + (glm::normalize(direction)) * m_speed * deltaTime);
-	
+		}	
 	return nullptr;
 }
 

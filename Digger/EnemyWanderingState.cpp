@@ -2,6 +2,7 @@
 #include "GridComponent.h"
 #include "DataTypes.h"
 #include "EnemyComponent.h"
+#include "EnemyHelpers.h"
 #include <Windows.h>
 #include <algorithm>
 dae::EnemyWanderingState::EnemyWanderingState(float moveSpeed)
@@ -25,19 +26,14 @@ dae::EnemyState* dae::EnemyWanderingState::Update(EnemyComponent* enemyComponent
 {
 	if (!m_isTargettingTile) return nullptr;
 	constexpr float snapDistance{ 2.f };
-	const glm::vec3 enemyPos{ enemyComponent->GetOwner()->GetLocalPosition() };
-	const glm::vec3 direction{ m_targetPos - enemyPos };
-	const float distance{static_cast<float>(glm::length(direction)) };
-
-	if (distance <= snapDistance)
+	
+	if (EnemyMovement::MoveTowardsTile(enemyComponent,m_targetPos, m_moveSpeed,deltaTime,snapDistance))
 	{
-		enemyComponent->GetOwner()->SetLocalPosition(m_targetPos);
 		m_isTargettingTile = false;
 
 		ChooseNewTargetTile(enemyComponent);
 		return nullptr;
 	}
-	enemyComponent->GetOwner()->SetLocalPosition(enemyPos + (glm::normalize(direction)) * m_moveSpeed * deltaTime );
 	return nullptr;
 }
 
