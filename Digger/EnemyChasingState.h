@@ -23,8 +23,6 @@ namespace dae
 	private:
 		float m_speed{};
 		GridComponent* m_grid{};
-		glm::vec3 m_playerPos{};
-		int m_maxCols{};
 
 		std::vector<glm::vec3> m_shortestPath{};
 		int m_shortestPathIdx{};

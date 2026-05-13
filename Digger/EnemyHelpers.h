@@ -1,6 +1,9 @@
 #pragma once
 #include <glm/glm.hpp>
 #include "EnemyComponent.h"
+#include "GridComponent.h"
+#include "DataTypes.h"
+#include <vector>
 
 namespace EnemyMovement
 {
@@ -10,5 +13,5 @@ namespace EnemyMovement
 
 namespace PathFinding
 {
-
+    std::vector<glm::vec3> BFS(dae::GridComponent* grid, const glm::vec3& start, const glm::vec3& goal);
 }
