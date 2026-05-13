@@ -1,5 +1,6 @@
 #pragma once
 #include "GoldBagState.h"
+#include "DataTypes.h"
 
 namespace dae
 {
@@ -11,12 +12,7 @@ namespace dae
 		virtual GoldBagState* HandleInputs(GoldBagComponent* goldBagComponent, GridComponent* grid, glm::vec3 playerPos) override;
 		virtual GoldBagState* Update(GoldBagComponent* goldBagComponent,float deltaTime) override;
 	private:
-		struct GridPos
-		{
-			int col;
-			int row;
-
-		};
+		
 		float m_moveSpeed{};
 		glm::vec3 m_newPosition{};
 		bool m_hasMoved{ false };
