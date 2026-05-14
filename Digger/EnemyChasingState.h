@@ -1,7 +1,6 @@
 #pragma once
 
 #include "EnemyState.h"
-#include <queue>
 #include "DataTypes.h"
 namespace dae
 {
@@ -26,10 +25,6 @@ namespace dae
 
 		std::vector<glm::vec3> m_shortestPath{};
 		int m_shortestPathIdx{};
-
-
-		std::vector<glm::vec3> GetShortestPathToPlayer(EnemyComponent* enemyComponent);
-		GridPos indexToGridPos(int index);
 	};
 
 }
