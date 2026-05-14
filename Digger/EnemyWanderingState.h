@@ -1,6 +1,9 @@
 #pragma once
 #include "EnemyState.h"
 #include <vector>
+#include <functional>
+#include "DataTypes.h"
+
 namespace dae
 {
 	class EnemyWanderingState final : public EnemyState
@@ -26,8 +29,10 @@ namespace dae
 		bool m_hasPreviousPos{ false };
 		GridComponent* m_grid{ nullptr };
 
-		std::vector<glm::vec3> GetNeighbouringTunnels(const glm::vec3& enemyPos);
-		void ChooseNewTargetTile(EnemyComponent* enemyComponent);
+		std::function<bool(TileType)> m_isAllowed = [](TileType t)
+			{
+				return t == TileType::Tunnel;
+			};
 	};
 
 }
