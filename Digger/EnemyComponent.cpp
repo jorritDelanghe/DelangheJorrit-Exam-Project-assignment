@@ -2,11 +2,12 @@
 #include "EnemyWanderingState.h"
 #include "GridComponent.h"
 #include "EnemyChasingState.h"
+#include "EnemyDiggingState.h"
 
 dae::EnemyComponent::EnemyComponent(GameObject* pGameObject, GridComponent* grid, GameObject*player)
 	:Component(pGameObject)
 	,m_grid(grid)
-	,m_state(std::make_unique<EnemyChasingState>(100.f))
+	,m_state(std::make_unique<EnemyDiggingState>(100.f))
 	, m_pendingEnter{true}
 	,m_player(player)
 {
