@@ -14,4 +14,14 @@ namespace EnemyMovement
 namespace PathFinding
 {
     std::vector<glm::vec3> BFS(dae::GridComponent* grid, const glm::vec3& start, const glm::vec3& goal);
+
+    std::vector<glm::vec3> GetNeighbouringTunnels(dae::GridComponent* grid
+        ,const glm::vec3& currentPos
+        ,std::function<bool(dae::TileType)>isAllowed);
+
+    bool ChooseNewTargetTile(dae::GridComponent* grid, const glm::vec3& currentPos, std::function<bool(dae::TileType)>isAlllowed
+        , glm::vec3& outTargetPos
+        , glm::vec3& outPreviousPos
+        , bool& outHasPreviousPos);
+
 }

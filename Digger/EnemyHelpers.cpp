@@ -91,3 +91,62 @@ std::vector<glm::vec3> PathFinding::BFS(dae::GridComponent* grid, const glm::vec
 	return result;
 
 }
+std::vector<glm::vec3> PathFinding::GetNeighbouringTunnels(dae::GridComponent* grid, const glm::vec3& currentPos
+	, std::function<bool(dae::TileType)>isAllowed)
+{
+	const int currentCol{ grid->WorldToCol(currentPos.x) };
+	const int currentRow{ grid->WorldToRow(currentPos.y) };
+	constexpr std::pair<int, int> direction[] = { {1,0},{-1,0},{0,1},{0,-1} };
+	constexpr int maxTunnelOptions{ 4 };
+
+	std::vector<glm::vec3> neighbouringTunnelPos{};
+	neighbouringTunnelPos.reserve(maxTunnelOptions);
+
+	for (auto [col, row] : direction)
+	{
+		const int neighbouringCol{ currentCol + col };
+		const int neighbouringRow{ currentRow + row };
+
+
+		const dae::TileType neighbourTile{
+			grid->GetGrid().GetTile(
+				neighbouringCol
+				,neighbouringRow) };
+
+		if (isAllowed(neighbourTile) )
+		{
+			neighbouringTunnelPos.push_back(glm::vec3{
+				 grid->ColToWorld(neighbouringCol)
+				 , grid->RowToWorld(neighbouringRow)
+				,0.f
+				});
+		}
+
+	}
+	return neighbouringTunnelPos;
+}
+bool PathFinding::ChooseNewTargetTile(dae::GridComponent* grid, const glm::vec3& currentPos,std::function<bool(dae::TileType)>isAlllowed
+	,glm::vec3& outTargetPos
+	,glm::vec3& outPreviousPos
+	,bool& outHasPreviousPos)
+{
+	auto tunnelPositions{ GetNeighbouringTunnels(grid,currentPos ,isAlllowed) };
+
+	if (tunnelPositions.empty())
+	{
+		return false;
+	}
+	if (outHasPreviousPos && tunnelPositions.size() >= 2) //otherwise no options left
+	{
+		tunnelPositions.erase(std::remove(tunnelPositions.begin()
+			, tunnelPositions.end()
+			, outPreviousPos)
+			, tunnelPositions.end());
+	}
+	outPreviousPos = currentPos;
+	outHasPreviousPos = true;
+
+	const int randNumber{ static_cast<int>(rand() % (tunnelPositions.size())) };
+	outTargetPos = tunnelPositions[randNumber];
+	return true;
+}
