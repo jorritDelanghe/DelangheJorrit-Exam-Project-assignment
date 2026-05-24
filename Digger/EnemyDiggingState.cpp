@@ -22,7 +22,7 @@ dae::EnemyState* dae::EnemyDiggingState::OnEnter(EnemyComponent* enemyComponent,
 
 dae::EnemyState* dae::EnemyDiggingState::Update(EnemyComponent* enemyComponent, float deltaTime)
 {
-    if (playerInRange(enemyComponent)) return new EnemyChasingState(m_speed);
+    if (playerInRange(enemyComponent)) return nullptr;
     if(!m_isTargettingTile) return nullptr;
 
     if (EnemyMovement::MoveTowardsTile(enemyComponent, m_targetPos, m_speed, deltaTime))

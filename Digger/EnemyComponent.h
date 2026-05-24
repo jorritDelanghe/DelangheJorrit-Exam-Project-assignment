@@ -17,14 +17,14 @@ namespace dae
 		EnemyComponent& operator=(EnemyComponent&& other) = delete;
 
 		virtual void Update(float deltaTime) override;
-		//virtual void Render() const;
+		void SetState(EnemyState* newState);
+
 	private:
 		GridComponent* m_grid{};
 		std::unique_ptr<EnemyState> m_state;
 		bool m_pendingEnter{};
 		GameObject* m_player{};
 
-		void SetState(EnemyState* newState);
 
 	};
 }

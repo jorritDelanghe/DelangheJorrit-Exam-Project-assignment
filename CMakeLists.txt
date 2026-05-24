@@ -58,6 +58,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Digger/EnemyChasingState.cpp
   Digger/EnemyDiggingState.cpp
   Digger/EnemyHelpers.cpp
+  Digger/EnemyUtilityAI.cpp
   Digger/MovingState.cpp)
 
 # enable c++20 features

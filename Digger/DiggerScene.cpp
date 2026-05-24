@@ -30,6 +30,10 @@
 //enemy
 #include "GameTime.h"
 #include "EnemyComponent.h"
+#include "EnemyUtilityAI.h"
+#include "EnemyWanderingState.h"
+#include "EnemyChasingState.h"
+#include "EnemyDiggingState.h"
 namespace dae
 {
 	void diggerScene::loadScene()
@@ -112,6 +116,56 @@ namespace dae
 					auto* enemy = enemyObj->AddComponent<EnemyComponent>(rawPtrGrid, diggerRawPtr);
 					enemyObj->AddComponent<RenderComponent>("Resources/diggerSingle.png");
 
+					//actions
+					constexpr float speed = 100.f;
+					constexpr float chasingRadius = 150.f;
+					constexpr float maxChaseRange = 300.f;
+
+					auto* enemyUtilityAI = enemyObj->AddComponent<EnemyUtilityAI>(enemy, rawPtrGrid, diggerRawPtr, points);
+					
+					enemyUtilityAI->RegisterNewAction("Chasing",
+						[chasingRadius](const EnemyUtilityAI::GameStats& gameStats)
+						{
+							//closer hte higher score
+							const float score{1.f - EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer, chasingRadius) };
+							return EnemyUtilityAI::GetScoringQuadraticCurve(score,1.f); //more decisive avction
+						}
+						, [speed]()
+						{
+							return new EnemyChasingState(speed);
+						});
+
+					enemyUtilityAI->RegisterNewAction("Digging",
+						[](const EnemyUtilityAI::GameStats& gameStats)
+						{
+							if (gameStats.isOnTunnel) return 0.1f; // discourage digging on tunnels
+							float farness = EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer, 500.f);
+							return EnemyUtilityAI::GetScoringQuadraticCurve(farness, 1.f);
+						}
+						, [speed]()
+						{
+							return new EnemyDiggingState(speed);
+						});
+
+					enemyUtilityAI->RegisterNewAction("Wandering",
+						[](const EnemyUtilityAI::GameStats& gameStats)
+						{
+							const float distanceToWander{ EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer,maxChaseRange) };
+
+							if (gameStats.collectedPoints > 100) //if player has more than 100 points, enemies will wander less
+							{
+								const float negativeScore{ -0.2f }; //wander lesss
+								return EnemyUtilityAI::GetScoringQuadraticCurve(distanceToWander+negativeScore,1.f);
+							}
+							return EnemyUtilityAI::GetScoringQuadraticCurve(distanceToWander,1.f);
+						}
+						, [speed]()
+						{
+							
+							return new EnemyWanderingState(speed);
+						});
+						
+
 					enemyObj->SetLocalPosition(
 						{
 						rawPtrGrid->ColToWorld(c)
@@ -145,6 +199,19 @@ namespace dae
 		auto& input = InputManager::GetInstance();
 		constexpr float speed{ 100.f };
 
+		int numJoysticks = 0;
+		SDL_JoystickID* joysticks = SDL_GetJoysticks(&numJoysticks);
+		SDL_Log("Number of controllers found: %d", numJoysticks);
+
+		for (int i = 0; i < numJoysticks; i++)
+		{
+			if (SDL_IsGamepad(joysticks[i]))
+			{
+				SDL_Gamepad* gamepad = SDL_OpenGamepad(joysticks[i]);
+				SDL_Log("Controller %d: %s", i, SDL_GetGamepadName(gamepad));
+			}
+		}
+		SDL_free(joysticks);
 
 		input.BindKeyboardCommand(SDL_SCANCODE_W
 			, InputManager::TriggerType::Isdown
@@ -187,6 +254,27 @@ namespace dae
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
 			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
+
+		//gamepad
+		input.BindControllerCommand(dae::GamepadButton::DpadUp,
+			InputManager::TriggerType::Isdown,
+			std::make_unique<MoveDiggerCommand>(
+				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
+
+		input.BindControllerCommand(dae::GamepadButton::DpadDown,
+			InputManager::TriggerType::Isdown,
+			std::make_unique<MoveDiggerCommand>(
+				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
+
+		input.BindControllerCommand(dae::GamepadButton::DpadLeft,
+			InputManager::TriggerType::Isdown,
+			std::make_unique<MoveDiggerCommand>(
+				diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
+
+		input.BindControllerCommand(dae::GamepadButton::DpadRight,
+			InputManager::TriggerType::Isdown,
+			std::make_unique<MoveDiggerCommand>(
+				diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
 		
 	}
 
