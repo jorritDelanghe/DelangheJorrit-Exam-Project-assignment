@@ -91,7 +91,7 @@ namespace dae
 		{
 			for (int c{}; c < grid.GetCols();++c)
 			{
-				if (grid.GetTile(c, r) == TileType::GoldBag)
+				if (grid.GetTileType(c, r) == TileType::GoldBag)
 				{
 
 					auto goldBagObj = std::make_unique<GameObject>();
@@ -109,7 +109,7 @@ namespace dae
 					scene.Add(std::move(goldBagObj));
 				
 				}
-				if (grid.GetTile(c, r) == TileType::EnemySpawn)
+				if (grid.GetTileType(c, r) == TileType::EnemySpawn)
 				{
 
 					auto enemyObj = std::make_unique<GameObject>();

@@ -51,7 +51,7 @@ std::vector<glm::vec3> PathFinding::BFS(dae::GridComponent* grid, const glm::vec
 		{
 			const int nextCol{ current.col + col };
 			const int nextRow{ current.row + row };
-			if (grid->GetGrid().GetTile(nextCol, nextRow) == dae::TileType::Tunnel)
+			if (grid->GetGrid().GetTileType(nextCol, nextRow) == dae::TileType::Tunnel)
 			{
 				const int neighbourIndex{ nextRow * maxCols + nextCol };
 				const int currentIndex{ current.row * maxCols + current.col };
@@ -109,7 +109,7 @@ std::vector<glm::vec3> PathFinding::GetNeighbouringTunnels(dae::GridComponent* g
 
 
 		const dae::TileType neighbourTile{
-			grid->GetGrid().GetTile(
+			grid->GetGrid().GetTileType(
 				neighbouringCol
 				,neighbouringRow) };
 

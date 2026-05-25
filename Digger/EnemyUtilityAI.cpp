@@ -71,7 +71,7 @@ dae::EnemyUtilityAI::GameStats dae::EnemyUtilityAI::GetGameStats() const
 
 	const int col = m_pGrid->WorldToCol(gameStats.enemyPos.x);
 	const int row = m_pGrid->WorldToRow(gameStats.enemyPos.y);
-	gameStats.isOnTunnel = (m_pGrid->GetGrid().GetTile(col, row) == TileType::Tunnel);
+	gameStats.isOnTunnel = (m_pGrid->GetGrid().GetTileType(col, row) == TileType::Tunnel);
 
 	return gameStats;
 }

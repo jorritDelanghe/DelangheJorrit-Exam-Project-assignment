@@ -4,7 +4,8 @@
 #include "texture2D.h"
 #include <memory>
 #include"Grid.h"
-
+#include <unordered_map>
+#include "TileData.h"
 namespace dae
 {
 	class GridComponent final : public Component
@@ -25,12 +26,7 @@ namespace dae
 
 	private:
 		dae::Grid m_grid{};
-
-		std::shared_ptr<Texture2D> m_dirtTexture{};
-		std::shared_ptr<Texture2D> m_tunnelTexture{};
-		std::shared_ptr<Texture2D> m_emeraldTexture{};
-		std::shared_ptr<Texture2D> m_goldTexture{};
-
+		std::unordered_map<TileType, TileData> m_tileDataMap{};
 		void RenderTile(int col, int row) const;
 	};
 

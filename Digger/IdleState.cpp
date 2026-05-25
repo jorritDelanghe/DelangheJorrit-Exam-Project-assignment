@@ -31,7 +31,7 @@ dae::GoldBagState* dae::IdleState::Update(GoldBagComponent* goldBagComponent, fl
 	const int col = grid->WorldToCol(pos.x);
 	const int row = grid->WorldToRow(pos.y);
 
-	const TileType tileBelow = grid->GetGrid().GetTile(col, row + 1);
+	const TileType tileBelow = grid->GetGrid().GetTileType(col, row + 1);
 
 	if (tileBelow == TileType::Tunnel)
 	{

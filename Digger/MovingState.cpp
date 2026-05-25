@@ -38,8 +38,8 @@ dae::GoldBagState* dae::MovingState::HandleInputs(GoldBagComponent* goldBagCompo
 		return new IdleState();
 	}
 
-	const TileType typeTargetTile{ grid->GetGrid().GetTile(targetTile.col,targetTile.row) };
-	const TileType typeTargetFallTile{ grid->GetGrid().GetTile(targetTile.col,targetTile.row+1) };
+	const TileType typeTargetTile{ grid->GetGrid().GetTileType(targetTile.col,targetTile.row) };
+	const TileType typeTargetFallTile{ grid->GetGrid().GetTileType(targetTile.col,targetTile.row+1) };
 
 	if (typeTargetTile == TileType::Tunnel)
 	{

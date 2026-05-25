@@ -21,7 +21,7 @@ dae::GoldBagState* dae::FallingState::Update(GoldBagComponent* goldBagComponent,
     const int currentRow = grid->WorldToRow(newPos.y);
     const int currentCol = grid->WorldToCol(newPos.x);
 
-    const TileType tileBelow = grid->GetGrid().GetTile(currentCol, currentRow + 1);
+    const TileType tileBelow = grid->GetGrid().GetTileType(currentCol, currentRow + 1);
 
     if (tileBelow != TileType::Tunnel)
     {

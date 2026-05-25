@@ -10,12 +10,14 @@
 #include <string>
 #include <windows.h>
 
-dae::LevelLoader::LevelLoader(const std::string& filePath, Grid& grid)
+#include "TileData.h"
+
+dae::LevelLoader::LevelLoader(const std::string& filePath,std::unordered_map<TileType,TileData>& tileDataMap, Grid& grid)
 {
-	loadLevelFromFile(filePath, grid); //two times reference is that heavy?????
+	loadLevelFromFile(filePath, tileDataMap,grid); //two times reference is that heavy?????
 }
 
-void dae::LevelLoader::loadLevelFromFile(const std::string& filePath, Grid& grid)
+void dae::LevelLoader::loadLevelFromFile(const std::string& filePath, std::unordered_map<TileType,TileData>& tileDataMap, Grid& grid)
 {
 	std::ifstream file(filePath);
 	if (!file.is_open())
@@ -26,7 +28,7 @@ void dae::LevelLoader::loadLevelFromFile(const std::string& filePath, Grid& grid
 	int cols{};
 	int rows{};
 	float tileSize{};
-	std::vector<dae::TileType> tiles;
+	std::vector<TileData*> tiles;
 
 	std::string line;
 	while (std::getline(file, line))
@@ -48,19 +50,19 @@ void dae::LevelLoader::loadLevelFromFile(const std::string& filePath, Grid& grid
 			switch (character)
 			{
 			case '#':
-				tiles.push_back(dae::TileType::DirtWall);
+				tiles.push_back(&tileDataMap.at(TileType::DirtWall));
 				break;
 			case '.':
-				tiles.push_back(dae::TileType::Tunnel);
+				tiles.push_back(&tileDataMap.at(TileType::Tunnel));
 				break;
 			case'G':
-				tiles.push_back(dae::TileType::GoldBag);
+				tiles.push_back(&tileDataMap.at(TileType::Tunnel));
 				break;
 			case'E':
-				tiles.push_back(dae::TileType::Emerald);
+				tiles.push_back(&tileDataMap.at(TileType::Tunnel));
 				break;
 			case'N':
-				tiles.push_back(dae::TileType::EnemySpawn);
+				tiles.push_back(&tileDataMap.at(TileType::Tunnel));
 				break;
 
 			}

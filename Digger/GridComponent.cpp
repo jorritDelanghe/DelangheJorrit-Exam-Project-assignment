@@ -7,11 +7,12 @@
 dae::GridComponent::GridComponent(GameObject* pOwner, const std::string& filePath)
 	:Component(pOwner)
 {
-	LevelLoader levelLoader(filePath, m_grid); //needs to be temp object or else gets deleted for filling grid
-	m_dirtTexture = ResourceManager::GetInstance().LoadTexture("Resources/dirt.png");
-	m_tunnelTexture = ResourceManager::GetInstance().LoadTexture("Resources/tunnel.png");
-	m_emeraldTexture = ResourceManager::GetInstance().LoadTexture("resources/emerald.png");
-	m_goldTexture = ResourceManager::GetInstance().LoadTexture("resources/goldBagSingle.png");
+	m_tileDataMap[TileType::DirtWall] = TileData{ ResourceManager::GetInstance().LoadTexture("Resources/dirt.png"), false, TileType::DirtWall };
+	m_tileDataMap[TileType::Tunnel] = TileData{ ResourceManager::GetInstance().LoadTexture("Resources/tunnel.png"), false, TileType::Tunnel };
+
+	LevelLoader levelLoader(filePath, m_tileDataMap, m_grid); //needs to be temp object or else gets deleted for filling grid
+
+
 }
 
 void dae::GridComponent::Render() const
@@ -29,7 +30,7 @@ void dae::GridComponent::Render() const
 dae::TileType dae::GridComponent::DiggedTile(int col, int row)
 {
 
-	TileType tempTileType = m_grid.GetTile(col, row);
+	TileType tempTileType = m_grid.GetTileType(col, row);
 
 	m_grid.SetTileType(col, row, TileType::Tunnel); //set digged
 
@@ -63,22 +64,13 @@ void dae::GridComponent::RenderTile(int col, int row) const
 {
 	std::shared_ptr<Texture2D> texture{};
 
-	switch (m_grid.GetTile(col, row))
+	switch (m_grid.GetTileType(col, row))
 	{
 		case TileType::DirtWall:
-			texture = m_dirtTexture;
+			texture = m_tileDataMap.at(TileType::DirtWall).texture;
 			break;
 		case TileType::Tunnel:
-			texture = m_tunnelTexture;
-			break;
-		case TileType::Emerald:
-			texture = m_emeraldTexture;
-			break;
-		case TileType::GoldBag:
-			texture = m_dirtTexture;
-			break;
-		case TileType::EnemySpawn:
-			texture = m_tunnelTexture;
+			texture = m_tileDataMap.at(TileType::Tunnel).texture;
 			break;
 		default:
 			return;
