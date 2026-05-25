@@ -5,6 +5,7 @@ namespace dae
 	{
 		PlayerDied,
 		PlayerPickedUp,
-		EnemyDied
+		EnemyDied,
+		Collision
 	};
 }

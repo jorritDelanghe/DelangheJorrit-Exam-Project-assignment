@@ -34,6 +34,7 @@
 #include "EnemyWanderingState.h"
 #include "EnemyChasingState.h"
 #include "EnemyDiggingState.h"
+#include "RectColliderComponent.h"
 namespace dae
 {
 	void diggerScene::loadScene()
@@ -114,7 +115,12 @@ namespace dae
 
 					auto enemyObj = std::make_unique<GameObject>();
 					auto* enemy = enemyObj->AddComponent<EnemyComponent>(rawPtrGrid, diggerRawPtr);
-					enemyObj->AddComponent<RenderComponent>("Resources/diggerSingle.png");
+					auto* enemyImage =enemyObj->AddComponent<RenderComponent>("Resources/diggerSingle.png");
+					enemyObj->AddComponent<RectColliderComponent>(Size
+						{
+							enemyImage->GetSizeImage().width
+							, enemyImage->GetSizeImage().height
+						}, CollisionTag::Enemy);
 
 					//actions
 					constexpr float speed = 100.f;
