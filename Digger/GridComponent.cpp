@@ -7,10 +7,10 @@
 dae::GridComponent::GridComponent(GameObject* pOwner, const std::string& filePath)
 	:Component(pOwner)
 {
-	m_tileDataMap[TileType::DirtWall] = TileData{ ResourceManager::GetInstance().LoadTexture("Resources/dirt.png"), false, TileType::DirtWall };
-	m_tileDataMap[TileType::Tunnel] = TileData{ ResourceManager::GetInstance().LoadTexture("Resources/tunnel.png"), false, TileType::Tunnel };
+	m_tileDataMap[TileType::DirtWall] = TileData{ ResourceManager::GetInstance().LoadTexture("Resources/dirt.png"), true};
+	m_tileDataMap[TileType::Tunnel] = TileData{ ResourceManager::GetInstance().LoadTexture("Resources/tunnel.png"), true};
 
-	LevelLoader levelLoader(filePath, m_tileDataMap, m_grid); //needs to be temp object or else gets deleted for filling grid
+	LevelLoader levelLoader(filePath, m_grid); //needs to be temp object or else gets deleted for filling grid
 
 
 }
@@ -63,7 +63,7 @@ const dae::Grid& dae::GridComponent::GetGrid()const
 void dae::GridComponent::RenderTile(int col, int row) const
 {
 	std::shared_ptr<Texture2D> texture{};
-
+	std::shared_ptr<Texture2D> bordertexture = ResourceManager::GetInstance().LoadTexture("Resources/diggerSingle.png");
 	switch (m_grid.GetTileType(col, row))
 	{
 		case TileType::DirtWall:
@@ -71,6 +71,9 @@ void dae::GridComponent::RenderTile(int col, int row) const
 			break;
 		case TileType::Tunnel:
 			texture = m_tileDataMap.at(TileType::Tunnel).texture;
+			break;
+		case TileType::BorderWallGame:
+			texture = bordertexture;
 			break;
 		default:
 			return;

@@ -12,6 +12,5 @@ namespace dae
 	{
 		std::shared_ptr<dae::Texture2D> texture{};
 		bool isTunnel{ false };
-		dae::TileType tileType{ dae::TileType::Empty };
 	};
 }

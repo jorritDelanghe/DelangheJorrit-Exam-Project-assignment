@@ -2,7 +2,6 @@
 #include <vector>
 #include <string>
 #include "DataTypes.h"
-#include "TileData.h"
 
 namespace dae
 {
@@ -10,9 +9,8 @@ namespace dae
 	{
 	public:
 		Grid() = default; //problem otherwise in gridcomponent with intializing
-		explicit Grid(int cols, int rows, float tileSize,const std::vector<TileData*>& tiles);
+		explicit Grid(int cols, int rows, float tileSize,const std::vector<TileType>& tiles);
 
-		TileData GetTileData(int col, int row) const;
 		TileType GetTileType(int col, int row) const;
 		void SetTileType(int col, int row, const TileType& type);
 
@@ -27,6 +25,6 @@ namespace dae
 		int m_rows{};
 		float m_tileSize{};
 
-		std::vector<TileData*> m_tiles;
+		std::vector<TileType> m_tiles;
 	};
 }
