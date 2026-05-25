@@ -11,6 +11,7 @@ namespace dae
 		, Emerald
 		, GoldBag
 		, EnemySpawn
+		,BorderWallGame
 	};
 	struct GridPos
 	{

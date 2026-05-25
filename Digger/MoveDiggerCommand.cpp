@@ -20,16 +20,24 @@ dae::MoveDiggerCommand::MoveDiggerCommand(dae::GameObject* gameObject, float spe
 void dae::MoveDiggerCommand::Execute()
 {
 	auto* gameObject{ GetGameObject() };
-	glm::vec3 currentPos{ gameObject->GetLocalPosition() };
+	const glm::vec3 currentPos{ gameObject->GetLocalPosition() };
+	const glm::vec3 newPos{ currentPos + (m_speed * m_direction * dae::GameTime::deltaTime) };
 
 	if (m_grid)
 	{
-		const int col{ m_grid->WorldToCol(currentPos.x) };
-		const int row{ m_grid->WorldToRow(currentPos.y) };
+		const int newCol{ m_grid->WorldToCol(newPos.x) };
+		const int newRow{ m_grid->WorldToRow(newPos.y) };
 
+		const TileType destinationTile{ m_grid->GetGrid().GetTileType(newCol, newRow) };
+		if (!m_grid->GetGrid().IsInGrid(newCol, newRow) || destinationTile == TileType::BorderWallGame)
+		{
+			return;
+		}
+		
 		constexpr int gemPoints{ 40 };
 		constexpr int goldBagPoints{ 80 };
-		switch (m_grid->DiggedTile(col, row))
+
+		switch (destinationTile)
 		{
 		case TileType::DirtWall:
 			dae::ServiceLocator::GetSoundSystem().Play(m_digSound, 0.8f);
@@ -49,7 +57,7 @@ void dae::MoveDiggerCommand::Execute()
 		{
 			bag->HandleInput(currentPos);
 		}
-		
+		m_grid->DiggedTile(newCol, newRow);
 	}
-	gameObject->SetLocalPosition(currentPos + (m_speed * m_direction * dae::GameTime::deltaTime));
+	gameObject->SetLocalPosition(newPos);
 }
