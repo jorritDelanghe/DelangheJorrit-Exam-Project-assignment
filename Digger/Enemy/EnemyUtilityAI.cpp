@@ -1,10 +1,10 @@
-#include "EnemyUtilityAI.h"
+#include "Enemy/EnemyUtilityAI.h"
 #include <algorithm>
 #include "GameObject.h"
-#include "GridComponent.h"
+#include "Grid/GridComponent.h"
 #include "GameObject.h"
 #include "EnemyComponent.h"
-#include "PointsComponent.h"
+#include "Scene/PointsComponent.h"
 
 
 dae::EnemyUtilityAI::EnemyUtilityAI(GameObject* pOwner, EnemyComponent* enemy, GridComponent* grid,

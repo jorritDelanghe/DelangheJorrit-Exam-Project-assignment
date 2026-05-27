@@ -1,5 +1,5 @@
 #include "EnemyWanderingState.h"
-#include "GridComponent.h"
+#include "Grid/GridComponent.h"
 #include "EnemyComponent.h"
 #include "EnemyHelpers.h"
 #include <Windows.h>

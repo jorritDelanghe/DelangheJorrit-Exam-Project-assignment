@@ -1,6 +1,6 @@
 #include "GameObjectCommand.h"
-#include "HealthComponent.h"
-#include "PointsComponent.h"
+#include "Player/HealthComponent.h"
+#include "Scene/PointsComponent.h"
 #include "GameTime.h"
 
 namespace dae

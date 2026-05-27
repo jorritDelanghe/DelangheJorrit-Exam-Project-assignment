@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include "EnemyComponent.h"
-#include "GridComponent.h"
+#include "Grid/GridComponent.h"
 #include "DataTypes.h"
 #include <vector>
 

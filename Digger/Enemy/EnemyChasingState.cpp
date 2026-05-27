@@ -1,7 +1,7 @@
 #include "EnemyChasingState.h"
-#include "GridComponent.h"
-#include "EnemyComponent.h"
-#include "EnemyHelpers.h"
+#include "Grid/GridComponent.h"
+#include "Enemy/EnemyComponent.h"
+#include "Enemy/EnemyHelpers.h"
 dae::EnemyChasingState::EnemyChasingState(float moveSpeed)
 	:m_speed(moveSpeed)
 {

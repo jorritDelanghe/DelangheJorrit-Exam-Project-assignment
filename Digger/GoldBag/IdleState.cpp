@@ -1,6 +1,6 @@
 #include "IdleState.h"
 #include "GoldBagComponent.h"
-#include "GridComponent.h"
+#include "Grid/GridComponent.h"
 #include "MovingState.h"
 #include "FallingState.h"
 

@@ -2,7 +2,7 @@
 #include "EnemyState.h"
 #include <memory>
 #include "Component.h"
-#include "PointsComponent.h"
+#include "Scene/PointsComponent.h"
 #include <functional>
 #include <string>
 #include <glm/glm.hpp>

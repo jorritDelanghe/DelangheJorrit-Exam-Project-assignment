@@ -18,10 +18,10 @@ namespace dae
 
 		void AddScore(int points);
 		int GetScore() const { return m_score; }
-		Subject& OnPointsChanged() { return m_onPointsChanged; }
+		Subject<GameEvent>& OnPointsChanged() { return m_onPointsChanged; }
 	private:
 		int m_score{};
-		Subject m_onPointsChanged;
+		Subject<GameEvent> m_onPointsChanged;
 	};
 
 }

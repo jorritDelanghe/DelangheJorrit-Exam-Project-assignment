@@ -1,5 +1,5 @@
 #include "MovingState.h"
-#include "GridComponent.h"
+#include "Grid/GridComponent.h"
 #include "GameObject.h"
 #include "GoldBagComponent.h"
 #include "IdleState.h"

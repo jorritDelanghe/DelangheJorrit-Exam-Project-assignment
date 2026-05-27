@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "DataTypes.h"
-#include "Grid.h"
+#include "Grid/Grid.h"
 
 namespace dae
 {

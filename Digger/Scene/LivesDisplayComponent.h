@@ -12,7 +12,7 @@ namespace dae
 	class GameObject;
 	class Font;
 
-	class LivesDisplayComponent final : public Component, public Observer
+	class LivesDisplayComponent final : public Component, public Observer<GameEvent>
 	{
 	public:
 		explicit LivesDisplayComponent(GameObject* gameObject, const std::string& fileName, float size, float spacing, int startLives);

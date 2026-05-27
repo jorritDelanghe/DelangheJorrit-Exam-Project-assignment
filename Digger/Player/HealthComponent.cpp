@@ -1,9 +1,7 @@
 #include "HealthComponent.h"
-#include "HealthComponent.h"
-#include "HealthComponent.h"
 #include "Subject.h"
 #include "GameObject.h"
-#include "Event.h"
+#include "Scene/Event.h"
 
 
 dae::HealthComponent::HealthComponent(GameObject* gameObject, int lives)
@@ -27,7 +25,7 @@ void dae::HealthComponent::Update(float deltaTime)
 	}
 }
 
-void dae::HealthComponent::Notify(GameEvent event, GameObject* gameObject)
+void dae::HealthComponent::Notify(GameEvent event, GameObject* )
 {
 	if (event == GameEvent::CollisionEnemy && !m_isHit)
 	{

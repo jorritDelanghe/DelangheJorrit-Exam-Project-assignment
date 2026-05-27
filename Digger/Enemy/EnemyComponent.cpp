@@ -1,6 +1,6 @@
 #include "EnemyComponent.h"
 #include "EnemyWanderingState.h"
-#include "GridComponent.h"
+#include "Grid/GridComponent.h"
 #include "EnemyChasingState.h"
 #include "EnemyDiggingState.h"
 

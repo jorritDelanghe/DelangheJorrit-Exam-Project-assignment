@@ -6,18 +6,18 @@
 
 #include <SDL3/SDL.h> //needs to be above inputmanager otherwise it doesnt know it
 #include "InputManager.h"
-#include "MoveDiggerCommand.h"
+#include "Player/MoveDiggerCommand.h"
 
 
-#include "GridComponent.h"
-#include "GoldBagComponent.h"
+#include "Grid/GridComponent.h"
+#include "Goldbag/GoldBagComponent.h"
 #include "GameObject.h"
 
 #include "LivesDisplayComponent.h"
 #include "PointsDisplayComponent.h"
 #include "ResourceManager.h"
 #include "PointsComponent.h"
-#include "HealthComponent.h"
+#include "Player/HealthComponent.h"
 
 //sound
 #include "ServiceLocator.h"
@@ -29,14 +29,14 @@
 
 //enemy
 #include "GameTime.h"
-#include "EnemyComponent.h"
-#include "EnemyUtilityAI.h"
-#include "EnemyWanderingState.h"
-#include "EnemyChasingState.h"
-#include "EnemyDiggingState.h"
-#include "RectColliderComponent.h"
-#include "CollisionSystem.h"
-#include "CollisionUpdaterComponent.h"
+#include "Enemy/EnemyComponent.h"
+#include "Enemy/EnemyUtilityAI.h"
+#include "Enemy/EnemyWanderingState.h"
+#include "Enemy/EnemyChasingState.h"
+#include "Enemy/EnemyDiggingState.h"
+#include "Collision/RectColliderComponent.h"
+#include "Collision/CollisionSystem.h"
+#include "Collision/CollisionUpdaterComponent.h"
 namespace dae
 {
 	void diggerScene::loadScene()

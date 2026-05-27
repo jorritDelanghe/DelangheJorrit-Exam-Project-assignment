@@ -6,6 +6,7 @@ namespace dae
 {
 	enum class GameEvent;
 	class GameObject;
+	template<typename EventType> //needed so event can live in the game
 	class Subject final
 	{
 	public: 
@@ -17,11 +18,11 @@ namespace dae
 		Subject& operator=(const Subject& other) = delete;
 		Subject& operator= (Subject && other) = delete;
 
-		void AddObservers(Observer* observer)
+		void AddObservers(Observer<GameEvent>* observer)
 		{
 			m_observers.push_back(observer);
 		}
-		void RemoveObserver(Observer* observer)
+		void RemoveObserver(Observer<GameEvent>* observer)
 		{
 			m_observers.erase(std::remove(m_observers.begin(), m_observers.end(), observer), m_observers.end());
 		}
@@ -35,7 +36,7 @@ namespace dae
 		}
 
 	private:
-		std::vector<Observer*> m_observers{};
+		std::vector<Observer<EventType>*> m_observers{};
 	};
 
 }

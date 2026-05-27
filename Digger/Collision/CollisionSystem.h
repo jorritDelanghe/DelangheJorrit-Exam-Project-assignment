@@ -16,13 +16,13 @@ namespace dae
 		void RemoveCollider(RectColliderComponent* colliderRect);
 
 		void CheckCollisions();
-		Subject& OnHitSubject() { return m_OnHit; }
+		Subject<GameEvent>& OnHitSubject() { return m_OnHit; }
 
 	private:
 		CollisionSystem() = default;
 		static bool OverlappingRects(const Rect& rect1, const Rect& rect2);
 
 		std::vector<RectColliderComponent*> m_Colliders;
-		dae::Subject m_OnHit{};
+		dae::Subject<GameEvent> m_OnHit{};
 	};
 }

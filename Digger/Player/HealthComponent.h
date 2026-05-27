@@ -6,7 +6,7 @@
 namespace dae
 {
 	class GameObject;
-	class HealthComponent : public Component, public Observer
+	class HealthComponent : public Component, public Observer<GameEvent>
 	{
 	public:
 		explicit HealthComponent(GameObject* gameObject, int lives);
@@ -21,11 +21,11 @@ namespace dae
 		virtual void Notify(GameEvent event, GameObject* gameObject) override;
 		void Die();
 		int GetLives() const { return m_lives; }
-		Subject& OnDied() { return m_onDied;  }
+		Subject<GameEvent>& OnDied() { return m_onDied;  }
 
 	private:
 		int m_lives{};
-		dae::Subject m_onDied{};
+		dae::Subject<GameEvent> m_onDied{};
 		float m_cooldownTimer{};
 		bool m_isHit{ false };
 	};

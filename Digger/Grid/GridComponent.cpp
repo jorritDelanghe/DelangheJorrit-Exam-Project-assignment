@@ -2,7 +2,7 @@
 #include "renderer.h"
 #include "ResourceManager.h"
 #include"DataTypes.h"
-#include "LevelLoader.h"
+#include "Scene/LevelLoader.h"
 
 dae::GridComponent::GridComponent(GameObject* pOwner, const std::string& filePath)
 	:Component(pOwner)

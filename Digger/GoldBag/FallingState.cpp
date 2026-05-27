@@ -1,6 +1,6 @@
 #include "FallingState.h"
 #include "GoldBagComponent.h"
-#include "GridComponent.h"
+#include "Grid/GridComponent.h"
 #include "IdleState.h"
 dae::FallingState::FallingState(float fallSpeed)
 	:m_fallSpeed(fallSpeed)

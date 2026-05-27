@@ -1,11 +1,11 @@
 #pragma once
 
-#include "GameObjectCommand.h"
-#include "GridComponent.h"
+#include "Scene/GameObjectCommand.h"
+#include "Grid/GridComponent.h"
 #include <glm/glm.hpp>
 #include "SoundService.h"
-#include "PointsComponent.h"
-#include "GoldBagComponent.h"
+#include "Scene/PointsComponent.h"
+#include "GoldBag/GoldBagComponent.h"
 #include <vector>
 
 namespace dae

@@ -3,12 +3,13 @@
 #include <SDL3/SDL.h>
 #include <memory>
 #include "Observer.h"
+#include "Scene/Event.h"
 namespace dae
 {
 	class TextComponent;
 	class GameObject;
 	class Font;
-	class PointsDisplayComponent final : public Component ,public Observer
+	class PointsDisplayComponent final : public Component ,public Observer<GameEvent>
 	{
 	public:
 		explicit PointsDisplayComponent(GameObject* pGameObject,

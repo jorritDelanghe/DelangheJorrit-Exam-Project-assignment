@@ -9,7 +9,7 @@
 
 //digger scene
 #include "Minigin.h"
-#include "DiggerScene.h"
+#include "Scene/DiggerScene.h"
 
 namespace fs = std::filesystem;
 using namespace dae;

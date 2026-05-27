@@ -14,7 +14,6 @@ namespace dae
 		, Emerald
 	};
 	class GameObject;
-	class Subject;
 	class RectColliderComponent final : public Component
 	{
 	public:

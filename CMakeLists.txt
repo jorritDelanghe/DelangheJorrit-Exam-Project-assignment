@@ -31,38 +31,38 @@ add_library(Minigin STATIC
   Minigin/TextComponent.cpp
   Minigin/RenderComponent.cpp 
   Minigin/RotatorComponent.cpp 
-  Minigin/CacheTestComponent.cpp 
-  Minigin/GameObjectCommand.cpp
-  Minigin/HealthComponent.cpp
-  Minigin/LivesDisplayComponent.cpp
-  Minigin/PointsComponent.cpp
-  Minigin/PointsDisplayComponent.cpp
-  Minigin/AchievementComponent.cpp
+   
+  
   Minigin/Controller.cpp
   Minigin/ServiceLocator.cpp
   Minigin/SDLSoundSystem.cpp)
 
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
-  Digger/Grid.cpp
-  Digger/LevelLoader.cpp
-  Digger/GridComponent.cpp
-  Digger/DiggerScene.cpp
-  Digger/MoveDiggerCommand.cpp
-  Digger/GoldBagComponent.cpp
+  Digger/Grid/Grid.cpp
+  Digger/Scene/LevelLoader.cpp
+  Digger/Grid/GridComponent.cpp
+  Digger/Scene/DiggerScene.cpp
+  Digger/Player/MoveDiggerCommand.cpp
+  Digger/GoldBag/GoldBagComponent.cpp
   Digger/Main.cpp
-  Digger/IdleState.cpp
-  Digger/FallingState.cpp
-  Digger/EnemyComponent.cpp
-  Digger/EnemyWanderingState.cpp
-  Digger/EnemyChasingState.cpp
-  Digger/EnemyDiggingState.cpp
-  Digger/EnemyHelpers.cpp
-  Digger/EnemyUtilityAI.cpp
-  Digger/RectColliderComponent.cpp
-  Digger/CollisionSystem.cpp
-  Digger/CollisionUpdaterComponent.cpp
-  Digger/MovingState.cpp)
+  Digger/Scene/GameObjectCommand.cpp
+  Digger/GoldBag/IdleState.cpp
+  Digger/GoldBag/FallingState.cpp
+  Digger/Enemy/EnemyComponent.cpp
+  Digger/Enemy/EnemyWanderingState.cpp
+  Digger/Enemy/EnemyChasingState.cpp
+  Digger/Enemy/EnemyDiggingState.cpp
+  Digger/Enemy/EnemyHelpers.cpp
+  Digger/Enemy/EnemyUtilityAI.cpp
+  Digger/Collision/RectColliderComponent.cpp
+  Digger/Collision/CollisionSystem.cpp
+  Digger/Collision/CollisionUpdaterComponent.cpp
+  Digger/GoldBag/MovingState.cpp
+  Digger/Player/HealthComponent.cpp
+  Digger/Scene/LivesDisplayComponent.cpp
+  Digger/Scene/PointsComponent.cpp
+  Digger/Scene/PointsDisplayComponent.cpp)
 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
