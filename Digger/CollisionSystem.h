@@ -2,6 +2,7 @@
 #include "Singleton.h"
 #include <vector>
 #include "RectColliderComponent.h"
+#include "Subject.h"
 //singleton pattern
 
 namespace dae
@@ -15,12 +16,13 @@ namespace dae
 		void RemoveCollider(RectColliderComponent* colliderRect);
 
 		void CheckCollisions();
+		Subject& OnHitSubject() { return m_OnHit; }
 
 	private:
 		CollisionSystem() = default;
 		static bool OverlappingRects(const Rect& rect1, const Rect& rect2);
 
 		std::vector<RectColliderComponent*> m_Colliders;
-		Subject m_OnHit;
+		dae::Subject m_OnHit{};
 	};
 }

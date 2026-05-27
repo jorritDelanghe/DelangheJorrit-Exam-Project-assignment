@@ -1,6 +1,7 @@
 #include "CollisionSystem.h"
 #include "Subject.h"
-
+#include <Windows.h>
+#include <string>
 void dae::CollisionSystem::AddCollider(RectColliderComponent* colliderRect)
 {
 	m_Colliders.push_back(colliderRect);
@@ -8,6 +9,7 @@ void dae::CollisionSystem::AddCollider(RectColliderComponent* colliderRect)
 
 void dae::CollisionSystem::RemoveCollider(RectColliderComponent* colliderRect)
 {
+	if (m_Colliders.empty()) return;
 	m_Colliders.erase(std::remove(m_Colliders.begin(), m_Colliders.end(), colliderRect), m_Colliders.end());
 }
 
@@ -20,7 +22,16 @@ void dae::CollisionSystem::CheckCollisions()
 			if (collider == otherCollider) continue; // Skip self-collision
 			if (OverlappingRects(collider->GetBoundingBoxInWorld(), otherCollider->GetBoundingBoxInWorld()))
 			{
-				m_OnHit.NotifyObservers(GameEvent::Collision, collider->GetOwner());
+				bool aIsPlayer = collider->GetTag() == CollisionTag::Player;
+				bool bIsPlayer = otherCollider->GetTag() == CollisionTag::Player;
+				bool aIsEnemy = collider->GetTag() == CollisionTag::Enemy;
+				bool bIsEnemy = otherCollider->GetTag() == CollisionTag::Enemy;
+
+				if ((aIsPlayer && bIsEnemy) || (aIsEnemy && bIsPlayer))
+				{
+					m_OnHit.NotifyObservers(GameEvent::CollisionEnemy, collider->GetOwner());
+					OutputDebugStringA("hit\n");
+				}
 			}
 		}
 	}

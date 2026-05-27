@@ -35,6 +35,8 @@
 #include "EnemyChasingState.h"
 #include "EnemyDiggingState.h"
 #include "RectColliderComponent.h"
+#include "CollisionSystem.h"
+#include "CollisionUpdaterComponent.h"
 namespace dae
 {
 	void diggerScene::loadScene()
@@ -48,6 +50,9 @@ namespace dae
 		auto* rawPtrGrid{ gridObject->GetComponent<GridComponent>()};
 		scene.Add(std::move(gridObject)); //then add the gameobject to the scene	
 
+		auto collisionUpdater = std::make_unique<GameObject>();
+		collisionUpdater->AddComponent<CollisionUpdaterComponent>();
+		scene.Add(std::move(collisionUpdater));
 
 		//sound
 		ServiceLocator::RegisterSounSystem(std::make_unique<SDLSoundSystem>());
@@ -58,7 +63,12 @@ namespace dae
 		constexpr int numLives{ 3 };
 		auto diggerPlayer{ std::make_unique<GameObject>() };
 		auto* diggerRawPtr = diggerPlayer.get();
-		diggerPlayer->AddComponent<RenderComponent>("digger2.png");
+		auto*playerImage=diggerPlayer->AddComponent<RenderComponent>("digger2.png");
+		diggerPlayer->AddComponent<RectColliderComponent>(Size
+			{
+				playerImage->GetSizeImage().width
+				, playerImage->GetSizeImage().height
+			}, CollisionTag::Player);
 		auto* points = diggerPlayer->AddComponent<PointsComponent>();
 		auto* health = diggerPlayer->AddComponent<HealthComponent>(numLives);
 		diggerPlayer->SetLocalPosition({ 100.f,100.f,0.f });
@@ -80,9 +90,14 @@ namespace dae
 		pointsDisplayObj->SetLocalPosition({ 10.f, 0.f, 0.f });
 		scene.Add(std::move(pointsDisplayObj));
 	
+		//collsion
+		auto& CollisionSystem = CollisionSystem::GetInstance();
+		CollisionSystem.CheckCollisions();
+
 		//observers
 		health->OnDied().AddObservers(livesDisplay);
 		points->OnPointsChanged().AddObservers(pointsDisplay);
+		CollisionSystem.OnHitSubject().AddObservers(health);
 	
 		// add gold bagcomponents
 		const Grid& grid{ rawPtrGrid->GetGrid() };
@@ -123,7 +138,7 @@ namespace dae
 						}, CollisionTag::Enemy);
 
 					//actions
-					constexpr float speed = 100.f;
+					constexpr float speed = 0.f;
 					constexpr float chasingRadius = 150.f;
 					constexpr float maxChaseRange = 300.f;
 

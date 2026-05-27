@@ -20,7 +20,7 @@ namespace dae
 	public:
 		explicit RectColliderComponent(GameObject* pOwner,const Size& size, CollisionTag tag);
 
-		virtual ~RectColliderComponent() override = default;
+		virtual ~RectColliderComponent() override;
 		RectColliderComponent(const RectColliderComponent& other) = delete;
 		RectColliderComponent(RectColliderComponent&& other) = delete;
 		RectColliderComponent& operator=(const RectColliderComponent& other) = delete;
@@ -29,6 +29,7 @@ namespace dae
 		virtual void Update(float deltaTime) override; 
 		virtual void Render()const override; //debug purposes
 		const Rect& GetBoundingBoxInWorld() const;
+		CollisionTag GetTag()const { return m_tag; }
 
 	private:
 		Rect m_boundingBox{};

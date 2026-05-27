@@ -50,7 +50,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Digger/DiggerScene.cpp
   Digger/MoveDiggerCommand.cpp
   Digger/GoldBagComponent.cpp
-  Minigin/Main.cpp
+  Digger/Main.cpp
   Digger/IdleState.cpp
   Digger/FallingState.cpp
   Digger/EnemyComponent.cpp
@@ -61,6 +61,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Digger/EnemyUtilityAI.cpp
   Digger/RectColliderComponent.cpp
   Digger/CollisionSystem.cpp
+  Digger/CollisionUpdaterComponent.cpp
   Digger/MovingState.cpp)
 
 # enable c++20 features

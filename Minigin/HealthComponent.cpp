@@ -1,7 +1,10 @@
 #include "HealthComponent.h"
+#include "HealthComponent.h"
+#include "HealthComponent.h"
 #include "Subject.h"
 #include "GameObject.h"
 #include "Event.h"
+
 
 dae::HealthComponent::HealthComponent(GameObject* gameObject, int lives)
 	:Component(gameObject)
@@ -10,6 +13,29 @@ dae::HealthComponent::HealthComponent(GameObject* gameObject, int lives)
 {
 }
 
+void dae::HealthComponent::Update(float deltaTime)
+{
+	if (m_isHit)
+	{
+		m_cooldownTimer += deltaTime;
+		constexpr float maxCooldown{ 1.f }; 
+		if (m_cooldownTimer >= maxCooldown)
+		{
+			m_isHit = false;
+			m_cooldownTimer = 0.f;
+		}
+	}
+}
+
+void dae::HealthComponent::Notify(GameEvent event, GameObject* gameObject)
+{
+	if (event == GameEvent::CollisionEnemy && !m_isHit)
+	{
+		Die();
+		m_isHit = true;
+		m_cooldownTimer = 0.f;
+	}
+}
 void dae::HealthComponent::Die()
 {
 	if (m_lives <= 0) return;

@@ -10,6 +10,11 @@ dae::RectColliderComponent::RectColliderComponent(GameObject* pOwner, const Size
 	CollisionSystem::GetInstance().AddCollider(this);
 }
 
+dae::RectColliderComponent::~RectColliderComponent()
+{
+	CollisionSystem::GetInstance().RemoveCollider(this); //delete out of list
+}
+
 void dae::RectColliderComponent::Update(float )
 {
 	const auto& pos = m_pOwner->GetWorldPosition();
