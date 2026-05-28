@@ -39,63 +39,63 @@
 #include "Collision/CollisionUpdaterComponent.h"
 namespace dae
 {
-	void diggerScene::loadScene()
+	DiggerScene::DiggerScene()
 	{
-		//scene
+	}
+	void DiggerScene::LoadScene()
+	{
 		auto& scene = dae::SceneManager::GetInstance().CreateScene();
+		auto grid = InitGrid(scene, "Data/Resources/Level01.txt");
+		auto player = InitPlayer(scene, "digger2.png");
 
+		InitSound();
+		SpawnGameResources(scene, grid, player->GetComponent<PointsComponent>(), player);
+		SetupInputControls(grid, player, player->GetComponent<PointsComponent>()
+			, player->GetComponent<HealthComponent>(), std::vector<GoldBagComponent*>{});
+		InitUI(scene, player->GetComponent<PointsComponent>(), player->GetComponent<HealthComponent>());
+	}
+
+	GridComponent* DiggerScene::InitGrid(Scene& scene, const std::string& levelFile)
+	{
 		auto gridObject = std::make_unique<GameObject>(); //first create the gameobject
-		gridObject->AddComponent<GridComponent>("Data/Resources/Level01.txt"); //then add the grid component to it
+		gridObject->AddComponent<GridComponent>(levelFile); //then add the grid component to it
 		gridObject->SetLocalPosition({ 0.f,80.f,0.f });
-		auto* rawPtrGrid{ gridObject->GetComponent<GridComponent>()};
+		auto* rawPtrGrid{ gridObject->GetComponent<GridComponent>() };
 		scene.Add(std::move(gridObject)); //then add the gameobject to the scene	
 
-		//update collsions
-		/*auto collisionUpdater = std::make_unique<GameObject>();
-		collisionUpdater->AddComponent<CollisionUpdaterComponent>();
-		scene.Add(std::move(collisionUpdater));*/
+		return rawPtrGrid;
+	}
 
-		//sound
-		ServiceLocator::RegisterSounSystem(std::make_unique<SDLSoundSystem>());
-		SoundID digSound{ ServiceLocator::GetSoundSystem().AddSound("Data/Resources/DeathSound.wav") };
-		SoundID gemSound{ ServiceLocator::GetSoundSystem().AddSound("Data/Resources/piano2.wav") };
-
-		//player
+	GameObject* DiggerScene::InitPlayer(Scene& scene, const std::string& filepath)
+	{
 		constexpr int numLives{ 3 };
 		auto diggerPlayer{ std::make_unique<GameObject>() };
-		auto* diggerRawPtr = diggerPlayer.get();
-		auto*playerImage=diggerPlayer->AddComponent<RenderComponent>("digger2.png");
+		auto* rawDiggerPtr{ diggerPlayer.get() };
+		auto* playerImage = diggerPlayer->AddComponent<RenderComponent>(filepath);
 		diggerPlayer->AddComponent<RectColliderComponent>(Size
 			{
 				playerImage->GetSizeImage().width
 				, playerImage->GetSizeImage().height
 			}, CollisionTag::Player);
-		auto* points = diggerPlayer->AddComponent<PointsComponent>();
-		auto* health = diggerPlayer->AddComponent<HealthComponent>(numLives);
+		diggerPlayer->AddComponent<PointsComponent>();
+		diggerPlayer->AddComponent<HealthComponent>(numLives);
 		diggerPlayer->SetLocalPosition({ 100.f,100.f,0.f });
 
-		auto* diggerPlayerRawPtr{ diggerPlayer.get() };
 		scene.Add(std::move(diggerPlayer));
+		return rawDiggerPtr;
+	}
 
-		// lives display object
-		auto font = dae::ResourceManager::GetInstance().LoadFont("Resources/GameFont.ttf", 36);
-		auto livesDisplayObj = std::make_unique<GameObject>();
-		auto* livesDisplay = livesDisplayObj->AddComponent<LivesDisplayComponent>("digger2.png",40.f,5.f,3);
-		livesDisplayObj->SetLocalPosition({ 110.f, 0.f, 0.f });
-		scene.Add(std::move(livesDisplayObj));
-	
-		//points display
-		constexpr SDL_Color green{ 0,255,0,255 };
-		auto pointsDisplayObj = std::make_unique<GameObject>();
-		auto* pointsDisplay = pointsDisplayObj->AddComponent<PointsDisplayComponent>(font, green);
-		pointsDisplayObj->SetLocalPosition({ 10.f, 0.f, 0.f });
-		scene.Add(std::move(pointsDisplayObj));
+	void DiggerScene::InitSound() const
+	{
+		ServiceLocator::RegisterSounSystem(std::make_unique<SDLSoundSystem>());
+		ServiceLocator::GetSoundSystem().AddSound("Data/Resources/DeathSound.wav");
+		ServiceLocator::GetSoundSystem().AddSound("Data/Resources/piano2.wav");
+	}
 
-		//observers
-		health->OnDied().AddObservers(livesDisplay);
-		points->OnPointsChanged().AddObservers(pointsDisplay);
-		CollisionSystem::GetInstance().OnHitSubject().AddObservers(health);
-	
+	void DiggerScene::SpawnGameResources(Scene& scene, GridComponent* rawPtrGrid
+		, PointsComponent* points, GameObject* diggerRawPtr)
+	{
+
 		// add gold bagcomponents
 		const Grid& grid{ rawPtrGrid->GetGrid() };
 		std::vector<GoldBagComponent*> m_bags;
@@ -120,14 +120,14 @@ namespace dae
 
 					m_bags.push_back(bag);
 					scene.Add(std::move(goldBagObj));
-				
+
 				}
 				if (grid.GetTileType(c, r) == TileType::EnemySpawn)
 				{
 
 					auto enemyObj = std::make_unique<GameObject>();
 					auto* enemy = enemyObj->AddComponent<EnemyComponent>(rawPtrGrid, diggerRawPtr);
-					auto* enemyImage =enemyObj->AddComponent<RenderComponent>("Resources/diggerSingle.png");
+					auto* enemyImage = enemyObj->AddComponent<RenderComponent>("Resources/diggerSingle.png");
 					enemyObj->AddComponent<RectColliderComponent>(Size
 						{
 							enemyImage->GetSizeImage().width
@@ -140,13 +140,13 @@ namespace dae
 					constexpr float maxChaseRange = 300.f;
 
 					auto* enemyUtilityAI = enemyObj->AddComponent<EnemyUtilityAI>(enemy, rawPtrGrid, diggerRawPtr, points);
-					
+
 					enemyUtilityAI->RegisterNewAction("Chasing",
 						[chasingRadius](const EnemyUtilityAI::GameStats& gameStats)
 						{
 							//closer hte higher score
-							const float score{1.f - EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer, chasingRadius) };
-							return EnemyUtilityAI::GetScoringQuadraticCurve(score,1.f); //more decisive avction
+							const float score{ 1.f - EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer, chasingRadius) };
+							return EnemyUtilityAI::GetScoringQuadraticCurve(score, 1.f); //more decisive avction
 						}
 						, [speed]()
 						{
@@ -173,16 +173,16 @@ namespace dae
 							if (gameStats.collectedPoints > 100) //if player has more than 100 points, enemies will wander less
 							{
 								const float negativeScore{ -0.2f }; //wander lesss
-								return EnemyUtilityAI::GetScoringQuadraticCurve(distanceToWander+negativeScore,1.f);
+								return EnemyUtilityAI::GetScoringQuadraticCurve(distanceToWander + negativeScore, 1.f);
 							}
-							return EnemyUtilityAI::GetScoringQuadraticCurve(distanceToWander,1.f);
+							return EnemyUtilityAI::GetScoringQuadraticCurve(distanceToWander, 1.f);
 						}
 						, [speed]()
 						{
-							
+
 							return new EnemyWanderingState(speed);
 						});
-						
+
 
 					enemyObj->SetLocalPosition(
 						{
@@ -197,8 +197,34 @@ namespace dae
 				}
 			}
 		}
-		
-		
+
+		//update collsions
+		auto collisionUpdater = std::make_unique<GameObject>();
+		collisionUpdater->AddComponent<CollisionUpdaterComponent>();
+		scene.Add(std::move(collisionUpdater));
+	}
+
+	void DiggerScene::InitUI(Scene& scene, PointsComponent* points, HealthComponent* health)
+	{
+		// lives display object
+		auto font = dae::ResourceManager::GetInstance().LoadFont("Resources/GameFont.ttf", 36);
+		auto livesDisplayObj = std::make_unique<GameObject>();
+		auto* livesDisplay = livesDisplayObj->AddComponent<LivesDisplayComponent>("digger2.png", 40.f, 5.f, 3);
+		livesDisplayObj->SetLocalPosition({ 110.f, 0.f, 0.f });
+		scene.Add(std::move(livesDisplayObj));
+
+		//points display
+		constexpr SDL_Color green{ 0,255,0,255 };
+		auto pointsDisplayObj = std::make_unique<GameObject>();
+		auto* pointsDisplay = pointsDisplayObj->AddComponent<PointsDisplayComponent>(font, green);
+		pointsDisplayObj->SetLocalPosition({ 10.f, 0.f, 0.f });
+		scene.Add(std::move(pointsDisplayObj));
+
+		//observers
+		health->OnDied().AddObservers(livesDisplay);
+		points->OnPointsChanged().AddObservers(pointsDisplay);
+		CollisionSystem::GetInstance().OnHitSubject().AddObservers(health);
+
 		//instructions
 		SDL_Color white{ 255, 255, 255, 255 };
 		auto instructionP1 = std::make_unique<GameObject>();
@@ -213,8 +239,16 @@ namespace dae
 		textP2->SetText("Move WASD, arrows, dont press two keys same time");
 		scene.Add(std::move(instructionP2));
 
-		//controls keyboard
-		auto& input = InputManager::GetInstance();
+	}
+
+	void DiggerScene::SetupInputControls(GridComponent* rawPtrGrid, GameObject* diggerPlayerRawPtr
+		, PointsComponent* points, HealthComponent* 
+		, std::vector<GoldBagComponent*> m_bags)
+	{
+		const SoundID digSound{ ServiceLocator::GetSoundSystem().AddSound("Data/Resources/DeathSound.wav") };
+		const SoundID gemSound{ ServiceLocator::GetSoundSystem().AddSound("Data/Resources/piano2.wav") };
+		// controls keyboard
+			auto& input = InputManager::GetInstance();
 		constexpr float speed{ 100.f };
 
 		int numJoysticks = 0;
@@ -234,44 +268,44 @@ namespace dae
 		input.BindKeyboardCommand(SDL_SCANCODE_W
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>(
-				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
+				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_A
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
+			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_S
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_D
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
 
 		//arrows
 
 		input.BindKeyboardCommand(SDL_SCANCODE_UP
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>(
-				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
+				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_LEFT
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
+			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_DOWN
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_RIGHT
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points,m_bags));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
 
 		//gamepad
 		input.BindControllerCommand(dae::GamepadButton::DpadUp,
@@ -293,7 +327,8 @@ namespace dae
 			InputManager::TriggerType::Isdown,
 			std::make_unique<MoveDiggerCommand>(
 				diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
-		
+
 	}
+
 
 }

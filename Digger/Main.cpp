@@ -23,6 +23,11 @@ int main(int, char*[]) {
 		data_location = "../Data/";
 #endif
 	dae::Minigin engine(data_location);
-	engine.Run(diggerScene::loadScene);
+
+	DiggerScene scene{};
+	engine.Run([&scene]()
+		{
+			scene.LoadScene();
+		});
     return 0;
 }
