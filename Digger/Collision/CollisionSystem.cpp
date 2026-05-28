@@ -14,28 +14,28 @@ void dae::CollisionSystem::RemoveCollider(RectColliderComponent* colliderRect)
 	m_Colliders.erase(std::remove(m_Colliders.begin(), m_Colliders.end(), colliderRect), m_Colliders.end());
 }
 
-void dae::CollisionSystem::CheckCollisions()
+void dae::CollisionSystem::ClearCollideders()
 {
+	m_Colliders.clear();
+}
+
+std::vector <dae::CollisionSystem::CollidedObjects>  dae::CollisionSystem::CheckCollisions()
+{
+	std::vector<CollidedObjects> collisions{ m_Colliders.size()};
 	for (const auto& collider : m_Colliders)
 	{
 		for(const auto& otherCollider : m_Colliders)
 		{
+			if (!collider || !otherCollider) continue;
 			if (collider == otherCollider) continue; // Skip self-collision
 			if (OverlappingRects(collider->GetBoundingBoxInWorld(), otherCollider->GetBoundingBoxInWorld()))
 			{
-				bool aIsPlayer = collider->GetTag() == CollisionTag::Player;
-				bool bIsPlayer = otherCollider->GetTag() == CollisionTag::Player;
-				bool aIsEnemy = collider->GetTag() == CollisionTag::Enemy;
-				bool bIsEnemy = otherCollider->GetTag() == CollisionTag::Enemy;
-
-				if ((aIsPlayer && bIsEnemy) || (aIsEnemy && bIsPlayer))
-				{
-					m_OnHit.NotifyObservers(GameEvent::CollisionEnemy, collider->GetOwner());
-					OutputDebugStringA("hit\n");
-				}
+				collisions.push_back({ collider, otherCollider });
 			}
 		}
 	}
+
+	return collisions;
 }
 
 bool dae::CollisionSystem::OverlappingRects(const Rect& rect1, const Rect& rect2)

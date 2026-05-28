@@ -12,10 +12,21 @@ namespace dae
 	{
 		friend class Singleton<CollisionSystem>; //creates static the instance
 	public:
+
+		struct CollidedObjects
+		{
+			RectColliderComponent* Object1{};
+			RectColliderComponent* Object2{};
+		};
+
 		void AddCollider(RectColliderComponent* colliderRect);
 		void RemoveCollider(RectColliderComponent* colliderRect);
+		size_t GetNumberOfBoundingBoxes() const { return m_Colliders.size(); }
 
-		void CheckCollisions();
+		void ClearCollideders();
+
+		//sends vector that will be interpreted in the CollisionUpdaterComponent and send events to the observers
+		std::vector <CollidedObjects> CheckCollisions();
 		Subject<GameEvent>& OnHitSubject() { return m_OnHit; }
 
 	private:

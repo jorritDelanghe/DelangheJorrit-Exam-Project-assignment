@@ -1,5 +1,7 @@
 #pragma once
 #include "Component.h"
+#include <vector>
+#include "CollisionSystem.h"
 //used to activate the collision system, so it can check for collisions and notify the observers
 namespace dae
 {

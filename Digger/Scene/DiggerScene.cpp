@@ -89,15 +89,11 @@ namespace dae
 		auto* pointsDisplay = pointsDisplayObj->AddComponent<PointsDisplayComponent>(font, green);
 		pointsDisplayObj->SetLocalPosition({ 10.f, 0.f, 0.f });
 		scene.Add(std::move(pointsDisplayObj));
-	
-		//collsion
-		auto& CollisionSystem = CollisionSystem::GetInstance();
-		CollisionSystem.CheckCollisions();
 
 		//observers
 		health->OnDied().AddObservers(livesDisplay);
 		points->OnPointsChanged().AddObservers(pointsDisplay);
-		CollisionSystem.OnHitSubject().AddObservers(health);
+		CollisionSystem::GetInstance().OnHitSubject().AddObservers(health);
 	
 		// add gold bagcomponents
 		const Grid& grid{ rawPtrGrid->GetGrid() };
