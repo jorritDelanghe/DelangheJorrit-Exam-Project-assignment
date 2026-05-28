@@ -25,7 +25,6 @@ void dae::GridComponent::Render() const
 			RenderTile(c, r);
 		}
 	}
-
 }
 dae::TileType dae::GridComponent::DiggedTile(int col, int row)
 {
@@ -36,22 +35,33 @@ dae::TileType dae::GridComponent::DiggedTile(int col, int row)
 
 	return tempTileType;
 }
-bool dae::GridComponent::IsSolidWallTile(const Rect& boundingBox)
+dae::TileType dae::GridComponent::DiggedTile(const Rect& boundingBox)
 {
-	std::vector<std::pair<int, int>> corners = {
-		{WorldToCell(boundingBox.x, boundingBox.y)}
-		, { WorldToCell(boundingBox.x + boundingBox.width, boundingBox.y) }
-			, { WorldToCell(boundingBox.x, boundingBox.y + boundingBox.height)}
-			, { WorldToCell(boundingBox.x + boundingBox.width, boundingBox.y + boundingBox.height) }
-	};
-
-	for (const auto& [col,row] : corners)
+	TileType t{};
+	for (const auto& [col, row] : GetCorners(boundingBox))
 	{
-		if (!m_grid.IsInGrid(col, row)) return true;
+		if (!m_grid.IsInGrid(col, row))continue;
 
-		if (m_grid.GetTileType(col, row) == TileType::BorderWallGame) return true;
+		t = m_grid.GetTileType(col, row);
+		if (t == TileType::DirtWall)
+		{
+			DiggedTile(col, row);
+		}
 	}
-	return false;
+	return t;
+}
+dae::TileType dae::GridComponent::GetCollisionTileType(const Rect& boundingBox)
+{
+	//check if we need TileType return
+	TileType t{};
+	for (const auto& [col, row] : GetCorners(boundingBox))
+	{
+		if (!m_grid.IsInGrid(col, row)) return TileType::BorderWallGame;
+
+		t = m_grid.GetTileType(col, row);
+		if (t == TileType::BorderWallGame) return TileType::BorderWallGame;
+	}
+	return t;
 }
 int dae::GridComponent::WorldToCol(float x) const
 {
@@ -107,6 +117,17 @@ void dae::GridComponent::RenderTile(int col, int row) const
 		, m_grid.GetTileSize()
 		, m_grid.GetTileSize()
 	);
+}
+
+std::vector<std::pair<int, int>> dae::GridComponent::GetCorners(const Rect& boundingBox)
+{
+	std::vector<std::pair<int, int>> corners = {
+		{WorldToCell(boundingBox.x, boundingBox.y)}
+		, { WorldToCell(boundingBox.x + boundingBox.width, boundingBox.y) }
+			, { WorldToCell(boundingBox.x, boundingBox.y + boundingBox.height)}
+			, { WorldToCell(boundingBox.x + boundingBox.width, boundingBox.y + boundingBox.height) }
+	};
+	return corners;
 }
 
 

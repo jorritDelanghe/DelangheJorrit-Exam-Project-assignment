@@ -16,7 +16,8 @@ namespace dae
 
 		virtual void Render() const override;
 		TileType DiggedTile(int col, int row);
-		bool IsSolidWallTile(const Rect& boundingBox);
+		TileType DiggedTile(const Rect& boundingBox);
+		TileType GetCollisionTileType(const Rect& boundingBox);
 
 		int WorldToCol(float x) const;
 		int WorldToRow(float y) const;
@@ -31,6 +32,7 @@ namespace dae
 		dae::Grid m_grid{};
 		std::unordered_map<TileType, TileData> m_tileDataMap{};
 		void RenderTile(int col, int row) const;
+		std::vector<std::pair<int,int>> GetCorners(const Rect& boundingBox);
 	};
 
 }

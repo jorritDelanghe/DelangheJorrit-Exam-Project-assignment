@@ -34,6 +34,8 @@ namespace dae
 		float width{};
 		float height{};
 	};
+
+
 	struct Size
 	{
 		float width{};

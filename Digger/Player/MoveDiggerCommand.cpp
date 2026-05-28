@@ -26,42 +26,33 @@ void dae::MoveDiggerCommand::Execute()
 
 	if (m_grid)
 	{
-		auto boundingBox{ gameObject->GetComponent<RectColliderComponent>()->GetBoundingBoxInWorld() };
+		const auto boundingBox{ gameObject->GetComponent<RectColliderComponent>()->GetBoundingBoxInWorld() };
+		const auto newBoundinBox = Rect{ newPos.x,newPos.y, boundingBox.width, boundingBox.height };
 
-		if (m_grid->IsSolidWallTile(Rect{ newPos.x,newPos.y, boundingBox.width, boundingBox.height }))
-		{
-			newPos = currentPos;
-		}
-		gameObject->SetLocalPosition(newPos);
-	}
-	/*	constexpr int gemPoints{ 40 };
-		constexpr int goldBagPoints{ 80 };*/
+		const TileType destinationTile{ m_grid->GetCollisionTileType(newBoundinBox) };
+		constexpr int gemPoints{ 40 };
+		constexpr int goldBagPoints{ 80 };
 
-		/*const TileType destinationTile{ m_grid->GetGrid().GetTileType(newCol, newRow) };
-		if (!m_grid->GetGrid().IsInGrid(newCol, newRow) || destinationTile == TileType::BorderWallGame)
-		{
-			return;
-		}
 		switch (destinationTile)
 		{
-		case TileType::DirtWall:
-			dae::ServiceLocator::GetSoundSystem().Play(m_digSound, 0.8f);
-			break;
+			case TileType::BorderWallGame:
+				newPos = currentPos;
+				break;
+			case TileType::DirtWall:
+				m_grid->DiggedTile(newBoundinBox);
+				dae::ServiceLocator::GetSoundSystem().Play(m_digSound, 0.8f);
+				break;
 
-		case TileType::Emerald:
-			dae::ServiceLocator::GetSoundSystem().Play(m_gemSound, 0.8f);
-			m_pPoints->AddScore(gemPoints);
-			break;
+			case TileType::Emerald:
+				dae::ServiceLocator::GetSoundSystem().Play(m_gemSound, 0.8f);
+				m_pPoints->AddScore(gemPoints);
+				break;
 
-		case TileType::GoldBag:
-			dae::ServiceLocator::GetSoundSystem().Play(m_gemSound, 0.8f);
-			m_pPoints->AddScore(goldBagPoints);
-			break;
-		}*/
-		/*for (auto* bag : m_bags)
-		{
-			bag->HandleInput(currentPos);
+			case TileType::GoldBag:
+				dae::ServiceLocator::GetSoundSystem().Play(m_gemSound, 0.8f);
+				m_pPoints->AddScore(goldBagPoints);
+				break;
 		}
-		m_grid->DiggedTile(newCol, newRow);*/
-	
+		gameObject->SetLocalPosition(newPos);
+	}	
 }
