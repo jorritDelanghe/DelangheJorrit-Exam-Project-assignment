@@ -50,9 +50,10 @@ namespace dae
 		auto* rawPtrGrid{ gridObject->GetComponent<GridComponent>()};
 		scene.Add(std::move(gridObject)); //then add the gameobject to the scene	
 
-		auto collisionUpdater = std::make_unique<GameObject>();
+		//update collsions
+		/*auto collisionUpdater = std::make_unique<GameObject>();
 		collisionUpdater->AddComponent<CollisionUpdaterComponent>();
-		scene.Add(std::move(collisionUpdater));
+		scene.Add(std::move(collisionUpdater));*/
 
 		//sound
 		ServiceLocator::RegisterSounSystem(std::make_unique<SDLSoundSystem>());

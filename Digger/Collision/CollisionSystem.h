@@ -5,9 +5,10 @@
 #include "Subject.h"
 //singleton pattern
 //dynamic objects only use (static objects handled by grid
+//didnt put it in the engine because it uses game event and rectColliderComp which is game specific
+//needs to have a CollisionUpdaterComponent in the scene to work
 namespace dae
 {
-
 	class CollisionSystem final : public Singleton<CollisionSystem>
 	{
 		friend class Singleton<CollisionSystem>; //creates static the instance
@@ -29,11 +30,21 @@ namespace dae
 		std::vector <CollidedObjects> CheckCollisions();
 		Subject<GameEvent>& OnHitSubject() { return m_OnHit; }
 
+#ifndef NDEBUG
+		void RegisterUpdaterComp() { m_hasUpdaterCollsionComp = true; }
+		void UnRegisterUpdaterComp() { m_hasUpdaterCollsionComp = false; }
+#endif
+
 	private:
 		CollisionSystem() = default;
 		static bool OverlappingRects(const Rect& rect1, const Rect& rect2);
 
 		std::vector<RectColliderComponent*> m_Colliders;
 		dae::Subject<GameEvent> m_OnHit{};
+
+#ifndef NDEBUG
+		bool m_hasUpdaterCollsionComp{ false };
+#endif 
+
 	};
 }

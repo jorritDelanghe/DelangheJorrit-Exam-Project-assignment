@@ -10,7 +10,7 @@ namespace dae
 	public:
 		explicit CollisionUpdaterComponent(GameObject* pOwner);
 
-		~CollisionUpdaterComponent() override = default;
+		~CollisionUpdaterComponent() override;
 		CollisionUpdaterComponent(const CollisionUpdaterComponent& other) = delete;
 		CollisionUpdaterComponent(CollisionUpdaterComponent&& other) = delete;
 		CollisionUpdaterComponent& operator=(const CollisionUpdaterComponent& other) = delete;

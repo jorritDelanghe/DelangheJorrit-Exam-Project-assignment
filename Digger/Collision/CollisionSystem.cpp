@@ -5,6 +5,12 @@
 #include <string>
 void dae::CollisionSystem::AddCollider(RectColliderComponent* colliderRect)
 {
+#ifndef NDEBUG
+	if (m_hasUpdaterCollsionComp == false)
+	{
+		OutputDebugStringA("Warning: Adding collider without CollisionUpdaterComponent in the scene, collisions wont be updated\n");
+	}
+#endif
 	m_Colliders.push_back(colliderRect);
 }
 

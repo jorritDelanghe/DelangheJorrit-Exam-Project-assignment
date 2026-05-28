@@ -4,6 +4,15 @@
 dae::CollisionUpdaterComponent::CollisionUpdaterComponent(GameObject* pOwner)
 	:Component(pOwner)
 {
+#ifndef NDEBUG
+	CollisionSystem::GetInstance().RegisterUpdaterComp(); 
+#endif
+}
+dae::CollisionUpdaterComponent::~CollisionUpdaterComponent()
+{
+#ifndef NDEBUG
+	CollisionSystem::GetInstance().UnRegisterUpdaterComp();
+#endif
 }
 void dae::CollisionUpdaterComponent::Update(float)
 {
