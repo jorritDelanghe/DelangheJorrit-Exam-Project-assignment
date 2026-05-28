@@ -4,7 +4,7 @@
 #include "RectColliderComponent.h"
 #include "Subject.h"
 //singleton pattern
-
+//dynamic objects only use (static objects handled by grid
 namespace dae
 {
 

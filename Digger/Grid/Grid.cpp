@@ -34,7 +34,6 @@ bool dae::Grid::IsInGrid(int col, int row) const
 
 	return false;
 }
-
 int dae::Grid::GetCols() const
 {
 	return m_cols;

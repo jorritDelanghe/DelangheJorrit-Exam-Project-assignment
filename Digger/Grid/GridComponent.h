@@ -6,6 +6,7 @@
 #include"Grid.h"
 #include <unordered_map>
 #include "TileData.h"
+#include <algorithm>
 namespace dae
 {
 	class GridComponent final : public Component
@@ -15,9 +16,11 @@ namespace dae
 
 		virtual void Render() const override;
 		TileType DiggedTile(int col, int row);
+		bool IsSolidWallTile(const Rect& boundingBox);
 
 		int WorldToCol(float x) const;
 		int WorldToRow(float y) const;
+		std::pair<int, int>WorldToCell(float x, float y)const;
 
 		float ColToWorld(int col) const;
 		float RowToWorld(int row) const;

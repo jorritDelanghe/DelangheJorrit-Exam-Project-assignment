@@ -36,7 +36,23 @@ dae::TileType dae::GridComponent::DiggedTile(int col, int row)
 
 	return tempTileType;
 }
+bool dae::GridComponent::IsSolidWallTile(const Rect& boundingBox)
+{
+	std::vector<std::pair<int, int>> corners = {
+		{WorldToCell(boundingBox.x, boundingBox.y)}
+		, { WorldToCell(boundingBox.x + boundingBox.width, boundingBox.y) }
+			, { WorldToCell(boundingBox.x, boundingBox.y + boundingBox.height)}
+			, { WorldToCell(boundingBox.x + boundingBox.width, boundingBox.y + boundingBox.height) }
+	};
 
+	for (const auto& [col,row] : corners)
+	{
+		if (!m_grid.IsInGrid(col, row)) return true;
+
+		if (m_grid.GetTileType(col, row) == TileType::BorderWallGame) return true;
+	}
+	return false;
+}
 int dae::GridComponent::WorldToCol(float x) const
 {
 	return static_cast<int>(x / m_grid.GetTileSize());
@@ -44,6 +60,11 @@ int dae::GridComponent::WorldToCol(float x) const
 int dae::GridComponent::WorldToRow(float y) const
 {
 	return static_cast<int>(y / m_grid.GetTileSize());
+}
+
+std::pair<int, int> dae::GridComponent::WorldToCell(float x, float y) const
+{
+	return std::pair<int, int>({ WorldToCol(x), WorldToRow(y)});
 }
 
 float dae::GridComponent::ColToWorld(int col) const
