@@ -13,7 +13,7 @@ else()
   set(TARGET_PARAM WIN32)
 endif()
 # engine static library
-add_library(Minigin STATIC
+add_library(MiniginEngine STATIC
   Minigin/Font.cpp
   Minigin/GameObject.cpp
   Minigin/InputManager.cpp
@@ -195,9 +195,8 @@ endif()
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/steam")
 find_package(Steamworks QUIET)
 
-target_include_directories("${TARGET_NAME}" PUBLIC
+target_include_directories(MiniginEngine PUBLIC
   ${CMAKE_SOURCE_DIR}/Minigin/
-  ${CMAKE_SOURCE_DIR}/Digger/
     ${glm_SOURCE_DIR}
   ${sdl3_SOURCE_DIR}/include
   ${sdl3_image_SOURCE_DIR}/include
@@ -206,13 +205,15 @@ target_include_directories("${TARGET_NAME}" PUBLIC
   ${imgui_SOURCE_DIR}
   ${VLD_INCLUDE_DIR}
 )
-
+  target_include_directories("${TARGET_NAME}" PUBLIC
+  ${CMAKE_SOURCE_DIR}/Digger/
+)
 target_link_libraries("${TARGET_NAME}" PUBLIC
-  Minigin #Link the engine into the game
+  MiniginEngine #Link the engine into the game
  
 )
 
-target_link_libraries(Minigin PUBLIC
+target_link_libraries(MiniginEngine PUBLIC
   SDL3::SDL3
   SDL3_ttf::SDL3_ttf
   SDL3_mixer::SDL3_mixer  
