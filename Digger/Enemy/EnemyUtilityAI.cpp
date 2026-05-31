@@ -18,11 +18,13 @@ dae::EnemyUtilityAI::EnemyUtilityAI(GameObject* pOwner, EnemyComponent* enemy, G
 
 }
 
-void dae::EnemyUtilityAI::Update(float )
+void dae::EnemyUtilityAI::Update(float deltaTime)
 {
 	if (m_actions.empty()) return;
 
 	const GameStats gameStats{ GetGameStats() };
+	//update time alive
+	m_timeAlive += deltaTime;
 
 	//score actions
 	float bestScore{};
@@ -65,6 +67,7 @@ dae::EnemyUtilityAI::GameStats dae::EnemyUtilityAI::GetGameStats() const
 	GameStats gameStats{};
 
 	gameStats.collectedPoints = m_pPoints->GetScore();
+	gameStats.timePlayerAlive = m_timeAlive;
 	gameStats.enemyPos = m_pEnemy->GetOwner()->GetLocalPosition();
 	gameStats.playerPos = m_pPlayer->GetLocalPosition();
 	gameStats.distancePlayer = glm::length(gameStats.playerPos - gameStats.enemyPos);

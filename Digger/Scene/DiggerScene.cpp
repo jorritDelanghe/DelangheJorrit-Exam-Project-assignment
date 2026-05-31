@@ -182,8 +182,13 @@ namespace dae
 			{
 				//closer hte higher score
 				constexpr float maxRange = 600.f;
-				const float score{ 1.f - EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer, maxRange) };
-				return EnemyUtilityAI::GetScoringQuadraticCurve(score, 1.f); //more decisive avction
+				constexpr float maxTimeBoost{ 0.3f };      // max aggression increase over time
+				constexpr float timeToMaxBoost{ 120.f };
+
+				//the longer the player is alive, the more likely the enemy will chase
+				const float timeBoost{ EnemyUtilityAI::GetLinearCurve(gameStats.timePlayerAlive,timeToMaxBoost) * maxTimeBoost };
+				const float score{ 1.f - EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer, maxRange)};
+				return EnemyUtilityAI::GetScoringQuadraticCurve(score, 1.f) + timeBoost; //more decisive avction
 			}
 			, [speed]()
 			{
@@ -193,9 +198,18 @@ namespace dae
 		utilityAI->RegisterNewAction("Digging",
 			[](const EnemyUtilityAI::GameStats& gameStats)
 			{
-				if (gameStats.isOnTunnel) return 0.1f; // discourage digging on tunnels
+				constexpr float maxPointsBoost{ 0.15f };    // max digging increase from points
+				constexpr float pointsToMaxBoost{ 200.f };
+
+				//if (gameStats.isOnTunnel) return 0.1f; // discourage digging on tunnels
+				if (gameStats.distancePlayer < 150.f) return 0.0f; //dont dig if player is too close
 				float farness = EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer, 500.f);
-				return EnemyUtilityAI::GetScoringQuadraticCurve(farness, 1.f);
+
+				//the more points the player has,more digging
+				float pointBoost{ EnemyUtilityAI::GetLinearCurve(
+					static_cast<float>(gameStats.collectedPoints), pointsToMaxBoost) * maxPointsBoost };
+
+				return EnemyUtilityAI::GetScoringQuadraticCurve(std::clamp(farness + pointBoost, 0.f, 1.f), 1.f);
 			}
 			, [speed]()
 			{

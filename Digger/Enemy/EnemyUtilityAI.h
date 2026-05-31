@@ -23,6 +23,7 @@ namespace dae
 		struct GameStats
 		{
 			int collectedPoints{};
+			float timePlayerAlive{};
 			glm::vec3 enemyPos{};
 			glm::vec3 playerPos{};
 			float chasingRadius{ 150.f };
@@ -68,6 +69,7 @@ namespace dae
 		GridComponent* m_pGrid{ nullptr };
 		GameObject* m_pPlayer{ nullptr };
 		PointsComponent* m_pPoints{};
+		float m_timeAlive{ 0.f };
 
 		const float m_oscillationThreshold{ 0.05f }; //prevents switching between states to rapidly
 
