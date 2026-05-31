@@ -181,7 +181,8 @@ namespace dae
 			[chasingRadius](const EnemyUtilityAI::GameStats& gameStats)
 			{
 				//closer hte higher score
-				const float score{ 1.f - EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer, chasingRadius) };
+				constexpr float maxRange = 600.f;
+				const float score{ 1.f - EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer, maxRange) };
 				return EnemyUtilityAI::GetScoringQuadraticCurve(score, 1.f); //more decisive avction
 			}
 			, [speed]()

@@ -21,7 +21,14 @@ dae::EnemyState* dae::EnemyChasingState::OnEnter(EnemyComponent* enemyComponent,
 
 dae::EnemyState* dae::EnemyChasingState::Update(EnemyComponent* enemyComponent, float deltaTime)
 {
-	if (m_shortestPathIdx >= m_shortestPath.size()) return new EnemyChasingState(100.f);
+	if (m_shortestPathIdx >= m_shortestPath.size())
+	{
+		//calculate new path to player
+		const glm::vec3 enemyPos{ enemyComponent->GetOwner()->GetLocalPosition() };
+		m_shortestPath = PathFinding::BFS(m_grid, enemyPos, enemyComponent->GetPlayerPos());
+		m_shortestPathIdx = 0;
+		return nullptr;
+	}
 
 		constexpr float snapDistance{ 2.f };
 		const glm::vec3 targetPos{ m_shortestPath[m_shortestPathIdx]};

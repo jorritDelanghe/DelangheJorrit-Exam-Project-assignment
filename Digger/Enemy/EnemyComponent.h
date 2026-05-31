@@ -2,6 +2,7 @@
 #include "Component.h"
 #include <memory>
 #include "EnemyState.h"
+#include "GameObject.h"
 namespace dae
 {
 	class GridComponent;
@@ -18,6 +19,7 @@ namespace dae
 
 		virtual void Update(float deltaTime) override;
 		void SetState(EnemyState* newState);
+		glm::vec3 GetPlayerPos() const;
 
 	private:
 		GridComponent* m_grid{};
