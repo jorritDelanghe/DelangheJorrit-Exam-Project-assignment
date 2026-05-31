@@ -138,14 +138,14 @@ namespace dae
 		scene.Add(std::move(goldBagObj));
 	}
 
-	void DiggerScene::SpawnEmeralds(Scene& scene, GridComponent* rawPtrGrid, const glm::vec3& pos)
+	void DiggerScene::SpawnEmeralds(Scene& scene, GridComponent* , const glm::vec3& pos)
 	{
-		auto EmeraldObj = std::make_unique<GameObject>();
-		EmeraldObj->AddComponent<GoldBagComponent>(rawPtrGrid);
-		EmeraldObj->AddComponent<RenderComponent>("Resources/Emerald.png");
+		auto emeraldObj = std::make_unique<GameObject>();
+		auto* img = emeraldObj->AddComponent<RenderComponent>("Resources/Emerald.png",30.f,30.f);
+		emeraldObj->AddComponent<RectColliderComponent>(Size{ img->GetSizeImage().width, img->GetSizeImage().height }, CollisionTag::Emerald);
 
-		EmeraldObj->SetLocalPosition(pos);
-		scene.Add(std::move(EmeraldObj));
+		emeraldObj->SetLocalPosition(pos);
+		scene.Add(std::move(emeraldObj));
 	}
 
 	void DiggerScene::SpawnEnemies(Scene& scene, GridComponent* rawPtrGrid
@@ -241,6 +241,7 @@ namespace dae
 		health->OnDied().AddObservers(livesDisplay);
 		points->OnPointsChanged().AddObservers(pointsDisplay);
 		CollisionSystem::GetInstance().OnHitSubject().AddObservers(health);
+		CollisionSystem::GetInstance().OnHitSubject().AddObservers(points);
 
 		//instructions
 		SDL_Color white{ 255, 255, 255, 255 };

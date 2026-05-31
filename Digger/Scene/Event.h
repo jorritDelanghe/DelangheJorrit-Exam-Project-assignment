@@ -9,6 +9,7 @@ namespace dae
 		CollisionWall,
 		CollisionEnemy,
 		CollisionGoldBag,
-		CollisionDirtWall
+		CollisionDirtWall,
+		CollisionEmerald
 	};
 }

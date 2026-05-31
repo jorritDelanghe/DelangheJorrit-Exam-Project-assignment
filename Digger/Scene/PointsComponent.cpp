@@ -7,6 +7,31 @@ dae::PointsComponent::PointsComponent(GameObject* gameObject)
 {
 }
 
+void dae::PointsComponent::Notify(GameEvent event, GameObject* pGameObject)
+{
+	if (event == GameEvent::CollisionEmerald)
+	{
+		pGameObject->MarkForDelete();
+		AddEmerad();
+	}
+}
+
+void dae::PointsComponent::AddEmerad()
+{
+	constexpr int streakMax{ 5 };
+	constexpr int streakBonus{ 100 };
+	constexpr int emeraldPoints{ 20 };
+
+	++m_emeraldStreak;
+	AddScore(emeraldPoints);
+
+	if (m_emeraldStreak >= streakMax)
+	{
+		AddScore(streakBonus);
+		m_emeraldStreak = 0;
+	}
+}
+
 void dae::PointsComponent::AddScore(int points)
 {
 	m_score += points;

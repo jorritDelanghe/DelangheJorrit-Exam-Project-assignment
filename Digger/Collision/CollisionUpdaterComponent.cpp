@@ -56,6 +56,13 @@ void dae::CollisionUpdaterComponent::Update(float)
 		{
 			CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionGoldBag, collider->GetOwner());
 		}
+		if (compareTags(CollisionTag::Player, CollisionTag::Emerald))
+		{
+			GameObject* emeraldObject = (colliderTag == CollisionTag::Emerald) ? 
+				collider->GetOwner() : otherCollider->GetOwner();
+
+			CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionEmerald, emeraldObject);
+		}
 
 		OutputDebugStringA("hit\n");
 	}

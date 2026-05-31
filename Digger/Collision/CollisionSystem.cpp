@@ -3,6 +3,7 @@
 #include "Subject.h"
 #include <Windows.h>
 #include <string>
+
 void dae::CollisionSystem::AddCollider(RectColliderComponent* colliderRect)
 {
 #ifndef NDEBUG

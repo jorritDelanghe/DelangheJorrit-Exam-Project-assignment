@@ -24,7 +24,10 @@ void dae::MoveDiggerCommand::Execute()
 
 	if (m_grid)
 	{
-		const auto boundingBox{ gameObject->GetComponent<RectColliderComponent>()->GetBoundingBoxInWorld() };
+		auto* rectCollider = gameObject->GetComponent<RectColliderComponent>();
+		if (!rectCollider) return;
+
+		const auto boundingBox{ rectCollider->GetBoundingBoxInWorld() };
 		const auto newBoundinBox = Rect{ newPos.x,newPos.y, boundingBox.width, boundingBox.height };
 
 		const TileType destinationTile{ m_grid->GetCollisionTileType(newBoundinBox) };
@@ -44,6 +47,7 @@ void dae::MoveDiggerCommand::Execute()
 			case TileType::Emerald:
 				dae::ServiceLocator::GetSoundSystem().Play(m_gemSound, 0.8f);
 				m_pPoints->AddScore(gemPoints);
+				m_grid->DiggedTile(newBoundinBox);
 				break;
 
 			case TileType::GoldBag:
