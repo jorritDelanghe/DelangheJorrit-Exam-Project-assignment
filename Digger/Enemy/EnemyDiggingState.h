@@ -1,14 +1,15 @@
 #pragma once
 #include "EnemyState.h"
 #include "DataTypes.h"
-
+#include <string>
 namespace dae
 {
 	class GridComponent;
 	class EnemyDiggingState final : public EnemyState
 	{
 	public:
-		explicit EnemyDiggingState(float moveSpeed, float chasingRadius = 150.0f);
+		explicit EnemyDiggingState(float moveSpeed, const std::string& fileNameNormalEnemy,
+			const std::string& fileNameDiggingEnemy, float chasingRadius = 150.0f);
 		virtual~EnemyDiggingState() override = default;
 		virtual EnemyState* OnEnter(EnemyComponent* enemyComponent, GridComponent* grid, glm::vec3 playerPos)override;
 		virtual EnemyState* Update(EnemyComponent* enemyComponent, float deltaTime)override;
@@ -21,6 +22,8 @@ namespace dae
 
 	private:
 		float m_speed{};
+		std::string m_fileNameNormalEnemy{};
+		std::string m_fileNameDiggingEnemy{};
 		float m_chasingRadius{};
 
 		glm::vec3 m_targetPos{};
@@ -35,7 +38,6 @@ namespace dae
 				return t == TileType::Tunnel || t == TileType::DirtWall;
 			};
 
-		bool playerInRange(EnemyComponent* enemyComponent);
 		void TryDiggingTile(const glm::vec3& pos);
 
 	};

@@ -1,10 +1,17 @@
 #include "EnemyDiggingState.h"
 #include "EnemyHelpers.h"
 #include "EnemyChasingState.h"
+#include "RenderComponent.h"
 
-dae::EnemyDiggingState::EnemyDiggingState(float moveSpeed, float chasingRadius)
-    :m_speed(moveSpeed)
-    ,m_chasingRadius(chasingRadius)
+dae::EnemyDiggingState::EnemyDiggingState(
+    float moveSpeed,
+    const std::string& fileNameNormalEnemy, const std::string& fileNameDiggingEnemy, 
+    float chasingRadius)
+
+    : m_speed(moveSpeed)
+    , m_fileNameNormalEnemy(fileNameNormalEnemy)
+    , m_fileNameDiggingEnemy(fileNameDiggingEnemy)
+    , m_chasingRadius(chasingRadius)
 {
 }
 
@@ -13,16 +20,21 @@ dae::EnemyState* dae::EnemyDiggingState::OnEnter(EnemyComponent* enemyComponent,
     m_grid = grid;
     m_playerPos = playerPos;
 
+	//set target tile for enemy
     const glm::vec3 enemyPos{ enemyComponent->GetOwner()->GetLocalPosition() };
     m_isTargettingTile = PathFinding::ChooseNewTargetTile(grid, enemyPos, m_isAllowed
         , m_targetPos, m_previousPos, m_hasPreviousPos);
+
+	//change sprite to digging sprite
+    RenderComponent* renderComponent{enemyComponent->GetOwner()->GetComponent<RenderComponent>()};
+    renderComponent->SetTexture(m_fileNameDiggingEnemy);
 
     return nullptr;
 }
 
 dae::EnemyState* dae::EnemyDiggingState::Update(EnemyComponent* enemyComponent, float deltaTime)
 {
-    if (playerInRange(enemyComponent)) return nullptr;
+    //UtilityAI already checks in player is close go to chasing
     if(!m_isTargettingTile) return nullptr;
 
     if (EnemyMovement::MoveTowardsTile(enemyComponent, m_targetPos, m_speed, deltaTime))
@@ -37,20 +49,18 @@ dae::EnemyState* dae::EnemyDiggingState::Update(EnemyComponent* enemyComponent, 
     return nullptr;
 }
 
-dae::EnemyState* dae::EnemyDiggingState::OnExit(EnemyComponent* )
+dae::EnemyState* dae::EnemyDiggingState::OnExit(EnemyComponent* enemyComponent)
 {
+	//reset all digging related variables
     m_isTargettingTile = false;
     m_hasPreviousPos = false;
+
+    //change sprite to normal sprite
+    RenderComponent* renderComponent{ enemyComponent->GetOwner()->GetComponent<RenderComponent>() };
+    renderComponent->SetTexture(m_fileNameNormalEnemy);
+
     return nullptr;
 }
-
-bool dae::EnemyDiggingState::playerInRange(EnemyComponent* enemyComponent)
-{
-    const glm::vec3 enemyPos{ enemyComponent->GetOwner()->GetLocalPosition() };
-
-    return (glm::length(m_playerPos -enemyPos)<=m_chasingRadius);
-}
-
 void dae::EnemyDiggingState::TryDiggingTile(const glm::vec3& pos)
 {
     const GridPos currentTile{ m_grid->WorldToCol(pos.x), m_grid->WorldToRow(pos.y) };
