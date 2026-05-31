@@ -31,7 +31,6 @@ void dae::MoveDiggerCommand::Execute()
 		const auto newBoundinBox = Rect{ newPos.x,newPos.y, boundingBox.width, boundingBox.height };
 
 		const TileType destinationTile{ m_grid->GetCollisionTileType(newBoundinBox) };
-		constexpr int gemPoints{ 40 };
 		constexpr int goldBagPoints{ 80 };
 
 		switch (destinationTile)
@@ -46,7 +45,6 @@ void dae::MoveDiggerCommand::Execute()
 
 			case TileType::Emerald:
 				dae::ServiceLocator::GetSoundSystem().Play(m_gemSound, 0.8f);
-				m_pPoints->AddScore(gemPoints);
 				m_grid->DiggedTile(newBoundinBox);
 				break;
 

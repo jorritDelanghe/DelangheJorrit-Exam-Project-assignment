@@ -1,6 +1,7 @@
 #include "CollisionUpdaterComponent.h"
 #include <Windows.h>
 #include "Scene/Event.h"
+#include "gameObject.h"
 dae::CollisionUpdaterComponent::CollisionUpdaterComponent(GameObject* pOwner)
 	:Component(pOwner)
 {
@@ -60,8 +61,10 @@ void dae::CollisionUpdaterComponent::Update(float)
 		{
 			GameObject* emeraldObject = (colliderTag == CollisionTag::Emerald) ? 
 				collider->GetOwner() : otherCollider->GetOwner();
-
-			CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionEmerald, emeraldObject);
+			if (!emeraldObject->IsMarkedForDelete()) //if already picked up, dont send event again
+			{
+				CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionEmerald, emeraldObject);
+			}
 		}
 
 		OutputDebugStringA("hit\n");
