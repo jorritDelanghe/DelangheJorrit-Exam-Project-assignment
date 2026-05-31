@@ -201,7 +201,6 @@ namespace dae
 				constexpr float maxPointsBoost{ 0.15f };    // max digging increase from points
 				constexpr float pointsToMaxBoost{ 200.f };
 
-				//if (gameStats.isOnTunnel) return 0.1f; // discourage digging on tunnels
 				if (gameStats.distancePlayer < 150.f) return 0.0f; //dont dig if player is too close
 				float farness = EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer, 500.f);
 
