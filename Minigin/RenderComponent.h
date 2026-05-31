@@ -16,6 +16,7 @@ namespace dae
         virtual void Render() const override;
 		void SetTexture(const std::string& filename);
         void SetTexture(std::shared_ptr<Texture2D> texture);
+        void SetSize(float width, float height) { m_imageSize = { width, height }; }
 
         struct ImageSize
         {

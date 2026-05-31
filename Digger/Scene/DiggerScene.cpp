@@ -48,11 +48,11 @@ namespace dae
 		auto grid = InitGrid(scene, "Data/Resources/LevelUtiltiyAI.txt");
 		auto player = InitPlayer(scene, "digger2.png");
 
+		InitUI(scene, player->GetComponent<PointsComponent>(), player->GetComponent<HealthComponent>());
 		InitSound();
 		SpawnGameResources(scene, grid, player->GetComponent<PointsComponent>(), player);
 		SetupInputControls(grid, player, player->GetComponent<PointsComponent>()
 			, player->GetComponent<HealthComponent>());
-		InitUI(scene, player->GetComponent<PointsComponent>(), player->GetComponent<HealthComponent>());
 	}
 
 	GridComponent* DiggerScene::InitGrid(Scene& scene, const std::string& levelFile)
@@ -245,12 +245,6 @@ namespace dae
 
 		//instructions
 		SDL_Color white{ 255, 255, 255, 255 };
-		auto instructionP1 = std::make_unique<GameObject>();
-		instructionP1->SetLocalPosition({ 10.f, 450.f, 0.f });
-		auto* textP1 = instructionP1->AddComponent<TextComponent>(font, white);
-		textP1->SetText("GoldBag moves has Idle, moveState");
-		scene.Add(std::move(instructionP1));
-
 		auto instructionP2 = std::make_unique<GameObject>();
 		instructionP2->SetLocalPosition({ 10.f, 500.f, 0.f });
 		auto* textP2 = instructionP2->AddComponent<TextComponent>(font, white);

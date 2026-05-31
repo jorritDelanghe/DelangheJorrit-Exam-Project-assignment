@@ -48,5 +48,11 @@ void dae::TextComponent::UpdateTexture()
 	}
 	SDL_DestroySurface(surface);
 	m_renderComponent.SetTexture(std::make_shared<Texture2D>(texture));
+
+	//set texture size to render component
+	float width{}, height{};
+	SDL_GetTextureSize(texture, &width, &height);
+	m_renderComponent.SetSize(width, height);
+
 	m_updateTexture = false;
 }
