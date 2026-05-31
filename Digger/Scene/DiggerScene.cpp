@@ -45,7 +45,7 @@ namespace dae
 	void DiggerScene::LoadScene()
 	{
 		auto& scene = dae::SceneManager::GetInstance().CreateScene();
-		auto grid = InitGrid(scene, "Data/Resources/Level01.txt");
+		auto grid = InitGrid(scene, "Data/Resources/LevelUtiltiyAI.txt");
 		auto player = InitPlayer(scene, "digger2.png");
 
 		InitSound();
@@ -105,13 +105,19 @@ namespace dae
 					case TileType::Emerald:
 						SpawnEmeralds(scene, rawPtrGrid, pos);
 						break;
+
 					case TileType::GoldBag:
 						SpawnGoldBags(scene, rawPtrGrid, pos);
 						break;
-						case TileType::EnemySpawn:
+
+					case TileType::EnemySpawn:
 						SpawnEnemies(scene, rawPtrGrid, diggerRawPtr, points, pos);
 						rawPtrGrid->DiggedTile(c, r); //dig out the enemy spawn tile so it doesnt block movement
 						break;
+
+					case TileType::PlayerStart:
+						diggerRawPtr->SetLocalPosition(pos);
+							break;
 				}
 			}
 		}

@@ -65,6 +65,9 @@ void dae::LevelLoader::loadLevelFromFile(const std::string& filePath, Grid& grid
 			case'B':
 				tiles.push_back(dae::TileType::BorderWallGame);
 				break;
+			case'P':
+				tiles.push_back(dae::TileType::PlayerStart);
+				break;
 			}
 		}
 		++rows;
