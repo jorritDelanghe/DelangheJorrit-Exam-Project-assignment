@@ -59,6 +59,10 @@ namespace dae
 		const glm::vec3& GetLocalPosition() const;
 		const glm::vec3& GetWorldPosition();
 
+		//mark delete
+		void MarkForDelete() { m_markedForDelete = true; }
+		bool IsMarkedForDelete() const { return m_markedForDelete; }
+
 	private:
 		void AddChild(GameObject* child);
 		void RemoveChild(GameObject* child);
@@ -76,6 +80,8 @@ namespace dae
 		glm::vec3 m_worldPosition{};
 		bool m_positionDirty{ true };
 		bool m_keepWorldPosition{ true };
+
+		bool m_markedForDelete{ false };
 	};
 	
 }

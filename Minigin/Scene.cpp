@@ -1,7 +1,7 @@
 #include <algorithm>
 #include "Scene.h"
 #include <assert.h>
-
+#include "GameObject.h"
 using namespace dae;
 
 void Scene::Add(std::unique_ptr<GameObject> object)
@@ -27,6 +27,11 @@ void Scene::Update(float deltaTime)
 	{
 		object->Update(deltaTime);
 	}
+
+	m_objects.erase(
+		std::remove_if(m_objects.begin(), m_objects.end(),
+			[](const auto& obj) { return obj->IsMarkedForDelete(); }),
+		m_objects.end());
 
 	m_objects.erase(
 	std::remove_if(
