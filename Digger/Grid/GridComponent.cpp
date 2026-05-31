@@ -59,7 +59,9 @@ dae::TileType dae::GridComponent::GetCollisionTileType(const Rect& boundingBox)
 		if (!m_grid.IsInGrid(col, row)) return TileType::BorderWallGame;
 
 		t = m_grid.GetTileType(col, row);
-		if (t == TileType::BorderWallGame) return TileType::BorderWallGame;
+		if (t == TileType::BorderWallGame
+			|| t == TileType::DirtWall) 
+			return t;
 	}
 	return t;
 }

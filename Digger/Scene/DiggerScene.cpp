@@ -59,7 +59,6 @@ namespace dae
 	{
 		auto gridObject = std::make_unique<GameObject>(); //first create the gameobject
 		gridObject->AddComponent<GridComponent>(levelFile); //then add the grid component to it
-		gridObject->SetLocalPosition({ 0.f,80.f,0.f });
 		auto* rawPtrGrid{ gridObject->GetComponent<GridComponent>() };
 		scene.Add(std::move(gridObject)); //then add the gameobject to the scene	
 
@@ -127,7 +126,7 @@ namespace dae
 
 					auto enemyObj = std::make_unique<GameObject>();
 					auto* enemy = enemyObj->AddComponent<EnemyComponent>(rawPtrGrid, diggerRawPtr);
-					auto* enemyImage = enemyObj->AddComponent<RenderComponent>("Resources/diggerSingle.png");
+					auto* enemyImage = enemyObj->AddComponent<RenderComponent>("Resources/SoloNobbin.png");
 					enemyObj->AddComponent<RectColliderComponent>(Size
 						{
 							enemyImage->GetSizeImage().width
@@ -135,7 +134,7 @@ namespace dae
 						}, CollisionTag::Enemy);
 
 					//actions
-					constexpr float speed = 0.f;
+					constexpr float speed = 100.f;
 					constexpr float chasingRadius = 150.f;
 					constexpr float maxChaseRange = 300.f;
 
@@ -162,7 +161,7 @@ namespace dae
 						}
 						, [speed]()
 						{
-							return new EnemyDiggingState(speed);
+							return new EnemyDiggingState(speed, "Resources/SoloNobbin.png", "Resources/SoloHobbin.png");
 						});
 
 					enemyUtilityAI->RegisterNewAction("Wandering",
