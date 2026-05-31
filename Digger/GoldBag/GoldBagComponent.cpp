@@ -1,11 +1,10 @@
 #include "GoldBagComponent.h"
 #include "GameObject.h"
 #include "IdleState.h"
-dae::GoldBagComponent::GoldBagComponent(GameObject* pGameObject,GridComponent* grid,PointsComponent* points)
+dae::GoldBagComponent::GoldBagComponent(GameObject* pGameObject,GridComponent* grid)
 	:Component(pGameObject)
 	,m_state(std::make_unique<IdleState>())
 	,m_grid(grid)
-	,m_points(points)
 {
 
 }

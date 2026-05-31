@@ -12,7 +12,7 @@ namespace dae
 	{
 	public:
 
-		explicit GoldBagComponent(GameObject*pGameObject, GridComponent* grid, PointsComponent* points);
+		explicit GoldBagComponent(GameObject*pGameObject, GridComponent* grid);
 		virtual ~GoldBagComponent() override = default;
 
 		virtual void HandleInput(glm::vec3 playerPos);
@@ -22,7 +22,6 @@ namespace dae
 	private:
 		std::unique_ptr<GoldBagState> m_state;
 		GridComponent* m_grid{ nullptr };   
-		PointsComponent* m_points{ nullptr };
 	};
 
 }

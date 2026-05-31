@@ -5,8 +5,7 @@
 #include "Collision/RectColliderComponent.h"
 
 dae::MoveDiggerCommand::MoveDiggerCommand(dae::GameObject* gameObject, float speed, const glm::vec3& direction
-	, dae::GridComponent* grid,dae::SoundID soundID, dae::SoundID gemSound, PointsComponent* pPoints
-	, std::vector<GoldBagComponent*> goldBags)
+	, dae::GridComponent* grid,dae::SoundID soundID, dae::SoundID gemSound, PointsComponent* pPoints)
 	:GameObjectCommand(gameObject)
 	, m_direction{ direction }
 	, m_speed{ speed }
@@ -14,7 +13,6 @@ dae::MoveDiggerCommand::MoveDiggerCommand(dae::GameObject* gameObject, float spe
 	, m_digSound{ soundID }
 	, m_gemSound{ gemSound }
 	,m_pPoints{pPoints}
-	,m_bags(goldBags)
 {
 
 }

@@ -51,7 +51,7 @@ namespace dae
 		InitSound();
 		SpawnGameResources(scene, grid, player->GetComponent<PointsComponent>(), player);
 		SetupInputControls(grid, player, player->GetComponent<PointsComponent>()
-			, player->GetComponent<HealthComponent>(), std::vector<GoldBagComponent*>{});
+			, player->GetComponent<HealthComponent>());
 		InitUI(scene, player->GetComponent<PointsComponent>(), player->GetComponent<HealthComponent>());
 	}
 
@@ -94,105 +94,24 @@ namespace dae
 	void DiggerScene::SpawnGameResources(Scene& scene, GridComponent* rawPtrGrid
 		, PointsComponent* points, GameObject* diggerRawPtr)
 	{
-
-		// add gold bagcomponents
 		const Grid& grid{ rawPtrGrid->GetGrid() };
-		std::vector<GoldBagComponent*> m_bags;
-		std::vector<EnemyComponent*> m_enemies;
 		for (int r{}; r < grid.GetRows();++r)
 		{
 			for (int c{}; c < grid.GetCols();++c)
 			{
-				if (grid.GetTileType(c, r) == TileType::GoldBag)
+				const glm::vec3 pos{ rawPtrGrid->ColToWorld(c), rawPtrGrid->RowToWorld(r), 0.f };
+				switch (grid.GetTileType(c, r))
 				{
-
-					auto goldBagObj = std::make_unique<GameObject>();
-					auto* bag = goldBagObj->AddComponent<GoldBagComponent>(rawPtrGrid, points);
-					goldBagObj->AddComponent<RenderComponent>("Resources/goldBagSingle.png");
-
-					goldBagObj->SetLocalPosition(
-						{
-						rawPtrGrid->ColToWorld(c)
-						, rawPtrGrid->RowToWorld(r)
-						, 0.0f
-						});
-
-					m_bags.push_back(bag);
-					scene.Add(std::move(goldBagObj));
-
-				}
-				if (grid.GetTileType(c, r) == TileType::EnemySpawn)
-				{
-
-					auto enemyObj = std::make_unique<GameObject>();
-					auto* enemy = enemyObj->AddComponent<EnemyComponent>(rawPtrGrid, diggerRawPtr);
-					auto* enemyImage = enemyObj->AddComponent<RenderComponent>("Resources/SoloNobbin.png");
-					enemyObj->AddComponent<RectColliderComponent>(Size
-						{
-							enemyImage->GetSizeImage().width
-							, enemyImage->GetSizeImage().height
-						}, CollisionTag::Enemy);
-
-					//actions
-					constexpr float speed = 100.f;
-					constexpr float chasingRadius = 150.f;
-					constexpr float maxChaseRange = 300.f;
-
-					auto* enemyUtilityAI = enemyObj->AddComponent<EnemyUtilityAI>(enemy, rawPtrGrid, diggerRawPtr, points);
-
-					enemyUtilityAI->RegisterNewAction("Chasing",
-						[chasingRadius](const EnemyUtilityAI::GameStats& gameStats)
-						{
-							//closer hte higher score
-							const float score{ 1.f - EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer, chasingRadius) };
-							return EnemyUtilityAI::GetScoringQuadraticCurve(score, 1.f); //more decisive avction
-						}
-						, [speed]()
-						{
-							return new EnemyChasingState(speed);
-						});
-
-					enemyUtilityAI->RegisterNewAction("Digging",
-						[](const EnemyUtilityAI::GameStats& gameStats)
-						{
-							if (gameStats.isOnTunnel) return 0.1f; // discourage digging on tunnels
-							float farness = EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer, 500.f);
-							return EnemyUtilityAI::GetScoringQuadraticCurve(farness, 1.f);
-						}
-						, [speed]()
-						{
-							return new EnemyDiggingState(speed, "Resources/SoloNobbin.png", "Resources/SoloHobbin.png");
-						});
-
-					enemyUtilityAI->RegisterNewAction("Wandering",
-						[](const EnemyUtilityAI::GameStats& gameStats)
-						{
-							const float distanceToWander{ EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer,maxChaseRange) };
-
-							if (gameStats.collectedPoints > 100) //if player has more than 100 points, enemies will wander less
-							{
-								const float negativeScore{ -0.2f }; //wander lesss
-								return EnemyUtilityAI::GetScoringQuadraticCurve(distanceToWander + negativeScore, 1.f);
-							}
-							return EnemyUtilityAI::GetScoringQuadraticCurve(distanceToWander, 1.f);
-						}
-						, [speed]()
-						{
-
-							return new EnemyWanderingState(speed);
-						});
-
-
-					enemyObj->SetLocalPosition(
-						{
-						rawPtrGrid->ColToWorld(c)
-						, rawPtrGrid->RowToWorld(r)
-						, 0.0f
-						});
-
-					m_enemies.push_back(enemy);
-					scene.Add(std::move(enemyObj));
-					rawPtrGrid->DiggedTile(c, r);
+					case TileType::Emerald:
+						SpawnEmeralds(scene, rawPtrGrid, pos);
+						break;
+					case TileType::GoldBag:
+						SpawnGoldBags(scene, rawPtrGrid, pos);
+						break;
+						case TileType::EnemySpawn:
+						SpawnEnemies(scene, rawPtrGrid, diggerRawPtr, points, pos);
+						rawPtrGrid->DiggedTile(c, r); //dig out the enemy spawn tile so it doesnt block movement
+						break;
 				}
 			}
 		}
@@ -201,6 +120,98 @@ namespace dae
 		auto collisionUpdater = std::make_unique<GameObject>();
 		collisionUpdater->AddComponent<CollisionUpdaterComponent>();
 		scene.Add(std::move(collisionUpdater));
+	}
+
+	void DiggerScene::SpawnGoldBags(Scene& scene, GridComponent* grid, const glm::vec3& pos)
+	{
+		auto goldBagObj = std::make_unique<GameObject>();
+		goldBagObj->AddComponent<GoldBagComponent>(grid);
+		goldBagObj->AddComponent<RenderComponent>("Resources/goldBagSingle.png");
+
+		goldBagObj->SetLocalPosition(pos);
+		scene.Add(std::move(goldBagObj));
+	}
+
+	void DiggerScene::SpawnEmeralds(Scene& scene, GridComponent* rawPtrGrid, const glm::vec3& pos)
+	{
+		auto EmeraldObj = std::make_unique<GameObject>();
+		EmeraldObj->AddComponent<GoldBagComponent>(rawPtrGrid);
+		EmeraldObj->AddComponent<RenderComponent>("Resources/Emerald.png");
+
+		EmeraldObj->SetLocalPosition(pos);
+		scene.Add(std::move(EmeraldObj));
+	}
+
+	void DiggerScene::SpawnEnemies(Scene& scene, GridComponent* rawPtrGrid
+		, GameObject* player, PointsComponent* points, const glm::vec3& pos)
+	{
+		//actions
+		constexpr float speed = 100.f;
+		constexpr float chasingRadius = 150.f;
+		constexpr float maxChaseRange = 300.f;
+
+		//spawn enemy
+		auto enemyObj = std::make_unique<GameObject>();
+		auto* enemy = enemyObj->AddComponent<EnemyComponent>(rawPtrGrid, player);
+		auto* enemyImage = enemyObj->AddComponent<RenderComponent>("Resources/SoloNobbin.png");
+		enemyObj->AddComponent<RectColliderComponent>(Size
+			{
+				enemyImage->GetSizeImage().width
+				, enemyImage->GetSizeImage().height
+			}, CollisionTag::Enemy);
+		enemyObj->SetLocalPosition(pos);
+
+		//create utilityAI and register actions
+		auto* enemyUtilityAI = enemyObj->AddComponent<EnemyUtilityAI>(enemy, rawPtrGrid, player, points);
+		RegisterAIUtilityActions(enemyUtilityAI, speed, chasingRadius, maxChaseRange, points);
+		
+		scene.Add(std::move(enemyObj));
+	}
+
+	void DiggerScene::RegisterAIUtilityActions(dae::EnemyUtilityAI* utilityAI
+		, float speed, float chasingRadius, float /*maxChaseRange*/, PointsComponent*)
+	{
+		utilityAI->RegisterNewAction("Chasing",
+			[chasingRadius](const EnemyUtilityAI::GameStats& gameStats)
+			{
+				//closer hte higher score
+				const float score{ 1.f - EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer, chasingRadius) };
+				return EnemyUtilityAI::GetScoringQuadraticCurve(score, 1.f); //more decisive avction
+			}
+			, [speed]()
+			{
+				return new EnemyChasingState(speed);
+			});
+
+		utilityAI->RegisterNewAction("Digging",
+			[](const EnemyUtilityAI::GameStats& gameStats)
+			{
+				if (gameStats.isOnTunnel) return 0.1f; // discourage digging on tunnels
+				float farness = EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer, 500.f);
+				return EnemyUtilityAI::GetScoringQuadraticCurve(farness, 1.f);
+			}
+			, [speed]()
+			{
+				return new EnemyDiggingState(speed, "Resources/SoloNobbin.png", "Resources/SoloHobbin.png");
+			});
+
+		utilityAI->RegisterNewAction("Wandering",
+			[chasingRadius](const EnemyUtilityAI::GameStats& gameStats)
+			{
+				const float distanceToWander{ EnemyUtilityAI::GetLinearCurve(gameStats.distancePlayer,chasingRadius) };
+
+				if (gameStats.collectedPoints > 100) //if player has more than 100 points, enemies will wander less
+				{
+					const float negativeScore{ -0.2f }; //wander lesss
+					return EnemyUtilityAI::GetScoringQuadraticCurve(distanceToWander + negativeScore, 1.f);
+				}
+				return EnemyUtilityAI::GetScoringQuadraticCurve(distanceToWander, 1.f);
+			}
+			, [speed]()
+			{
+
+				return new EnemyWanderingState(speed);
+			});
 	}
 
 	void DiggerScene::InitUI(Scene& scene, PointsComponent* points, HealthComponent* health)
@@ -241,8 +252,7 @@ namespace dae
 	}
 
 	void DiggerScene::SetupInputControls(GridComponent* rawPtrGrid, GameObject* diggerPlayerRawPtr
-		, PointsComponent* points, HealthComponent* 
-		, std::vector<GoldBagComponent*> m_bags)
+		, PointsComponent* points, HealthComponent* )
 	{
 		const SoundID digSound{ ServiceLocator::GetSoundSystem().AddSound("Data/Resources/DeathSound.wav") };
 		const SoundID gemSound{ ServiceLocator::GetSoundSystem().AddSound("Data/Resources/piano2.wav") };
@@ -267,65 +277,65 @@ namespace dae
 		input.BindKeyboardCommand(SDL_SCANCODE_W
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>(
-				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
+				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound, points));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_A
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
+			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_S
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound, points));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_D
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points));
 
 		//arrows
 
 		input.BindKeyboardCommand(SDL_SCANCODE_UP
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>(
-				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
+				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound, points));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_LEFT
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
+			(diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_DOWN
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound, points));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_RIGHT
 			, InputManager::TriggerType::Isdown
 			, std::make_unique<MoveDiggerCommand>
-			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
+			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points));
 
 		//gamepad
 		input.BindControllerCommand(dae::GamepadButton::DpadUp,
 			InputManager::TriggerType::Isdown,
 			std::make_unique<MoveDiggerCommand>(
-				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
+				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,-1.f,0.f }, rawPtrGrid, digSound, gemSound, points));
 
 		input.BindControllerCommand(dae::GamepadButton::DpadDown,
 			InputManager::TriggerType::Isdown,
 			std::make_unique<MoveDiggerCommand>(
-				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
+				diggerPlayerRawPtr, speed, glm::vec3{ 0.f,1.f,0.f }, rawPtrGrid, digSound, gemSound, points));
 
 		input.BindControllerCommand(dae::GamepadButton::DpadLeft,
 			InputManager::TriggerType::Isdown,
 			std::make_unique<MoveDiggerCommand>(
-				diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
+				diggerPlayerRawPtr, speed, glm::vec3{ -1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points));
 
 		input.BindControllerCommand(dae::GamepadButton::DpadRight,
 			InputManager::TriggerType::Isdown,
 			std::make_unique<MoveDiggerCommand>(
-				diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points, m_bags));
+				diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points));
 
 	}
 
