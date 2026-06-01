@@ -108,6 +108,7 @@ namespace dae
 
 					case TileType::GoldBag:
 						SpawnGoldBags(scene, rawPtrGrid, pos);
+						rawPtrGrid->GetGridReference().SetTileType(c, r, TileType::DirtWall);
 						break;
 
 					case TileType::EnemySpawn:

@@ -27,6 +27,7 @@ namespace dae
 		float RowToWorld(int row) const;
 
 		const Grid& GetGrid()const;
+		Grid& GetGridReference();
 
 	private:
 		dae::Grid m_grid{};

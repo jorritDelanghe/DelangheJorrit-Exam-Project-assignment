@@ -95,6 +95,11 @@ const dae::Grid& dae::GridComponent::GetGrid()const
 	return m_grid;
 }
 
+dae::Grid& dae::GridComponent::GetGridReference()
+{
+	return m_grid;
+}
+
 void dae::GridComponent::RenderTile(int col, int row) const
 {
 	std::shared_ptr<Texture2D> texture{};
