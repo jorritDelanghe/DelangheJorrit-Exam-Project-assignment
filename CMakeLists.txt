@@ -40,29 +40,37 @@ add_library(MiniginEngine STATIC
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Digger/Grid/Grid.cpp
-  Digger/Scene/LevelLoader.cpp
   Digger/Grid/GridComponent.cpp
+
+  Digger/Scene/LevelLoader.cpp
   Digger/Scene/DiggerScene.cpp
-  Digger/Player/MoveDiggerCommand.cpp
-  Digger/GoldBag/GoldBagComponent.cpp
-  Digger/Main.cpp
   Digger/Scene/GameObjectCommand.cpp
+  Digger/Scene/LivesDisplayComponent.cpp
+  Digger/Scene/PointsComponent.cpp
+  Digger/Scene/PointsDisplayComponent.cpp
+
+  Digger/Player/MoveDiggerCommand.cpp
+  Digger/Player/HealthComponent.cpp
+  
+  Digger/Main.cpp
+
+  Digger/GoldBag/MovingState.cpp
+  Digger/GoldBag/GoldBagComponent.cpp
   Digger/GoldBag/IdleState.cpp
   Digger/GoldBag/FallingState.cpp
+  Digger/GoldBag/BrokenState.cpp
+
   Digger/Enemy/EnemyComponent.cpp
   Digger/Enemy/EnemyWanderingState.cpp
   Digger/Enemy/EnemyChasingState.cpp
   Digger/Enemy/EnemyDiggingState.cpp
   Digger/Enemy/EnemyHelpers.cpp
   Digger/Enemy/EnemyUtilityAI.cpp
+
   Digger/Collision/RectColliderComponent.cpp
   Digger/Collision/CollisionSystem.cpp
   Digger/Collision/CollisionUpdaterComponent.cpp
-  Digger/GoldBag/MovingState.cpp
-  Digger/Player/HealthComponent.cpp
-  Digger/Scene/LivesDisplayComponent.cpp
-  Digger/Scene/PointsComponent.cpp
-  Digger/Scene/PointsDisplayComponent.cpp)
+)
 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)

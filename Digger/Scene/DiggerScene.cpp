@@ -45,7 +45,7 @@ namespace dae
 	void DiggerScene::LoadScene()
 	{
 		auto& scene = dae::SceneManager::GetInstance().CreateScene();
-		auto grid = InitGrid(scene, "Data/Resources/LevelUtiltiyAI.txt");
+		auto grid = InitGrid(scene, "Data/Resources/Level01.txt");
 		auto player = InitPlayer(scene, "digger2.png");
 
 		InitUI(scene, player->GetComponent<PointsComponent>(), player->GetComponent<HealthComponent>());
@@ -132,7 +132,8 @@ namespace dae
 	{
 		auto goldBagObj = std::make_unique<GameObject>();
 		goldBagObj->AddComponent<GoldBagComponent>(grid);
-		goldBagObj->AddComponent<RenderComponent>("Resources/goldBagSingle.png");
+		auto* img = goldBagObj->AddComponent<RenderComponent>("Resources/goldBagSingle.png",30.f,30.f);
+		goldBagObj->AddComponent<RectColliderComponent>(Size{ img->GetSizeImage().width, img->GetSizeImage().height }, CollisionTag::GoldBag);
 
 		goldBagObj->SetLocalPosition(pos);
 		scene.Add(std::move(goldBagObj));

@@ -1,10 +1,15 @@
 #include "GoldBagComponent.h"
 #include "GameObject.h"
 #include "IdleState.h"
-dae::GoldBagComponent::GoldBagComponent(GameObject* pGameObject,GridComponent* grid)
+//needed for nugget
+#include "Scene.h"
+#include "RenderComponent.h"
+#include "Collision/RectColliderComponent.h"
+dae::GoldBagComponent::GoldBagComponent(GameObject* pGameObject, GridComponent* pGrid, Scene* pScene)
 	:Component(pGameObject)
 	,m_state(std::make_unique<IdleState>())
-	,m_grid(grid)
+	,m_grid(pGrid)
+	, m_scene(pScene)
 {
 
 }
@@ -20,6 +25,15 @@ void dae::GoldBagComponent::HandleInput(glm::vec3 playerPos)
 void dae::GoldBagComponent::SetState(GoldBagState* newState)
 {
 	m_state.reset(newState);
+}
+void dae::GoldBagComponent::SpawnGoldNugget()
+{
+	auto goldNugget = std::make_unique<GameObject>();
+	auto* img = goldNugget->AddComponent<RenderComponent>("Resources/SoloGold.png",20.f,20.f);
+	goldNugget->AddComponent<RectColliderComponent>(Size{ img->GetSizeImage().width, img->GetSizeImage().height }, CollisionTag::GoldNugget);
+
+	goldNugget->SetLocalPosition(GetOwner()->GetLocalPosition());
+	m_scene->Add(std::move(goldNugget));
 }
 void dae::GoldBagComponent::Update(float deltaTime)
 {
