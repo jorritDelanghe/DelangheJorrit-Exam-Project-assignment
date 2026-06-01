@@ -31,7 +31,6 @@ void dae::MoveDiggerCommand::Execute()
 		const auto newBoundinBox = Rect{ newPos.x,newPos.y, boundingBox.width, boundingBox.height };
 
 		const TileType destinationTile{ m_grid->GetCollisionTileType(newBoundinBox) };
-		constexpr int goldBagPoints{ 80 };
 
 		switch (destinationTile)
 		{
@@ -50,7 +49,7 @@ void dae::MoveDiggerCommand::Execute()
 
 			case TileType::GoldBag:
 				dae::ServiceLocator::GetSoundSystem().Play(m_gemSound, 0.8f);
-				m_pPoints->AddScore(goldBagPoints);
+				m_grid->DiggedTile(newBoundinBox);
 				break;
 		}
 		gameObject->SetLocalPosition(newPos);

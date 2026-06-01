@@ -5,11 +5,11 @@
 #include "Scene.h"
 #include "RenderComponent.h"
 #include "Collision/RectColliderComponent.h"
-dae::GoldBagComponent::GoldBagComponent(GameObject* pGameObject, GridComponent* pGrid, Scene* pScene)
+dae::GoldBagComponent::GoldBagComponent(GameObject* pGameObject, GridComponent* pGrid, Scene& scene)
 	:Component(pGameObject)
 	,m_state(std::make_unique<IdleState>())
 	,m_grid(pGrid)
-	, m_scene(pScene)
+	, m_scene(scene)
 {
 
 }
@@ -33,7 +33,7 @@ void dae::GoldBagComponent::SpawnGoldNugget()
 	goldNugget->AddComponent<RectColliderComponent>(Size{ img->GetSizeImage().width, img->GetSizeImage().height }, CollisionTag::GoldNugget);
 
 	goldNugget->SetLocalPosition(GetOwner()->GetLocalPosition());
-	m_scene->Add(std::move(goldNugget));
+	m_scene.Add(std::move(goldNugget));
 }
 void dae::GoldBagComponent::Update(float deltaTime)
 {
@@ -42,5 +42,6 @@ void dae::GoldBagComponent::Update(float deltaTime)
 	if (newState)
 	{
 		SetState(newState);
+		m_state->OnEnter(this);
 	}
 }

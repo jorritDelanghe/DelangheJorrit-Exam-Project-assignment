@@ -26,15 +26,18 @@ dae::GoldBagState* dae::FallingState::Update(GoldBagComponent* goldBagComponent,
 
     if (tileBelow != TileType::Tunnel)
     {
-        if (m_fallDistance > 0)
-        {
-            return new BrokenState();
-        }
         goldBagComponent->GetOwner()->SetLocalPosition({
             grid->ColToWorld(currentCol),
             grid->RowToWorld(currentRow),
             0.f
             });
+
+        constexpr float minBreakDistance{ 32.f }; // one tile
+        if (m_fallDistance > minBreakDistance)
+        {
+            return new BrokenState();
+        }
+
         return new IdleState();
     }
 

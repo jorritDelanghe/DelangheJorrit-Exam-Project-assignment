@@ -131,7 +131,7 @@ namespace dae
 	void DiggerScene::SpawnGoldBags(Scene& scene, GridComponent* grid, const glm::vec3& pos)
 	{
 		auto goldBagObj = std::make_unique<GameObject>();
-		goldBagObj->AddComponent<GoldBagComponent>(grid);
+		goldBagObj->AddComponent<GoldBagComponent>(grid,scene);
 		auto* img = goldBagObj->AddComponent<RenderComponent>("Resources/goldBagSingle.png",30.f,30.f);
 		goldBagObj->AddComponent<RectColliderComponent>(Size{ img->GetSizeImage().width, img->GetSizeImage().height }, CollisionTag::GoldBag);
 

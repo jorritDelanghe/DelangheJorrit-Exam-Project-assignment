@@ -13,6 +13,7 @@ namespace dae
 		, Border
 		, Emerald
 		, GoldNugget
+		, FallingGoldBag
 	};
 	class GameObject;
 	class RectColliderComponent final : public Component

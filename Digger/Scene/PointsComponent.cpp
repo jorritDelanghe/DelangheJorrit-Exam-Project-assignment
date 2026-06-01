@@ -14,7 +14,7 @@ void dae::PointsComponent::Notify(GameEvent event, GameObject* pGameObject)
 		pGameObject->MarkForDelete();
 		AddEmerad();
 	}
-	if (event == GameEvent::CollisionEmerald)
+	if (event == GameEvent::CollisionGoldNugget)
 	{
 		constexpr int goldNuggetPoints{ 50 };
 		pGameObject->MarkForDelete();
