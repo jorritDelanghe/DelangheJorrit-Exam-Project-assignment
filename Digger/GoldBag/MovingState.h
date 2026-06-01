@@ -11,9 +11,11 @@ namespace dae
 	public:
 		MovingState(float moveSpeed);
 		virtual ~MovingState() override = default;
+		virtual GoldBagState* OnEnter(GoldBagComponent* goldBagComponent) override;
 		virtual GoldBagState* HandleInputs(GoldBagComponent* goldBagComponent, GridComponent* grid, glm::vec3 playerPos) override;
 		//virtual void Notify(GameEvent event, GameObject* gameObject)override;
 		virtual GoldBagState* Update(GoldBagComponent* goldBagComponent,float deltaTime) override;
+		virtual GoldBagState* OnExit(GoldBagComponent* goldBagComponent) override;
 	private:
 		
 		float m_moveSpeed{};

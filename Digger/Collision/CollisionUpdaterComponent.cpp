@@ -105,7 +105,22 @@ void dae::CollisionUpdaterComponent::Update(float)
 			auto* victim = (colliderTag == CollisionTag::FallingGoldBag) ? otherCollider->GetOwner() : collider->GetOwner();
 			CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionFallingBag, victim);
 		}
+		if (compareTags(CollisionTag::MovingGoldBag, CollisionTag::GoldBag))
+		{
+			//find moving and idle
+			auto* movingGoldbag{ (collider->GetTag() == CollisionTag::MovingGoldBag)
+				? collider->GetOwner() : otherCollider->GetOwner() };
 
+			auto* idleGoldbag{ (collider->GetTag() == CollisionTag::MovingGoldBag)
+			? otherCollider->GetOwner() : collider->GetOwner() };
+
+			//get gold comp
+			auto* idleGoldBagComponent{ idleGoldbag->GetComponent<GoldBagComponent>() };
+
+			//allow chaing
+			const glm::vec3 movingObjPos = movingGoldbag->GetLocalPosition(); //handle input looks at the direction
+			idleGoldBagComponent->HandleInput(movingObjPos);
+		}
 		OutputDebugStringA("hit\n");
 	}
 }

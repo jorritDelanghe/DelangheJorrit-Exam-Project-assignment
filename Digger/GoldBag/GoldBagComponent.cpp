@@ -46,6 +46,7 @@ void dae::GoldBagComponent::Update(float deltaTime)
 
 	if (newState)
 	{
+		m_state->OnExit(this);
 		SetState(newState);
 		m_state->OnEnter(this);
 	}
