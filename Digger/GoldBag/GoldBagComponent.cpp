@@ -1,6 +1,7 @@
 #include "GoldBagComponent.h"
 #include "GameObject.h"
 #include "IdleState.h"
+#include "Grid/GridComponent.h"
 //needed for nugget
 #include "Scene.h"
 #include "RenderComponent.h"
@@ -29,10 +30,14 @@ void dae::GoldBagComponent::SetState(GoldBagState* newState)
 void dae::GoldBagComponent::SpawnGoldNugget()
 {
 	auto goldNugget = std::make_unique<GameObject>();
-	auto* img = goldNugget->AddComponent<RenderComponent>("Resources/SoloGold.png",20.f,20.f);
+	auto* img = goldNugget->AddComponent<RenderComponent>("Resources/SoloGold.png", 20.f, 20.f);
 	goldNugget->AddComponent<RectColliderComponent>(Size{ img->GetSizeImage().width, img->GetSizeImage().height }, CollisionTag::GoldNugget);
 
-	goldNugget->SetLocalPosition(GetOwner()->GetLocalPosition());
+	goldNugget->SetLocalPosition({
+		GetOwner()->GetLocalPosition().x, 
+	GetOwner()->GetLocalPosition().y+ m_grid->GetGrid().GetTileSize()/2.f, //put the nugget on the ground of a tile
+	GetOwner()->GetLocalPosition().z});
+
 	m_scene.Add(std::move(goldNugget));
 }
 void dae::GoldBagComponent::Update(float deltaTime)
