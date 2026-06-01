@@ -2,6 +2,7 @@
 #include "GoldBagComponent.h"
 #include "Grid/GridComponent.h"
 #include "IdleState.h"
+#include "BrokenState.h"
 dae::FallingState::FallingState(float fallSpeed)
 	:m_fallSpeed(fallSpeed)
 {
@@ -25,7 +26,10 @@ dae::GoldBagState* dae::FallingState::Update(GoldBagComponent* goldBagComponent,
 
     if (tileBelow != TileType::Tunnel)
     {
-      
+        if (m_fallDistance > 0)
+        {
+            return new BrokenState();
+        }
         goldBagComponent->GetOwner()->SetLocalPosition({
             grid->ColToWorld(currentCol),
             grid->RowToWorld(currentRow),

@@ -66,6 +66,15 @@ void dae::CollisionUpdaterComponent::Update(float)
 				CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionEmerald, emeraldObject);
 			}
 		}
+		if (compareTags(CollisionTag::Player, CollisionTag::GoldNugget))
+		{
+			GameObject* goldNuggetObject = (colliderTag == CollisionTag::GoldNugget) ?
+				collider->GetOwner() : otherCollider->GetOwner();
+			if (!goldNuggetObject->IsMarkedForDelete()) //if already picked up, dont send event again
+			{
+				CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionGoldNugget, goldNuggetObject);
+			}
+		}
 
 		OutputDebugStringA("hit\n");
 	}
