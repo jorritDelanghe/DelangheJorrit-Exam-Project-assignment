@@ -2,6 +2,7 @@
 #include "EnemyHelpers.h"
 #include "EnemyChasingState.h"
 #include "RenderComponent.h"
+#include "Collision/RectColliderComponent.h"
 
 dae::EnemyDiggingState::EnemyDiggingState(
     float moveSpeed,
@@ -37,14 +38,17 @@ dae::EnemyState* dae::EnemyDiggingState::Update(EnemyComponent* enemyComponent, 
     //UtilityAI already checks in player is close go to chasing
     if(!m_isTargettingTile) return nullptr;
 
+	//needs to check every update otherwise problem overlap
+	auto* rectColliderComponent{ enemyComponent->GetOwner()->GetComponent<RectColliderComponent>() };
+	const auto enemyBoundingBox{ rectColliderComponent->GetBoundingBoxInWorld() };
+	m_grid->DiggedTile(enemyBoundingBox);
+
+    //move towards true if arrive, set new target after arrive
     if (EnemyMovement::MoveTowardsTile(enemyComponent, m_targetPos, m_speed, deltaTime))
     {
         const glm::vec3 enemyPos{ enemyComponent->GetOwner()->GetLocalPosition() };
-
-        TryDiggingTile(enemyPos);
         m_isTargettingTile = PathFinding::ChooseNewTargetTile(m_grid, enemyPos, m_isAllowed
             , m_targetPos, m_previousPos, m_hasPreviousPos);
-
     }
     return nullptr;
 }
@@ -60,9 +64,4 @@ dae::EnemyState* dae::EnemyDiggingState::OnExit(EnemyComponent* enemyComponent)
     renderComponent->SetTexture(m_fileNameNormalEnemy);
 
     return nullptr;
-}
-void dae::EnemyDiggingState::TryDiggingTile(const glm::vec3& pos)
-{
-    const GridPos currentTile{ m_grid->WorldToCol(pos.x), m_grid->WorldToRow(pos.y) };
-    m_grid->DiggedTile(currentTile.col, currentTile.row);
 }

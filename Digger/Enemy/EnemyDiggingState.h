@@ -33,12 +33,11 @@ namespace dae
 		bool m_hasPreviousPos{ false };
 		GridComponent* m_grid{ nullptr };
 
+		//checks if can walk on the tile
 		std::function<bool(TileType)> m_isAllowed = [](TileType t)
 			{
 				return t == TileType::Tunnel || t == TileType::DirtWall;
 			};
-
-		void TryDiggingTile(const glm::vec3& pos);
 
 	};
 
