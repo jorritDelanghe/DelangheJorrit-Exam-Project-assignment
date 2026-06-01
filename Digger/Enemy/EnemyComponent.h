@@ -3,10 +3,12 @@
 #include <memory>
 #include "EnemyState.h"
 #include "GameObject.h"
+#include "Observer.h"
+#include "Scene/Event.h"
 namespace dae
 {
 	class GridComponent;
-	class EnemyComponent final : public Component
+	class EnemyComponent final : public Component, public Observer<GameEvent>
 	{
 	public:
 		explicit EnemyComponent(GameObject* pGameObject, GridComponent* grid,GameObject* player);
@@ -20,6 +22,7 @@ namespace dae
 		virtual void Update(float deltaTime) override;
 		void SetState(EnemyState* newState);
 		glm::vec3 GetPlayerPos() const;
+		virtual void Notify(GameEvent event, GameObject* gameObject) override;
 
 	private:
 		GridComponent* m_grid{};

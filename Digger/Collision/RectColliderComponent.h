@@ -29,6 +29,7 @@ namespace dae
 
 		virtual void Update(float deltaTime) override; 
 		virtual void Render()const override; //debug purposes
+		void SetTag(CollisionTag tag);
 		const Rect& GetBoundingBoxInWorld() const;
 		CollisionTag GetTag()const { return m_tag; }
 

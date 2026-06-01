@@ -31,6 +31,7 @@ void dae::CollisionUpdaterComponent::Update(float)
 	{
 		if (!collider || !otherCollider) continue;
 
+		//get tags
 		CollisionTag colliderTag = collider->GetTag();
 		CollisionTag otherColliderTag = otherCollider->GetTag();
 
@@ -45,35 +46,55 @@ void dae::CollisionUpdaterComponent::Update(float)
 				return false;
 			};
 
-		if (compareTags(CollisionTag::Player, CollisionTag::Enemy))
+		//get player otherwise a lot of extra code
+		GameObject* player{};
+		if (colliderTag == CollisionTag::Player || otherColliderTag == CollisionTag::Player)
 		{
-			CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionEnemy, collider->GetOwner());
+			player = (colliderTag == CollisionTag::Player) ? collider->GetOwner() : otherCollider->GetOwner();
 		}
-		if (compareTags(CollisionTag::Player, CollisionTag::Border))
+
+		//colision player with...
+		if (player)
 		{
-			CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionWall, collider->GetOwner());
-		}
-		if (compareTags(CollisionTag::Player, CollisionTag::GoldBag))
-		{
-			CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionGoldBag, collider->GetOwner());
-		}
-		if (compareTags(CollisionTag::Player, CollisionTag::Emerald))
-		{
-			GameObject* emeraldObject = (colliderTag == CollisionTag::Emerald) ? 
-				collider->GetOwner() : otherCollider->GetOwner();
-			if (!emeraldObject->IsMarkedForDelete()) //if already picked up, dont send event again
+			if (compareTags(CollisionTag::Player, CollisionTag::Enemy))
 			{
-				CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionEmerald, emeraldObject);
+				CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionEnemy, player);
+			}
+			if (compareTags(CollisionTag::Player, CollisionTag::Border))
+			{
+				CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionWall, player);
+			}
+			if (compareTags(CollisionTag::Player, CollisionTag::GoldBag) || compareTags(CollisionTag::GoldBag, CollisionTag::GoldBag))
+			{
+				CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionGoldBag, player);
+			}
+			if (compareTags(CollisionTag::Player, CollisionTag::Emerald))
+			{
+				//emerald needs to be destroyed
+				GameObject* emeraldObject = (colliderTag == CollisionTag::Emerald) ? 
+					collider->GetOwner() : otherCollider->GetOwner();
+				if (!emeraldObject->IsMarkedForDelete()) //if already picked up, dont send event again
+				{
+					CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionEmerald, emeraldObject);
+				}
+			}
+			if (compareTags(CollisionTag::Player, CollisionTag::GoldNugget))
+			{
+				GameObject* goldNuggetObject = (colliderTag == CollisionTag::GoldNugget) ?
+					collider->GetOwner() : otherCollider->GetOwner();
+				if (!goldNuggetObject->IsMarkedForDelete()) //if already picked up, dont send event again
+				{
+					CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionGoldNugget, goldNuggetObject);
+				}
 			}
 		}
-		if (compareTags(CollisionTag::Player, CollisionTag::GoldNugget))
+
+		//collision Golbag with...
+		if (compareTags(CollisionTag::Player, CollisionTag::FallingGoldBag)
+			|| compareTags(CollisionTag::Enemy, CollisionTag::FallingGoldBag))
 		{
-			GameObject* goldNuggetObject = (colliderTag == CollisionTag::GoldNugget) ?
-				collider->GetOwner() : otherCollider->GetOwner();
-			if (!goldNuggetObject->IsMarkedForDelete()) //if already picked up, dont send event again
-			{
-				CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionGoldNugget, goldNuggetObject);
-			}
+			auto* victim = (colliderTag == CollisionTag::FallingGoldBag) ? otherCollider->GetOwner() : collider->GetOwner();
+			CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionFallingBag, victim);
 		}
 
 		OutputDebugStringA("hit\n");

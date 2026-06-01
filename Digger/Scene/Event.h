@@ -6,11 +6,14 @@ namespace dae
 		PlayerDied,
 		PlayerPickedUp,
 		EnemyDied,
+
 		CollisionWall,
 		CollisionEnemy,
 		CollisionGoldBag,
 		CollisionDirtWall,
 		CollisionEmerald,
-		CollisionGoldNugget
+		CollisionGoldNugget,
+		CollisionFallingBag,
+		CollisionPlayer
 	};
 }

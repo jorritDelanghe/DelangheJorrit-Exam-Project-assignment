@@ -3,6 +3,7 @@
 #include "Grid/GridComponent.h"
 #include "EnemyChasingState.h"
 #include "EnemyDiggingState.h"
+#include "Collision/CollisionSystem.h"
 
 dae::EnemyComponent::EnemyComponent(GameObject* pGameObject, GridComponent* grid, GameObject*player)
 	:Component(pGameObject)
@@ -45,4 +46,14 @@ glm::vec3 dae::EnemyComponent::GetPlayerPos() const
 	playerPos = { m_grid->ColToWorld(col), m_grid->RowToWorld(row), 0.f };
 
 	return playerPos;
+}
+
+void dae::EnemyComponent::Notify(GameEvent event, GameObject* gameObject)
+{
+	if (event == GameEvent::CollisionFallingBag)
+	{
+		if (gameObject != GetOwner()) return; // not me, ignore, otherwise all the enmy components will get notified
+		CollisionSystem::GetInstance().OnHitSubject().RemoveObserver(this);
+		gameObject->MarkForDelete();
+	}
 }

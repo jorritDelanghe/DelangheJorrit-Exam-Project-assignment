@@ -36,6 +36,11 @@ void dae::RectColliderComponent::Render() const
 	SDL_RenderRect(renderer,  &rect);
 }
 
+void dae::RectColliderComponent::SetTag(CollisionTag tag)
+{
+	m_tag = tag;
+}
+
 const dae::Rect& dae::RectColliderComponent::GetBoundingBoxInWorld() const
 {
 	return m_boundingBox;

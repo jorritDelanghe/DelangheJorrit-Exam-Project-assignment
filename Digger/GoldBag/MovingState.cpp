@@ -60,6 +60,13 @@ dae::GoldBagState* dae::MovingState::HandleInputs(GoldBagComponent* goldBagCompo
 	}
 	return nullptr;
 }
+//void dae::MovingState::Notify(GameEvent event, GameObject* )
+//{
+//	if (event == GameEvent::CollisionGoldBag)
+//	{
+//
+//	}
+//}
 dae::GoldBagState* dae::MovingState::Update(GoldBagComponent* goldBagComponent, float /*deltaTime*/)
 {
 	if (m_hasMoved)

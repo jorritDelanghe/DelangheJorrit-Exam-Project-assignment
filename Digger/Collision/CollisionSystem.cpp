@@ -28,7 +28,9 @@ void dae::CollisionSystem::ClearCollideders()
 
 std::vector <dae::CollisionSystem::CollidedObjects>  dae::CollisionSystem::CheckCollisions()
 {
-	std::vector<CollidedObjects> collisions{ m_Colliders.size()};
+	std::vector<CollidedObjects> collisions;
+	collisions.reserve(m_Colliders.size());
+
 	for (const auto& collider : m_Colliders)
 	{
 		for(const auto& otherCollider : m_Colliders)

@@ -168,6 +168,9 @@ namespace dae
 			}, CollisionTag::Enemy);
 		enemyObj->SetLocalPosition(pos);
 
+		//set observer
+		CollisionSystem::GetInstance().OnHitSubject().AddObservers(enemyObj->GetComponent<EnemyComponent>());
+
 		//create utilityAI and register actions
 		auto* enemyUtilityAI = enemyObj->AddComponent<EnemyUtilityAI>(enemy, rawPtrGrid, player, points);
 		RegisterAIUtilityActions(enemyUtilityAI, speed, chasingRadius, maxChaseRange, points);

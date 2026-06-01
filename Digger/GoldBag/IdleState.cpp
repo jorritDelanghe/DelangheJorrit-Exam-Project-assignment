@@ -33,6 +33,7 @@ dae::GoldBagState* dae::IdleState::Update(GoldBagComponent* goldBagComponent, fl
 
 	const TileType tileBelow = grid->GetGrid().GetTileType(col, row + 1);
 
+	//set falling state if no tile below the goldbag
 	if (tileBelow == TileType::Tunnel)
 	{
 		constexpr float fallSpeed{ 100.f };

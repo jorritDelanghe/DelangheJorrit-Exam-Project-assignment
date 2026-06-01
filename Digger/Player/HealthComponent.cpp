@@ -27,7 +27,9 @@ void dae::HealthComponent::Update(float deltaTime)
 
 void dae::HealthComponent::Notify(GameEvent event, GameObject* )
 {
-	if (event == GameEvent::CollisionEnemy && !m_isHit)
+	if ((event == GameEvent::CollisionEnemy 
+		|| event == GameEvent::CollisionFallingBag) 
+		&& !m_isHit)
 	{
 		Die();
 		m_isHit = true;
