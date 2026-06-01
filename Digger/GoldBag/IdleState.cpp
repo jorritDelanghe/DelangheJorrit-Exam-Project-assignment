@@ -3,6 +3,7 @@
 #include "Grid/GridComponent.h"
 #include "MovingState.h"
 #include "FallingState.h"
+#include "WaitingToFallState.h"
 
 dae::GoldBagState* dae::IdleState::HandleInputs(GoldBagComponent* goldBagComponent, GridComponent* grid, glm::vec3 playerPos)
 {
@@ -23,7 +24,7 @@ dae::GoldBagState* dae::IdleState::HandleInputs(GoldBagComponent* goldBagCompone
 	}
 	return nullptr;
 }
-dae::GoldBagState* dae::IdleState::Update(GoldBagComponent* goldBagComponent, float /*deltaTime*/)
+dae::GoldBagState* dae::IdleState::Update(GoldBagComponent* goldBagComponent, float )
 {
 	GridComponent* grid = goldBagComponent->GetGrid();
 	const glm::vec3 pos = goldBagComponent->GetOwner()->GetLocalPosition();
@@ -36,9 +37,15 @@ dae::GoldBagState* dae::IdleState::Update(GoldBagComponent* goldBagComponent, fl
 
 	//set falling state if no tile below the goldbag
 	//currentile wall otherwise falls if tunnel under goldbag
-	if (tileBelow == TileType::Tunnel && currentTile != TileType::DirtWall)
+	if (tileBelow == TileType::Tunnel)
 	{
 		constexpr float fallSpeed{ 100.f };
+
+		if (currentTile == TileType::DirtWall)
+		{
+			constexpr float maxTimToWait{ 0.5f };
+			return new WaitingToFallState(maxTimToWait, fallSpeed);
+		}
 		return new FallingState(fallSpeed);
 	}
 	return nullptr;

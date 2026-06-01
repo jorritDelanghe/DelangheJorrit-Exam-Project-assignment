@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 
 #include <glm/glm.hpp>
 #include "GoldBagState.h"
@@ -6,16 +7,17 @@ namespace dae
 {
 	class GoldBagComponent;
 	class GridComponent;
-	class IdleState : public GoldBagState
+	class WaitingToFallState : public GoldBagState
 	{
 	public:
-		IdleState() = default;
-		virtual ~IdleState() override = default;
+		WaitingToFallState(float maxTimeToWait, float fallSpeed);
+		virtual ~WaitingToFallState() override = default;
 
-		virtual GoldBagState* HandleInputs(GoldBagComponent* goldBagComponent, GridComponent* grid, glm::vec3 playerPos) override;
 		virtual GoldBagState* Update(GoldBagComponent* goldBagComponent, float deltaTime) override;
 	private:
 
+		float m_maxTimeToWait{};
+		float m_fallSpeed{};
 		float m_timerTunnelUnderGoldBag{};
 	};
 

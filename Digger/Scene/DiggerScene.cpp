@@ -104,6 +104,7 @@ namespace dae
 				{
 					case TileType::Emerald:
 						SpawnEmeralds(scene, rawPtrGrid, pos);
+						rawPtrGrid->GetGridReference().SetTileType(c, r, TileType::DirtWall);
 						break;
 
 					case TileType::GoldBag:
