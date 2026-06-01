@@ -1,6 +1,7 @@
 #include "CollisionUpdaterComponent.h"
 #include <Windows.h>
 #include "Scene/Event.h"
+#include "Goldbag/GoldBagComponent.h"
 #include "gameObject.h"
 dae::CollisionUpdaterComponent::CollisionUpdaterComponent(GameObject* pOwner)
 	:Component(pOwner)
@@ -64,9 +65,17 @@ void dae::CollisionUpdaterComponent::Update(float)
 			{
 				CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionWall, player);
 			}
-			if (compareTags(CollisionTag::Player, CollisionTag::GoldBag) || compareTags(CollisionTag::GoldBag, CollisionTag::GoldBag))
+			if (compareTags(CollisionTag::Player, CollisionTag::GoldBag))
 			{
-				CollisionSystem::GetInstance().OnHitSubject().NotifyObservers(GameEvent::CollisionGoldBag, player);
+				GameObject* goldBagObject = (colliderTag == CollisionTag::GoldBag) ?
+					collider->GetOwner() : otherCollider->GetOwner();
+
+				auto* goldBagComponent = goldBagObject->GetComponent<GoldBagComponent>();
+
+				if (goldBagComponent) //if goldbag is falling, player dies
+				{
+					goldBagComponent->HandleInput(player->GetLocalPosition());
+				}
 			}
 			if (compareTags(CollisionTag::Player, CollisionTag::Emerald))
 			{

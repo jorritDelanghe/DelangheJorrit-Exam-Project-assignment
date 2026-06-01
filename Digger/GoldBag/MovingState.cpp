@@ -41,7 +41,7 @@ dae::GoldBagState* dae::MovingState::HandleInputs(GoldBagComponent* goldBagCompo
 	const TileType typeTargetTile{ grid->GetGrid().GetTileType(targetTile.col,targetTile.row) };
 	const TileType typeTargetFallTile{ grid->GetGrid().GetTileType(targetTile.col,targetTile.row+1) };
 
-	if (typeTargetTile == TileType::Tunnel)
+	if (typeTargetTile == TileType::Tunnel || typeTargetTile == TileType::DirtWall)
 	{
 		m_newPosition = {
 			grid->ColToWorld(targetTile.col)

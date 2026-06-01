@@ -119,6 +119,7 @@ namespace dae
 
 					case TileType::PlayerStart:
 						diggerRawPtr->SetLocalPosition(pos);
+						rawPtrGrid->GetGridReference().SetTileType(c, r, TileType::Tunnel);
 							break;
 				}
 			}
