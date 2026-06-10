@@ -4,6 +4,7 @@
 
 #include "RenderComponent.h"
 
+//input
 #include <SDL3/SDL.h> //needs to be above inputmanager otherwise it doesnt know it
 #include "InputManager.h"
 #include "Player/MoveDiggerCommand.h"
@@ -337,10 +338,6 @@ namespace dae
 			, std::make_unique<MoveDiggerCommand>
 			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points));
 
-		//controls
-		 input.BindKeyboardCommand(SDL_SCANCODE_F1
-		, InputManager::TriggerType::Isdown
-			, std::make_unique<MuteSoundCommand>());
 		//gamepad
 		input.BindControllerCommand(dae::GamepadButton::DpadUp,
 			InputManager::TriggerType::Isdown,

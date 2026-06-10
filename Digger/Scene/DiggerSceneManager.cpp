@@ -5,6 +5,12 @@
 #include "ServiceLocator.h"
 #include "SDLSoundSystem.h"
 
+//input
+#include <SDL3/SDL.h> //needs to be above inputmanager otherwise it doesnt know it
+#include "InputManager.h"
+#include "MuteSoundCommand.h"
+#include "SkipToNextLevelCommand.h"
+
 //collision
 #include "Collision/CollisionSystem.h"
 
@@ -31,6 +37,15 @@ void dae::DiggerSceneManager::LoadDiggerLevel(const LevelData& levelData)
 
 	DiggerScene diggerScene{ levelData };
 	diggerScene.LoadScene();
+
+	//controls
+	InputManager::GetInstance().BindKeyboardCommand(SDL_SCANCODE_F2,
+		InputManager::TriggerType::Isdown,
+		std::make_unique<SkipToNextLevelCommand>(this));
+
+	InputManager::GetInstance().BindKeyboardCommand(SDL_SCANCODE_F1
+		, InputManager::TriggerType::Isdown
+		, std::make_unique<MuteSoundCommand>());
 }
 void dae::DiggerSceneManager::InitSound() const
 {
