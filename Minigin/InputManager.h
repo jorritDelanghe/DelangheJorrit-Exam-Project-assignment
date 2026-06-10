@@ -2,7 +2,6 @@
 #include "Singleton.h"
 #include "Command.h"
 #include <memory>
-
 namespace dae
 {
 	class InputManager final : public Singleton<InputManager>
@@ -25,8 +24,9 @@ namespace dae
 		};
 		void BindControllerCommand(unsigned int button,TriggerType trigger, std::unique_ptr<Command> pCommand);
 		void UnbindControllerCommand(unsigned int button);
-		void BindKeyboardCommand(SDL_Scancode key,TriggerType trigger, std::unique_ptr<Command> pCommand);
-		void UnbindKeyboardCommand(SDL_Scancode key);
+		void BindKeyboardCommand(int key,TriggerType trigger, std::unique_ptr<Command> pCommand);
+		void UnbindKeyboardCommand(int key);
+		void UnbindAll();
 
 		class InputManagerImpl;
 	private:
