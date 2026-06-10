@@ -1,0 +1,14 @@
+TileSize:40
+BBBBBBBBBBBBBBBBB
+BN....G#G#G....NB
+BEE##.#E#E#.#GG#B
+BE###.#E#E#.#EE#B
+B#GG#.#E#E#.EEEEB
+BEEEE..P....EEEEB
+BEEEE#E###E##EE#B
+B#EE##E###E##EE#B
+B#EE##E###E#####B
+B#########E#####B
+B##############EB
+B#############EEB
+BBBBBBBBBBBBBBBBB
