@@ -71,6 +71,11 @@ namespace dae
 					return key == binding.key;
 				});
 		}
+		void UnbindAll()
+		{
+			m_keyBoardBindings.clear();
+			m_controllerBindings.clear();
+		}
 		void ProcessControllerBindings()
 		{
 			for (auto& controllerBinding : m_controllerBindings)
@@ -149,6 +154,8 @@ namespace dae
 			}
 			if (e.type == SDL_EVENT_KEY_DOWN) 
 			{
+				if (e.key.repeat) continue;
+
 				m_pInputManagerImpl->ProcessKeyBoardBindings(
 					e.key.scancode, 
 					TriggerType::IsDownThisFrame);
@@ -187,14 +194,18 @@ namespace dae
 		m_pInputManagerImpl->UnBindControllerCommand(button);
 	}
 
-	void InputManager::BindKeyboardCommand(SDL_Scancode key, TriggerType trigger, std::unique_ptr<Command> pCommand)
+	void InputManager::BindKeyboardCommand(int key, TriggerType trigger, std::unique_ptr<Command> pCommand)
 	{
-		m_pInputManagerImpl->BindKeyBoardCommand(key, trigger,std::move(pCommand));
+		m_pInputManagerImpl->BindKeyBoardCommand(static_cast<SDL_Scancode>(key), trigger,std::move(pCommand));
 	}
 
-	void InputManager::UnbindKeyboardCommand(SDL_Scancode key)
+	void InputManager::UnbindKeyboardCommand(int key)
 	{
-		m_pInputManagerImpl->UnBindKeyBoardCommand(key);
+		m_pInputManagerImpl->UnBindKeyBoardCommand(static_cast<SDL_Scancode>(key));
+	}
+	void InputManager::UnbindAll()
+	{
+		m_pInputManagerImpl->UnbindAll();
 	}
 
 }

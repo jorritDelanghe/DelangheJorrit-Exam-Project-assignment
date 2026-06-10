@@ -1,3 +1,4 @@
+
 #include "DiggerSceneManager.h"
 #include "DiggerScene.h"
 
@@ -10,6 +11,7 @@
 #include "InputManager.h"
 #include "MuteSoundCommand.h"
 #include "SkipToNextLevelCommand.h"
+#include "SceneManager.h"
 
 //collision
 #include "Collision/CollisionSystem.h"
@@ -17,6 +19,7 @@
 dae::DiggerSceneManager::DiggerSceneManager()
 {
 	InitSound(); //all sounds for the game
+	InitInput();
 }
 
 void dae::DiggerSceneManager::LoadNextLevel()
@@ -37,19 +40,22 @@ void dae::DiggerSceneManager::LoadDiggerLevel(const LevelData& levelData)
 
 	DiggerScene diggerScene{ levelData };
 	diggerScene.LoadScene();
-
-	//controls
-	InputManager::GetInstance().BindKeyboardCommand(SDL_SCANCODE_F2,
-		InputManager::TriggerType::Isdown,
-		std::make_unique<SkipToNextLevelCommand>(this));
-
-	InputManager::GetInstance().BindKeyboardCommand(SDL_SCANCODE_F1
-		, InputManager::TriggerType::Isdown
-		, std::make_unique<MuteSoundCommand>());
 }
 void dae::DiggerSceneManager::InitSound() const
 {
 	ServiceLocator::RegisterSounSystem(std::make_unique<SDLSoundSystem>());
 	ServiceLocator::GetSoundSystem().AddSound("Data/Resources/DeathSound.wav");
 	ServiceLocator::GetSoundSystem().AddSound("Data/Resources/piano2.wav");
+}
+
+void dae::DiggerSceneManager::InitInput()
+{
+	//controls
+	InputManager::GetInstance().BindKeyboardCommand(SDL_SCANCODE_F1,
+		InputManager::TriggerType::IsDownThisFrame,
+		std::make_unique<SkipToNextLevelCommand>(this));
+
+	InputManager::GetInstance().BindKeyboardCommand(SDL_SCANCODE_F2
+		, InputManager::TriggerType::IsDownThisFrame
+		, std::make_unique<MuteSoundCommand>());
 }

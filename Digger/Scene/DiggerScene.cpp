@@ -275,6 +275,21 @@ namespace dae
 		const SoundID gemSound{ ServiceLocator::GetSoundSystem().AddSound("Data/Resources/piano2.wav") };
 		// controls keyboard
 			auto& input = InputManager::GetInstance();
+
+		// clear input
+		input.UnbindKeyboardCommand(SDL_SCANCODE_W);
+		input.UnbindKeyboardCommand(SDL_SCANCODE_A);
+		input.UnbindKeyboardCommand(SDL_SCANCODE_S);
+		input.UnbindKeyboardCommand(SDL_SCANCODE_D);
+		input.UnbindKeyboardCommand(SDL_SCANCODE_UP);
+		input.UnbindKeyboardCommand(SDL_SCANCODE_LEFT);
+		input.UnbindKeyboardCommand(SDL_SCANCODE_DOWN);
+		input.UnbindKeyboardCommand(SDL_SCANCODE_RIGHT);
+		input.UnbindControllerCommand(dae::GamepadButton::DpadUp);
+		input.UnbindControllerCommand(dae::GamepadButton::DpadDown);
+		input.UnbindControllerCommand(dae::GamepadButton::DpadLeft);
+		input.UnbindControllerCommand(dae::GamepadButton::DpadRight);
+
 		constexpr float speed{ 100.f };
 
 		int numJoysticks = 0;

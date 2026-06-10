@@ -19,13 +19,14 @@ namespace dae
 
 		void LoadDiggerLevel(const LevelData& levelData);
 		void InitSound() const;
+		void InitInput();
 
 		int m_currentLevelIndex{};
 
 		std::vector<LevelData> m_Levels{
 		LevelData{"Data/Resources/Level01.txt"}
-		,LevelData{"Data/Resources/Level01.txt"}
-		,LevelData{"Data/Resources/Level01.txt"}
+		,LevelData{"Data/Resources/Level02.txt"}
+		,LevelData{"Data/Resources/Level03.txt"}
 		};
 
 	};
