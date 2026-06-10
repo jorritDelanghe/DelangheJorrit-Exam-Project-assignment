@@ -9,7 +9,7 @@
 
 //digger scene
 #include "Minigin.h"
-#include "Scene/DiggerScene.h"
+#include "Scene/DiggerSceneManager.h"
 
 namespace fs = std::filesystem;
 using namespace dae;
@@ -24,10 +24,10 @@ int main(int, char*[]) {
 #endif
 	dae::Minigin engine(data_location);
 
-	DiggerScene scene{};
-	engine.Run([&scene]()
+	DiggerSceneManager diggerSceneManager{};
+	engine.Run([&diggerSceneManager]()
 		{
-			scene.LoadScene();
+			diggerSceneManager.LoadNextLevel();
 		});
     return 0;
 }

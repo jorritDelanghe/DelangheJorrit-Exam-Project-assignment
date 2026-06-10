@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <glm/glm.hpp>
+#include "LevelData.h"
 namespace dae
 {
 	class GridComponent;
@@ -15,7 +16,7 @@ namespace dae
 	class DiggerScene : public BaseScene
 	{
 	public:
-		DiggerScene();
+		DiggerScene(const LevelData& levelData);
 		virtual ~DiggerScene() override = default;
 
 		DiggerScene(const DiggerScene& other) = delete;
@@ -25,9 +26,10 @@ namespace dae
 
 		virtual void LoadScene() override;
 	private:
+		LevelData m_levelData{};
+
 		GridComponent* InitGrid(Scene& scene, const std::string& levelFile);
 		GameObject* InitPlayer(Scene& scene,const std::string& filename);
-		void InitSound() const;
 		void SpawnGameResources(Scene& scene, GridComponent* rawPtrGrid
 			, PointsComponent* points, GameObject* diggerRawPtr);
 

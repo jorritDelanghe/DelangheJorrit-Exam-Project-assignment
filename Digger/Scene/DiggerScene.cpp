@@ -19,10 +19,6 @@
 #include "PointsComponent.h"
 #include "Player/HealthComponent.h"
 
-//sound
-#include "ServiceLocator.h"
-#include "SDLSoundSystem.h"
-
 //text 
 #include "TextComponent.h"
 #include "Font.h"
@@ -37,19 +33,24 @@
 #include "Collision/RectColliderComponent.h"
 #include "Collision/CollisionSystem.h"
 #include "Collision/CollisionUpdaterComponent.h"
+
+//sound
+#include "ServiceLocator.h"
+#include "SDLSoundSystem.h"
+#include "MuteSoundCommand.h"
 namespace dae
 {
-	DiggerScene::DiggerScene()
+	DiggerScene::DiggerScene(const LevelData& levelData)
+		:m_levelData{ levelData }
 	{
 	}
 	void DiggerScene::LoadScene()
 	{
 		auto& scene = dae::SceneManager::GetInstance().CreateScene();
-		auto grid = InitGrid(scene, "Data/Resources/Level01.txt");
+		auto grid = InitGrid(scene, m_levelData.levelFilePath);
 		auto player = InitPlayer(scene, "digger2.png");
 
 		InitUI(scene, player->GetComponent<PointsComponent>(), player->GetComponent<HealthComponent>());
-		InitSound();
 		SpawnGameResources(scene, grid, player->GetComponent<PointsComponent>(), player);
 		SetupInputControls(grid, player, player->GetComponent<PointsComponent>()
 			, player->GetComponent<HealthComponent>());
@@ -82,13 +83,6 @@ namespace dae
 
 		scene.Add(std::move(diggerPlayer));
 		return rawDiggerPtr;
-	}
-
-	void DiggerScene::InitSound() const
-	{
-		ServiceLocator::RegisterSounSystem(std::make_unique<SDLSoundSystem>());
-		ServiceLocator::GetSoundSystem().AddSound("Data/Resources/DeathSound.wav");
-		ServiceLocator::GetSoundSystem().AddSound("Data/Resources/piano2.wav");
 	}
 
 	void DiggerScene::SpawnGameResources(Scene& scene, GridComponent* rawPtrGrid
@@ -338,6 +332,15 @@ namespace dae
 			, std::make_unique<MoveDiggerCommand>
 			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points));
 
+		input.BindKeyboardCommand(SDL_SCANCODE_N
+			, InputManager::TriggerType::Isdown
+			, std::make_unique<MoveDiggerCommand>
+			(diggerPlayerRawPtr, speed, glm::vec3{ 1.f,0.f,0.f }, rawPtrGrid, digSound, gemSound, points));
+
+		//controls
+		 input.BindKeyboardCommand(SDL_SCANCODE_F1
+		, InputManager::TriggerType::Isdown
+			, std::make_unique<MuteSoundCommand>());
 		//gamepad
 		input.BindControllerCommand(dae::GamepadButton::DpadUp,
 			InputManager::TriggerType::Isdown,

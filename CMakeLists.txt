@@ -48,6 +48,9 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Digger/Scene/LivesDisplayComponent.cpp
   Digger/Scene/PointsComponent.cpp
   Digger/Scene/PointsDisplayComponent.cpp
+  Digger/Scene/DiggerSceneManager.cpp
+  Digger/Scene/SkipToNextLevelCommand.cpp
+  Digger/Scene/MuteSoundCommand.cpp
 
   Digger/Player/MoveDiggerCommand.cpp
   Digger/Player/HealthComponent.cpp

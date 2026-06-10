@@ -19,6 +19,7 @@ void dae::SceneManager::Render()
 
 dae::Scene& dae::SceneManager::CreateScene()
 {
+	m_scenes.clear(); // Clear existing scenes before creating a new one
 	m_scenes.emplace_back(new Scene());
 	return *m_scenes.back();
 }
