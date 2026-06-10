@@ -1,4 +1,6 @@
 #include "SDLSoundSystem.h"
+#include "SDLSoundSystem.h"
+#include "SDLSoundSystem.h"
 #include <SDL3_mixer/SDL_mixer.h>
 #include <thread>
 #include <map>
@@ -52,8 +54,8 @@ namespace dae
 				{
 					MIX_DestroyTrack(track);
 				}
-				m_tracks.clear();
 			}
+			m_tracks.clear();
 
 			for (auto& [id, audio] : m_audiosMap)
 			{
@@ -160,6 +162,7 @@ dae::SDLSoundSystem::~SDLSoundSystem()
 
 void dae::SDLSoundSystem::Play(SoundID soundID, float volume)
 {
+	if (m_isSoundMuted) return;
 	m_pSDLSoundSystemImpl->Play(soundID, volume);
 }
 
@@ -170,4 +173,14 @@ void dae::SDLSoundSystem::Stop(SoundID soundID)
 dae::SoundID dae::SDLSoundSystem::AddSound(const std::string& soundName)
 {
 	return m_pSDLSoundSystemImpl->AddSound(soundName);
+}
+
+void dae::SDLSoundSystem::MuteSounds(bool isSoundMuted)
+{
+	m_isSoundMuted = isSoundMuted;
+}
+
+bool dae::SDLSoundSystem::GetMuteStatusSound() const
+{
+	return m_isSoundMuted;
 }

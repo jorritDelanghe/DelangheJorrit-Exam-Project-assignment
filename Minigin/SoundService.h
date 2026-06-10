@@ -15,6 +15,8 @@ namespace dae
 		virtual void Stop(SoundID sounID) = 0;
 		virtual SoundID AddSound(const std::string& soundPathName) = 0;
 
+		virtual void MuteSounds(bool isMuted) = 0;
+		virtual bool GetMuteStatusSound() const = 0;
 	};
 
 	//loactor can never be a nullptr 
@@ -24,6 +26,9 @@ namespace dae
 		virtual void Play(SoundID , float ) override {}
 		virtual void Stop(SoundID ) override {}
 		virtual SoundID AddSound(const std::string& ) override {return 0;}
+
+		virtual void MuteSounds(bool ) override {}
+		virtual bool GetMuteStatusSound() const { return false; }
 	};
 
 }

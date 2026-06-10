@@ -19,9 +19,11 @@ namespace dae
 		virtual void Stop(SoundID soundID) override;
 		virtual SoundID AddSound(const std::string& soundName) override;
 	
-
+		virtual void MuteSounds(bool isSoundMuted) override;
+		virtual bool GetMuteStatusSound() const override;
 	private:
 		class SDLSoundSystemImpl;
 		std::unique_ptr<SDLSoundSystemImpl> m_pSDLSoundSystemImpl;
+		bool m_isSoundMuted{ false };
 	};
 }
