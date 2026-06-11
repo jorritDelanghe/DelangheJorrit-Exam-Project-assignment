@@ -5,6 +5,7 @@
 #include "Scene/Event.h"
 namespace dae
 {
+	class GameObject;
 	class DiggerSceneManager final :public Observer<GameEvent>
 	{
 	public:
@@ -16,6 +17,8 @@ namespace dae
 		DiggerSceneManager& operator=(DiggerSceneManager&& other) = delete;
 
 		void LoadNextLevel();
+		int GetScore()const { return m_currentScore; }
+		int GetLives()const { return m_currentLives; }
 	private:
 
 		void LoadDiggerLevel(const LevelData& levelData);
@@ -26,11 +29,14 @@ namespace dae
 		virtual void Notify(GameEvent event, GameObject* gameObject) override;
 
 		int m_currentLevelIndex{};
+		int m_currentScore{};
+		int m_currentLives{};
+		GameObject* m_currentPlayer{ nullptr }; //need to be a pointer because it doesnt own
 
 		std::vector<LevelData> m_Levels{
 		LevelData{"Data/Resources/Level02Test.txt"}
-		,LevelData{"Data/Resources/Level02.txt"}
-		,LevelData{"Data/Resources/Level03.txt"}
+		,LevelData{"Data/Resources/Level02Test.txt"}
+		,LevelData{"Data/Resources/Level02Test.txt"}
 		};
 
 	};

@@ -55,6 +55,9 @@ namespace dae
 	}
 	void DiggerScene::LoadScene()
 	{
+		//clear the current colliders
+		CollisionSystem::GetInstance().Clear(); // reset observers
+
 		auto& scene = dae::SceneManager::GetInstance().CreateScene();
 		auto grid = InitGrid(scene, m_levelData.levelFilePath);
 		auto player = InitPlayer(scene, "digger2.png");
@@ -78,7 +81,10 @@ namespace dae
 	GameObject* DiggerScene::InitPlayer(Scene& scene, const std::string& filepath)
 	{
 		constexpr int numLives{ 3 };
+
 		auto diggerPlayer{ std::make_unique<GameObject>() };
+		m_player = diggerPlayer.get(); //used to remember score and lives
+
 		auto* rawDiggerPtr{ diggerPlayer.get() };
 		auto* playerImage = diggerPlayer->AddComponent<RenderComponent>(filepath);
 		diggerPlayer->AddComponent<RectColliderComponent>(Size
@@ -86,9 +92,14 @@ namespace dae
 				playerImage->GetSizeImage().width
 				, playerImage->GetSizeImage().height
 			}, CollisionTag::Player);
-		diggerPlayer->AddComponent<PointsComponent>();
-		diggerPlayer->AddComponent<HealthComponent>(numLives);
+
+		auto* points = diggerPlayer->AddComponent<PointsComponent>();
+		auto* lives = diggerPlayer->AddComponent<HealthComponent>(numLives);
 		diggerPlayer->SetLocalPosition({ 100.f,100.f,0.f });
+
+		//restore points and lives 
+		points->AddScore(m_diggerSceneManager->GetScore());
+		lives->Health(m_diggerSceneManager->GetLives());
 
 		scene.Add(std::move(diggerPlayer));
 		return rawDiggerPtr;

@@ -20,6 +20,7 @@ namespace dae
 		virtual void Update(float deltaTime) override;
 		virtual void Notify(GameEvent event, GameObject* gameObject) override;
 		void Die();
+		void Health(int lives);
 		int GetLives() const { return m_lives; }
 		Subject<GameEvent>& OnDied() { return m_onDied;  }
 

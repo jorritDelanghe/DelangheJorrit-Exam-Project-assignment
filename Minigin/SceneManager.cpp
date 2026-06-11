@@ -16,6 +16,13 @@ void dae::SceneManager::Update(float deltaTime)
 	{
 		scene->Update(deltaTime);
 	}
+
+	if (m_pendingAction) //avoid crash new level
+	{
+		auto action = std::move(m_pendingAction);
+		m_pendingAction = nullptr;
+		action();
+	}
 }
 
 void dae::SceneManager::Render()

@@ -42,3 +42,9 @@ void dae::HealthComponent::Die()
 	--m_lives;
 	m_onDied.NotifyObservers(GameEvent::PlayerDied, Component::GetOwner());
 }
+
+void dae::HealthComponent::Health(int lives)
+{
+	if (lives < 0)return;
+	m_lives = lives;
+}

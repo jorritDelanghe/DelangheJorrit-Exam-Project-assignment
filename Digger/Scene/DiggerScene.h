@@ -27,9 +27,12 @@ namespace dae
 		DiggerScene& operator=( DiggerScene&& other) = delete;
 
 		virtual void LoadScene() override;
+
+		GameObject* GetPlayer() const { return m_player; }
 	private:
 		LevelData m_levelData{};
 		DiggerSceneManager* m_diggerSceneManager{nullptr};
+		GameObject* m_player{ nullptr };
 
 		GridComponent* InitGrid(Scene& scene, const std::string& levelFile);
 		GameObject* InitPlayer(Scene& scene,const std::string& filename);

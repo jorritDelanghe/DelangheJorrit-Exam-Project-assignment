@@ -15,6 +15,10 @@
 
 //collision
 #include "Collision/CollisionSystem.h"
+#include "PointsComponent.h"
+#include "Player/HealthComponent.h"
+
+#include "SkipToNextLevelCommand.h"
 
 dae::DiggerSceneManager::DiggerSceneManager()
 {
@@ -35,11 +39,18 @@ void dae::DiggerSceneManager::LoadNextLevel()
 
 void dae::DiggerSceneManager::LoadDiggerLevel(const LevelData& levelData)
 {
-	//clear the current colliders
-	CollisionSystem::GetInstance().Clear(); // reset observers
-
 	DiggerScene diggerScene{ levelData, this };
 	diggerScene.LoadScene();
+	m_currentPlayer = diggerScene.GetPlayer();
+
+	if (m_currentPlayer)
+	{
+		if (auto* score = m_currentPlayer->GetComponent<PointsComponent>())
+			score ->AddScore(m_currentScore);
+
+		if (auto* health = m_currentPlayer->GetComponent<HealthComponent>())
+			health->Health(m_currentLives);
+	}
 }
 void dae::DiggerSceneManager::InitSound() const
 {
@@ -60,10 +71,18 @@ void dae::DiggerSceneManager::InitInput()
 		, std::make_unique<MuteSoundCommand>());
 }
 
-void dae::DiggerSceneManager::Notify(GameEvent event, GameObject* )
+void dae::DiggerSceneManager::Notify(GameEvent event, GameObject*  )
 {
 	if (event == GameEvent::AllEmeraldsCollected)
 	{
-		LoadNextLevel();
+		if (m_currentPlayer)
+		{
+			if (auto* score = m_currentPlayer->GetComponent<PointsComponent>())
+				m_currentScore = score->GetScore();
+			if (auto* health = m_currentPlayer->GetComponent<HealthComponent>())
+				m_currentLives = health->GetLives();
+		}
+
+		SceneManager::GetInstance().SetPendingAction([this]() { LoadNextLevel(); });
 	}
 }

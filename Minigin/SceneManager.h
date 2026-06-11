@@ -15,10 +15,12 @@ namespace dae
 
 		void Update(float fixedDeltaTime);
 		void Render();
+		void SetPendingAction(std::function<void()> action) { m_pendingAction = action; }
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
 		std::vector<std::unique_ptr<Scene>> m_scenes{};
+		std::function<void()> m_pendingAction{};
 
 		bool m_pendingClear{false};
 	};
