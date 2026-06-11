@@ -93,13 +93,9 @@ namespace dae
 				, playerImage->GetSizeImage().height
 			}, CollisionTag::Player);
 
-		auto* points = diggerPlayer->AddComponent<PointsComponent>();
-		auto* lives = diggerPlayer->AddComponent<HealthComponent>(numLives);
+		 diggerPlayer->AddComponent<PointsComponent>();
+		diggerPlayer->AddComponent<HealthComponent>(numLives);
 		diggerPlayer->SetLocalPosition({ 100.f,100.f,0.f });
-
-		//restore points and lives 
-		points->AddScore(m_diggerSceneManager->GetScore());
-		lives->Health(m_diggerSceneManager->GetLives());
 
 		scene.Add(std::move(diggerPlayer));
 		return rawDiggerPtr;

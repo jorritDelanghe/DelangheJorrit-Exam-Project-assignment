@@ -48,8 +48,12 @@ void dae::DiggerSceneManager::LoadDiggerLevel(const LevelData& levelData)
 		if (auto* score = m_currentPlayer->GetComponent<PointsComponent>())
 			score ->AddScore(m_currentScore);
 
+
 		if (auto* health = m_currentPlayer->GetComponent<HealthComponent>())
+		{
 			health->Health(m_currentLives);
+			health->OnDied().NotifyObservers(GameEvent::PlayerDied, m_currentPlayer); // force UI sync
+		}
 	}
 }
 void dae::DiggerSceneManager::InitSound() const

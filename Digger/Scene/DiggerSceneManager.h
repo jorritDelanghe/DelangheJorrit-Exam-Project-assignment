@@ -30,7 +30,7 @@ namespace dae
 
 		int m_currentLevelIndex{};
 		int m_currentScore{};
-		int m_currentLives{};
+		int m_currentLives{3};
 		GameObject* m_currentPlayer{ nullptr }; //need to be a pointer because it doesnt own
 
 		std::vector<LevelData> m_Levels{
