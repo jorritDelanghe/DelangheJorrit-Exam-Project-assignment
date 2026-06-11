@@ -23,7 +23,7 @@ void dae::LivesDisplayComponent::Render() const
 
 void dae::LivesDisplayComponent::Notify(GameEvent event, GameObject* gameObject)
 {
-	if (event == GameEvent::PlayerDied)
+	if (event == GameEvent::PlayerDied || event == GameEvent::HealthChanged)
 	{
 		auto* health = gameObject->GetComponent<HealthComponent>();
 		if (health)

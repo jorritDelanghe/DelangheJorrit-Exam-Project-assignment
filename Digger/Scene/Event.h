@@ -8,6 +8,7 @@ namespace dae
 
 		//die
 		PlayerDied,
+		HealthChanged,
 		EnemyDied,
 
 		//collsion

@@ -37,6 +37,11 @@ void dae::DiggerSceneManager::LoadNextLevel()
 	++m_currentLevelIndex;
 }
 
+void dae::DiggerSceneManager::ResetCurrentLevel()
+{
+	LoadDiggerLevel(m_Levels[m_currentLevelIndex]);
+}
+
 void dae::DiggerSceneManager::LoadDiggerLevel(const LevelData& levelData)
 {
 	DiggerScene diggerScene{ levelData, this };
@@ -52,7 +57,6 @@ void dae::DiggerSceneManager::LoadDiggerLevel(const LevelData& levelData)
 		if (auto* health = m_currentPlayer->GetComponent<HealthComponent>())
 		{
 			health->Health(m_currentLives);
-			health->OnDied().NotifyObservers(GameEvent::PlayerDied, m_currentPlayer); // force UI sync
 		}
 	}
 }
@@ -88,5 +92,9 @@ void dae::DiggerSceneManager::Notify(GameEvent event, GameObject*  )
 		}
 
 		SceneManager::GetInstance().SetPendingAction([this]() { LoadNextLevel(); });
+	}
+	if (event == GameEvent::PlayerDied)
+	{
+		SceneManager::GetInstance().SetPendingAction([this]() { ResetCurrentLevel(); });
 	}
 }

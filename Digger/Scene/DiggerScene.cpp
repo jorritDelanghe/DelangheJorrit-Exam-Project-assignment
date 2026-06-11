@@ -277,6 +277,7 @@ namespace dae
 
 		//observers
 		health->OnDied().AddObservers(livesDisplay);
+		health->OnDied().AddObservers(m_diggerSceneManager);
 		points->OnPointsChanged().AddObservers(pointsDisplay);
 		CollisionSystem::GetInstance().OnHitSubject().AddObservers(health);
 		CollisionSystem::GetInstance().OnHitSubject().AddObservers(points);

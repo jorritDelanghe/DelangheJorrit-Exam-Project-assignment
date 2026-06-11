@@ -17,6 +17,7 @@ namespace dae
 		DiggerSceneManager& operator=(DiggerSceneManager&& other) = delete;
 
 		void LoadNextLevel();
+		void ResetCurrentLevel();
 		int GetScore()const { return m_currentScore; }
 		int GetLives()const { return m_currentLives; }
 	private:
@@ -31,6 +32,7 @@ namespace dae
 		int m_currentLevelIndex{};
 		int m_currentScore{};
 		int m_currentLives{3};
+		bool m_skipFirstFrame{ false };
 		GameObject* m_currentPlayer{ nullptr }; //need to be a pointer because it doesnt own
 
 		std::vector<LevelData> m_Levels{
