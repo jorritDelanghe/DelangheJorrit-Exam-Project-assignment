@@ -3,10 +3,14 @@ namespace dae
 {
 	enum class GameEvent
 	{
-		PlayerDied,
+		//pickup
 		PlayerPickedUp,
+
+		//die
+		PlayerDied,
 		EnemyDied,
 
+		//collsion
 		CollisionWall,
 		CollisionEnemy,
 		CollisionGoldBag,
@@ -14,6 +18,9 @@ namespace dae
 		CollisionEmerald,
 		CollisionGoldNugget,
 		CollisionFallingBag,
-		CollisionPlayer
+		CollisionPlayer,
+
+		//level
+		AllEmeraldsCollected
 	};
 }

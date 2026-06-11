@@ -64,6 +64,8 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Digger/GoldBag/BrokenState.cpp
   Digger/GoldBag/WaitingToFallState.cpp
 
+  Digger/Emerald/EmeraldManagerComponent.cpp
+
   Digger/Enemy/EnemyComponent.cpp
   Digger/Enemy/EnemyWanderingState.cpp
   Digger/Enemy/EnemyChasingState.cpp

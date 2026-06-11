@@ -31,18 +31,26 @@
 #include "Enemy/EnemyWanderingState.h"
 #include "Enemy/EnemyChasingState.h"
 #include "Enemy/EnemyDiggingState.h"
+
+//collision
 #include "Collision/RectColliderComponent.h"
 #include "Collision/CollisionSystem.h"
 #include "Collision/CollisionUpdaterComponent.h"
+
+//emerald
+#include "Emerald/EmeraldManagerComponent.h"
 
 //sound
 #include "ServiceLocator.h"
 #include "SDLSoundSystem.h"
 #include "MuteSoundCommand.h"
+
+#include "DiggerSceneManager.h"
 namespace dae
 {
-	DiggerScene::DiggerScene(const LevelData& levelData)
+	DiggerScene::DiggerScene(const LevelData& levelData, DiggerSceneManager* sceneManager)
 		:m_levelData{ levelData }
+		, m_diggerSceneManager{sceneManager}
 	{
 	}
 	void DiggerScene::LoadScene()
@@ -89,7 +97,18 @@ namespace dae
 	void DiggerScene::SpawnGameResources(Scene& scene, GridComponent* rawPtrGrid
 		, PointsComponent* points, GameObject* diggerRawPtr)
 	{
+		//setup Managers
+		auto managers = std::make_unique<GameObject>();
+		managers->AddComponent<CollisionUpdaterComponent>();
+		auto* emeraldManager = managers->AddComponent<EmeraldManagerComponent>();
+		scene.Add(std::move(managers));
+
+		//observer
+		CollisionSystem::GetInstance().OnHitSubject().AddObservers(emeraldManager);
+		emeraldManager->OnAllEmeraldsCollected().AddObservers(m_diggerSceneManager);
+
 		const Grid& grid{ rawPtrGrid->GetGrid() };
+
 		for (int r{}; r < grid.GetRows();++r)
 		{
 			for (int c{}; c < grid.GetCols();++c)
@@ -98,7 +117,7 @@ namespace dae
 				switch (grid.GetTileType(c, r))
 				{
 					case TileType::Emerald:
-						SpawnEmeralds(scene, rawPtrGrid, pos);
+						SpawnEmeralds(scene, rawPtrGrid, pos, emeraldManager);
 						rawPtrGrid->GetGridReference().SetTileType(c, r, TileType::DirtWall);
 						break;
 
@@ -119,11 +138,6 @@ namespace dae
 				}
 			}
 		}
-
-		//update collsions
-		auto collisionUpdater = std::make_unique<GameObject>();
-		collisionUpdater->AddComponent<CollisionUpdaterComponent>();
-		scene.Add(std::move(collisionUpdater));
 	}
 
 	void DiggerScene::SpawnGoldBags(Scene& scene, GridComponent* grid, const glm::vec3& pos)
@@ -137,7 +151,7 @@ namespace dae
 		scene.Add(std::move(goldBagObj));
 	}
 
-	void DiggerScene::SpawnEmeralds(Scene& scene, GridComponent* , const glm::vec3& pos)
+	void DiggerScene::SpawnEmeralds(Scene& scene, GridComponent* , const glm::vec3& pos, EmeraldManagerComponent* EmeraldManager)
 	{
 		auto emeraldObj = std::make_unique<GameObject>();
 		auto* img = emeraldObj->AddComponent<RenderComponent>("Resources/Emerald.png",30.f,30.f);
@@ -145,6 +159,8 @@ namespace dae
 
 		emeraldObj->SetLocalPosition(pos);
 		scene.Add(std::move(emeraldObj));
+
+		EmeraldManager->AddEmerald();
 	}
 
 	void DiggerScene::SpawnEnemies(Scene& scene, GridComponent* rawPtrGrid

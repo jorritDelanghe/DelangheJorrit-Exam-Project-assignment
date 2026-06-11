@@ -38,7 +38,7 @@ void dae::DiggerSceneManager::LoadDiggerLevel(const LevelData& levelData)
 	//clear the current colliders
 	CollisionSystem::GetInstance().Clear(); // reset observers
 
-	DiggerScene diggerScene{ levelData };
+	DiggerScene diggerScene{ levelData, this };
 	diggerScene.LoadScene();
 }
 void dae::DiggerSceneManager::InitSound() const
@@ -58,4 +58,12 @@ void dae::DiggerSceneManager::InitInput()
 	InputManager::GetInstance().BindKeyboardCommand(SDL_SCANCODE_F2
 		, InputManager::TriggerType::IsDownThisFrame
 		, std::make_unique<MuteSoundCommand>());
+}
+
+void dae::DiggerSceneManager::Notify(GameEvent event, GameObject* )
+{
+	if (event == GameEvent::AllEmeraldsCollected)
+	{
+		LoadNextLevel();
+	}
 }
