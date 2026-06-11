@@ -9,16 +9,14 @@
 //input
 #include <SDL3/SDL.h> //needs to be above inputmanager otherwise it doesnt know it
 #include "InputManager.h"
-#include "MuteSoundCommand.h"
-#include "SkipToNextLevelCommand.h"
+#include "Commands/MuteSoundCommand.h"
+#include "Commands/SkipToNextLevelCommand.h"
 #include "SceneManager.h"
 
 //collision
 #include "Collision/CollisionSystem.h"
 #include "PointsComponent.h"
 #include "Player/HealthComponent.h"
-
-#include "SkipToNextLevelCommand.h"
 
 dae::DiggerSceneManager::DiggerSceneManager()
 {

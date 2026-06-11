@@ -14,8 +14,8 @@
 #include "Goldbag/GoldBagComponent.h"
 #include "GameObject.h"
 
-#include "LivesDisplayComponent.h"
-#include "PointsDisplayComponent.h"
+#include "UI/LivesDisplayComponent.h"
+#include "UI/PointsDisplayComponent.h"
 #include "ResourceManager.h"
 #include "PointsComponent.h"
 #include "Player/HealthComponent.h"
@@ -43,7 +43,7 @@
 //sound
 #include "ServiceLocator.h"
 #include "SDLSoundSystem.h"
-#include "MuteSoundCommand.h"
+#include "Commands/MuteSoundCommand.h"
 
 #include "DiggerSceneManager.h"
 namespace dae

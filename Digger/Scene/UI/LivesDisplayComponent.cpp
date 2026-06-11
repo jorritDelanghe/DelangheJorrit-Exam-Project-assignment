@@ -2,7 +2,7 @@
 #include "TextComponent.h"
 #include "Player/HealthComponent.h"
 #include "GameObject.h"
-#include "Event.h"
+#include "Scene/Event.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include <string>

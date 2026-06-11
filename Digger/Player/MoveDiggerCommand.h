@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scene/GameObjectCommand.h"
+#include "Scene/Commands/GameObjectCommand.h"
 #include "Grid/GridComponent.h"
 #include <glm/glm.hpp>
 #include "SoundService.h"

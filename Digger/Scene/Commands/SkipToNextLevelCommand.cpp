@@ -1,5 +1,5 @@
 #include "SkipToNextLevelCommand.h"
-#include "DiggerSceneManager.h"
+#include "Scene/DiggerSceneManager.h"
 
 dae::SkipToNextLevelCommand::SkipToNextLevelCommand(DiggerSceneManager* sceneManager)
 	:m_sceneManager(sceneManager)

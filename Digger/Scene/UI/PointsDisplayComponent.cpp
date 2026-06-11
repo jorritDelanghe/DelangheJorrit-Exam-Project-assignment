@@ -1,8 +1,8 @@
 # include "PointsDisplayComponent.h"
 #include "TextComponent.h"
-#include "PointsComponent.h"
+#include "Scene/PointsComponent.h"
 #include "GameObject.h"
-#include "Event.h"
+#include "Scene/Event.h"
 #include <string>
 
 dae::PointsDisplayComponent::PointsDisplayComponent(GameObject* pGameObject,
