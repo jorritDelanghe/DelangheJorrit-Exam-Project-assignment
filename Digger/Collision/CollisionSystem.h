@@ -24,7 +24,7 @@ namespace dae
 		void RemoveCollider(RectColliderComponent* colliderRect);
 		size_t GetNumberOfBoundingBoxes() const { return m_Colliders.size(); }
 
-		void ClearCollideders();
+		void Clear();
 
 		//sends vector that will be interpreted in the CollisionUpdaterComponent and send events to the observers
 		std::vector <CollidedObjects> CheckCollisions();

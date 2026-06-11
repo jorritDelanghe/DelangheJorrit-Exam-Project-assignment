@@ -21,9 +21,10 @@ void dae::CollisionSystem::RemoveCollider(RectColliderComponent* colliderRect)
 	m_Colliders.erase(std::remove(m_Colliders.begin(), m_Colliders.end(), colliderRect), m_Colliders.end());
 }
 
-void dae::CollisionSystem::ClearCollideders()
+void dae::CollisionSystem::Clear()
 {
 	m_Colliders.clear();
+	m_OnHit.RemoveAllObservers();
 }
 
 std::vector <dae::CollisionSystem::CollidedObjects>  dae::CollisionSystem::CheckCollisions()

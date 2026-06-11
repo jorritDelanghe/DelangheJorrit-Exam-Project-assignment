@@ -36,7 +36,7 @@ void dae::DiggerSceneManager::LoadNextLevel()
 void dae::DiggerSceneManager::LoadDiggerLevel(const LevelData& levelData)
 {
 	//clear the current colliders
-	CollisionSystem::GetInstance().ClearCollideders(); // reset observers
+	CollisionSystem::GetInstance().Clear(); // reset observers
 
 	DiggerScene diggerScene{ levelData };
 	diggerScene.LoadScene();
