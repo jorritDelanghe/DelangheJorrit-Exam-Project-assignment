@@ -53,7 +53,6 @@ void dae::DiggerSceneManager::LoadDiggerLevel(const LevelData& levelData)
 		if (auto* score = m_currentPlayer->GetComponent<PointsComponent>())
 			score ->AddScore(m_currentScore);
 
-
 		if (auto* health = m_currentPlayer->GetComponent<HealthComponent>())
 		{
 			health->Health(m_currentLives);
@@ -95,6 +94,13 @@ void dae::DiggerSceneManager::Notify(GameEvent event, GameObject*  )
 	}
 	if (event == GameEvent::PlayerDied)
 	{
+		if (m_currentPlayer)
+		{
+			if (auto* score = m_currentPlayer->GetComponent<PointsComponent>())
+				m_currentScore = score->GetScore();
+			if (auto* health = m_currentPlayer->GetComponent<HealthComponent>())
+				m_currentLives = health->GetLives();
+		}
 		SceneManager::GetInstance().SetPendingAction([this]() { ResetCurrentLevel(); });
 	}
 }
