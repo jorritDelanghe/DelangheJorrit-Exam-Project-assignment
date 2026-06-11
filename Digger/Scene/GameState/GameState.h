@@ -1,14 +1,14 @@
 #pragma once
 
-#include "DiggerSceneManager.h"
+#include "Scene/DiggerSceneManager.h"
 namespace dae
 {
 	class GameState
 	{
 	public:
 		virtual ~GameState()= default;
-		virtual OnEnter(DiggerSceneManager* pDiggerSceneManager) = 0;
-		virtual OnExit(DiggerSceneManager* pDiggerSceneManager) = 0;
+		virtual void OnEnter(DiggerSceneManager* pDiggerSceneManager) = 0;
+		virtual void OnExit(DiggerSceneManager* pDiggerSceneManager) = 0;
 	};
 
 }

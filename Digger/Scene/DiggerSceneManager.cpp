@@ -18,10 +18,16 @@
 #include "PointsComponent.h"
 #include "Player/HealthComponent.h"
 
+//gamestate
+#include "GameState/EndScreenState.h"
+#include "GameState/PlayingState.h"
+#include "GameState/StartScreenState.h"
+
 dae::DiggerSceneManager::DiggerSceneManager()
 {
 	InitSound(); //all sounds for the game
 	InitInput();
+	SetState(std::make_unique<StartScreenState>());
 }
 
 void dae::DiggerSceneManager::LoadNextLevel()
@@ -80,25 +86,47 @@ void dae::DiggerSceneManager::Notify(GameEvent event, GameObject*  )
 {
 	if (event == GameEvent::AllEmeraldsCollected)
 	{
-		if (m_currentPlayer)
-		{
-			if (auto* score = m_currentPlayer->GetComponent<PointsComponent>())
-				m_currentScore = score->GetScore();
-			if (auto* health = m_currentPlayer->GetComponent<HealthComponent>())
-				m_currentLives = health->GetLives();
-		}
+		SaveCurrentGameData();
 
-		SceneManager::GetInstance().SetPendingAction([this]() { LoadNextLevel(); });
+		if (m_currentLevelIndex >= m_Levels.size())
+		{
+			SetState(std::make_unique<EndScreenState>(true, m_currentScore));
+		}
+		else
+		{
+			SceneManager::GetInstance().SetPendingAction([this]() { LoadNextLevel(); });
+		}
 	}
 	if (event == GameEvent::PlayerDied)
 	{
-		if (m_currentPlayer)
+		SaveCurrentGameData();
+		if (m_currentLives <= 0)
 		{
-			if (auto* score = m_currentPlayer->GetComponent<PointsComponent>())
-				m_currentScore = score->GetScore();
-			if (auto* health = m_currentPlayer->GetComponent<HealthComponent>())
-				m_currentLives = health->GetLives();
+			SetState(std::make_unique<EndScreenState>(false, m_currentScore));
 		}
-		SceneManager::GetInstance().SetPendingAction([this]() { ResetCurrentLevel(); });
+		else
+		{
+			SceneManager::GetInstance().SetPendingAction([this]() { ResetCurrentLevel(); });
+		}
+	}
+}
+
+void dae::DiggerSceneManager::SetState(std::unique_ptr<GameState> newState)
+{
+	m_currentGameState->OnExit(this);
+	m_currentGameState = std::move(newState);
+	m_currentGameState->OnEnter(this);
+}
+
+void dae::DiggerSceneManager::SaveCurrentGameData()
+{
+	if (m_currentPlayer)
+	{
+		if (auto* score = m_currentPlayer->GetComponent<PointsComponent>())
+			m_currentScore = score->GetScore();
+		if (auto* health = m_currentPlayer->GetComponent<HealthComponent>())
+		{
+			m_currentLives = health->GetLives();
+		}
 	}
 }

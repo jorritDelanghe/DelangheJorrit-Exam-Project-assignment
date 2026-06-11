@@ -3,6 +3,7 @@
 #include <vector>
 #include "Observer.h"
 #include "Scene/Event.h"
+#include "GameState/GameState.h"
 namespace dae
 {
 	class GameObject;
@@ -28,12 +29,18 @@ namespace dae
 
 		//next level observer
 		virtual void Notify(GameEvent event, GameObject* gameObject) override;
+		//state
+		void SetState(std::unique_ptr<GameState> newState);
+		//save
+		void SaveCurrentGameData();
 
 		int m_currentLevelIndex{};
 		int m_currentScore{};
 		int m_currentLives{3};
 		bool m_skipFirstFrame{ false };
 		GameObject* m_currentPlayer{ nullptr }; //need to be a pointer because it doesnt own
+
+		std::unique_ptr<GameState> m_currentGameState;
 
 		std::vector<LevelData> m_Levels{
 		LevelData{"Data/Resources/Level02Test.txt"}
