@@ -19,5 +19,7 @@ namespace dae
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
 		std::vector<std::unique_ptr<Scene>> m_scenes{};
+
+		bool m_pendingClear{false};
 	};
 }
