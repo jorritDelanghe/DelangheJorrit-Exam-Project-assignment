@@ -1,12 +1,20 @@
 #include "EndScreenState.h"
+
+//scene
 #include "TextComponent.h"
 #include "Scene.h"
 #include "ResourceManager.h"
 #include "SceneManager.h"
+
+//input
 #include "InputManager.h"
+
+//commands
 #include "Scene/Commands/ChangeLetterCommand.h"
 #include "Scene/Commands/NextLetterCommand.h"
 #include "Scene/Commands/ConfirmNameCommand.h"
+#include "Scene/Commands/SetNewGameStateCommand.h"
+#include "Scene/GameState/StartScreenState.h"
 
 dae::EndScreenState::EndScreenState(bool hasWon, int score)
 	:m_hasWon(hasWon)
@@ -19,7 +27,7 @@ void dae::EndScreenState::OnEnter(DiggerSceneManager* )
 	InputManager::GetInstance().UnbindAll();
 }
 
-void dae::EndScreenState::LoadScene(DiggerSceneManager*)
+void dae::EndScreenState::LoadScene(DiggerSceneManager* pDiggerSceneManger)
 {
 	auto& scene = dae::SceneManager::GetInstance().CreateScene();
 
@@ -87,8 +95,21 @@ void dae::EndScreenState::LoadScene(DiggerSceneManager*)
 			std::make_unique<ConfirmNameCommand>(rawNameDisplay->GetComponent<TextComponent>(), &m_highScoreManager, m_score));
 	}
 
+	// go back To Start instuction
+	auto instrObj3 = std::make_unique<GameObject>();
+	instrObj3->SetLocalPosition({ 10.f, 170.f, 0.f });
+	auto* instructionText3 = instrObj3->AddComponent<TextComponent>(smallFont, white);
+	instructionText3->SetText(" Press Space To Go back To startScreen");
+	scene.Add(std::move(instrObj3));
+
+	InputManager::GetInstance().BindKeyboardCommand(SDL_SCANCODE_SPACE,
+		InputManager::TriggerType::IsDownThisFrame,
+		std::make_unique<SetNewGameStateCommand>(pDiggerSceneManger, std::make_unique<StartScreenState>()));
 }
 
 void dae::EndScreenState::OnExit(DiggerSceneManager* )
 {
+	SceneManager::GetInstance().SetPendingAction([this]() {
+		InputManager::GetInstance().UnbindAll();
+		});
 }

@@ -21,7 +21,7 @@ dae::DiggerSceneManager::DiggerSceneManager()
 {
 	InitSound(); //all sounds for the game
 	InitInput();
-	SetState(std::make_unique<EndScreenState>(true, 800));
+	SetState(std::make_unique<StartScreenState>());
 }
 
 
