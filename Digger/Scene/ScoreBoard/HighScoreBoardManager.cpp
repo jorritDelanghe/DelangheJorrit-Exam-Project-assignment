@@ -16,6 +16,8 @@ dae::HighScoreBoardManager::~HighScoreBoardManager()
 
 bool dae::HighScoreBoardManager::CheckIfHighScore(int score) const
 {
+	if (m_highScores.empty()) return true;
+
 	for (const auto& highScore : m_highScores)
 	{
 		if (highScore.score < score)
@@ -30,9 +32,9 @@ bool dae::HighScoreBoardManager::AddHighScore(const std::string& name, int score
 {
 	if (CheckIfHighScore(score))
 	{
-		if (m_highScores.size()<=m_maxScoresList)
+		if (m_highScores.size()>=m_maxScoresList)
 		{
-			m_highScores.erase(std::remove(m_highScores.begin(), m_highScores.end(), m_highScores.begin()), m_highScores.end()); //erase lowest number
+			m_highScores.pop_back(); //erase lowest number
 		}
 	
 		m_highScores.push_back(ScoreRecord{ score,name });

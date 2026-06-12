@@ -1,9 +1,11 @@
 #pragma once
 
 #include "GameState.h"
+#include "Scene/ScoreBoard/HighScoreBoardManager.h"
 namespace dae
 {
 	class DiggerSceneManager;
+	class TextComponent;
 	class EndScreenState final : public GameState
 	{
 	public:
@@ -21,6 +23,8 @@ namespace dae
 	private:
 		bool m_hasWon{ false };
 		int m_score{};
+		HighScoreBoardManager m_highScoreManager{ HighScoreBoardManager {"Data/Resources/HighScores.txt"} };
+		TextComponent* m_nameHighScore{ nullptr };
 	};
 
 }
