@@ -12,7 +12,6 @@ namespace dae
     private:
         TextComponent* m_text{nullptr};
         int m_amountToGoToNext{};
-        std::string m_highScoreName;
 
         void ChangeLetter();
     };

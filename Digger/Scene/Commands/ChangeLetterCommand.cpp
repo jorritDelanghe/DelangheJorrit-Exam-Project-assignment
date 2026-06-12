@@ -14,14 +14,15 @@ void dae::ChangeLetterCommand::Execute()
 void dae::ChangeLetterCommand::ChangeLetter()
 {
 	const char firstLetter{ 'A' };
+	std::string highScoreName{m_text->GetText()};
 
-	if (m_highScoreName.empty())
+	if (highScoreName.empty())
 	{
-		m_highScoreName += firstLetter;
+		highScoreName += firstLetter;
 	}
 	//change last letter name
-	char& currentLetter{ m_highScoreName.back() };
-	currentLetter += m_amountToGoToNext;
+	char currentLetter{ highScoreName.back() };
+	currentLetter += static_cast<char>(m_amountToGoToNext);
 
    if (currentLetter < 'A')
    {
@@ -31,6 +32,6 @@ void dae::ChangeLetterCommand::ChangeLetter()
    {
 	   currentLetter = 'A';
    }
-
-   m_text->SetText(m_highScoreName);
+   highScoreName.back() = currentLetter;
+   m_text->SetText(highScoreName);
 }

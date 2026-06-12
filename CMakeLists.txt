@@ -57,6 +57,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Digger/Scene/Commands/SkipToNextLevelCommand.cpp
   Digger/Scene/Commands/ChangeLetterCommand.cpp
   Digger/Scene/Commands/ConfirmNameCommand.cpp
+  Digger/Scene/Commands/NextLetterCommand.cpp
 
   Digger/Scene/GameState/StartScreenState.cpp
   Digger/Scene/GameState/PlayingState.cpp
