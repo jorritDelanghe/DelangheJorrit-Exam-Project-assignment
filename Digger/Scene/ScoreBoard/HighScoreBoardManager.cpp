@@ -43,6 +43,7 @@ bool dae::HighScoreBoardManager::AddHighScore(const std::string& name, int score
 		{
 			SortHighScores();
 		}
+		SaveFile();
 		return true;
 	}
 	return false;
