@@ -16,11 +16,13 @@ dae::EndScreenState::EndScreenState(bool hasWon, int score)
 
 void dae::EndScreenState::OnEnter(DiggerSceneManager* )
 {
+	InputManager::GetInstance().UnbindAll();
 }
 
 void dae::EndScreenState::LoadScene(DiggerSceneManager*)
 {
 	auto& scene = dae::SceneManager::GetInstance().CreateScene();
+
 	auto font = dae::ResourceManager::GetInstance().LoadFont("Resources/GameFont.ttf", 36);
 	auto smallFont = dae::ResourceManager::GetInstance().LoadFont("Resources/GameFont.ttf", 24);
 	auto& input = InputManager::GetInstance();
@@ -46,21 +48,23 @@ void dae::EndScreenState::LoadScene(DiggerSceneManager*)
 		// Name entry display
 		auto nameObj = std::make_unique<GameObject>();
 		nameObj->SetLocalPosition({ 10.f, 170.f, 0.f });
-		m_nameHighScore = nameObj->AddComponent<TextComponent>(font, white);
+		auto* text = nameObj->AddComponent<TextComponent>(font, white);
+		text->SetText("A");
+	    auto* rawNameDisplay = nameObj.get();
 		scene.Add(std::move(nameObj));
 
 		//controls
 		input.BindKeyboardCommand(SDL_SCANCODE_RIGHT, InputManager::TriggerType::IsDownThisFrame,
-			std::make_unique<ChangeLetterCommand>(m_nameHighScore, 1));
+			std::make_unique<ChangeLetterCommand>(rawNameDisplay->GetComponent<TextComponent>(), 1));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_LEFT, InputManager::TriggerType::IsDownThisFrame,
-			std::make_unique<ChangeLetterCommand>(m_nameHighScore, -1));
+			std::make_unique<ChangeLetterCommand>(rawNameDisplay->GetComponent<TextComponent>(), -1));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_TAB, InputManager::TriggerType::IsDownThisFrame,
-			std::make_unique<NextLetterCommand>(m_nameHighScore, 3));
+			std::make_unique<NextLetterCommand>(rawNameDisplay->GetComponent<TextComponent>(), 3));
 
-		input.BindKeyboardCommand(SDL_SCANCODE_RETURN, InputManager::TriggerType::IsDownThisFrame,
-			std::make_unique<ConfirmNameCommand>(m_nameHighScore, &m_highScoreManager, m_score));
+		input.BindKeyboardCommand(SDL_SCANCODE_RETURN2, InputManager::TriggerType::IsDownThisFrame,
+			std::make_unique<ConfirmNameCommand>(rawNameDisplay->GetComponent<TextComponent>(), &m_highScoreManager, m_score));
 	}
 
 }

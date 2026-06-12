@@ -30,7 +30,6 @@ void dae::PlayingState::LoadScene(DiggerSceneManager*)
 void dae::PlayingState::OnExit(DiggerSceneManager* )
 {
 	InputManager::GetInstance().UnbindAll();
-	SceneManager::GetInstance().CreateScene(); //change still dirty trick
 }
 
 void dae::PlayingState::LoadNextLevel()

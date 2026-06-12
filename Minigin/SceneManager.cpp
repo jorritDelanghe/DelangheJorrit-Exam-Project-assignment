@@ -4,14 +4,6 @@
 
 void dae::SceneManager::Update(float deltaTime)
 {
-	if (m_pendingClear)
-	{
-		if (m_scenes.size() > 1)
-		{
-			m_scenes.erase(m_scenes.begin(), m_scenes.end() - 1);// Clear existing scenes after creating a new one
-		}
-			m_pendingClear = false;
-	}
 	for (auto& scene : m_scenes)
 	{
 		scene->Update(deltaTime);
@@ -35,7 +27,11 @@ void dae::SceneManager::Render()
 
 dae::Scene& dae::SceneManager::CreateScene()
 {
-	m_pendingClear = true;
+	if (m_scenes.size() > 1)
+	{
+		m_scenes.erase(m_scenes.begin(), m_scenes.end() - 1);
+	}
+
 	m_scenes.emplace_back(new Scene());
 	return *m_scenes.back();
 }

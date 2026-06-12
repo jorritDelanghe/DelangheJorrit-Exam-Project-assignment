@@ -21,7 +21,5 @@ namespace dae
 		SceneManager() = default;
 		std::vector<std::unique_ptr<Scene>> m_scenes{};
 		std::function<void()> m_pendingAction{};
-
-		bool m_pendingClear{false};
 	};
 }
