@@ -338,6 +338,7 @@ elseif(APPLE)
   # Copy Data folder to output directory after build
   add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Data" "$<TARGET_FILE_DIR:${TARGET_NAME}>/Data"
+    COMMAND "${CMAKE_COMMAND}" -E touch_nocreate "$<TARGET_FILE_DIR:${TARGET_NAME}>/Data/Resources/HighScores.txt" # deosnt overwrite highScores
   )
 else()
  if(Steamworks_FOUND)

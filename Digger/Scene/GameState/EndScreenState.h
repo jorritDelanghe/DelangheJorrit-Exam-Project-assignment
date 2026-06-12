@@ -23,8 +23,7 @@ namespace dae
 	private:
 		bool m_hasWon{ false };
 		int m_score{};
-		HighScoreBoardManager m_highScoreManager{ HighScoreBoardManager {"Data/Resources/HighScores.txt"} };
-		TextComponent* m_nameHighScore{ nullptr };
+		HighScoreBoardManager m_highScoreManager{ "Data/Resources/HighScores.txt"};
 	};
 
 }

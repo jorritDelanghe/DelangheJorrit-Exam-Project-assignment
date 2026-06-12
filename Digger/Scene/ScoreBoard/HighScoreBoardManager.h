@@ -26,7 +26,7 @@ namespace dae
 		void SaveFile();
 		void SortHighScores();
 
-		static constexpr int m_maxScoresList{ 3 };
+		static constexpr int m_maxScoresList{ 10 };
 		std::string m_filePath{};
 		std::vector<ScoreRecord> m_highScores{};
 	};

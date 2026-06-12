@@ -67,13 +67,11 @@ void dae::EndScreenState::LoadScene(DiggerSceneManager*)
 		input.BindKeyboardCommand(SDL_SCANCODE_LEFT, InputManager::TriggerType::IsDownThisFrame,
 			std::make_unique<ChangeLetterCommand>(rawNameDisplay->GetComponent<TextComponent>(), -1));
 
-
 		input.BindKeyboardCommand(SDL_SCANCODE_TAB, InputManager::TriggerType::IsDownThisFrame,
 			std::make_unique<NextLetterCommand>(rawNameDisplay->GetComponent<TextComponent>(), 3));
 
 		input.BindKeyboardCommand(SDL_SCANCODE_X, InputManager::TriggerType::IsDownThisFrame,
 			std::make_unique<ConfirmNameCommand>(rawNameDisplay->GetComponent<TextComponent>(), &m_highScoreManager, m_score));
-
 
 		//controls
 		input.BindControllerCommand(dae::GamepadButton::DpadRight, InputManager::TriggerType::IsDownThisFrame,

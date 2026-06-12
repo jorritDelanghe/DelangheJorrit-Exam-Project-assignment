@@ -7,7 +7,8 @@
 dae::HighScoreBoardManager::HighScoreBoardManager(const std::string& filePath)
 	: m_filePath(filePath)
 {
-	LoadFile(filePath);
+	LoadFile(m_filePath);
+	OutputDebugStringA(("size after load: " + std::to_string(m_highScores.size()) + "\n").c_str());
 }
 
 dae::HighScoreBoardManager::~HighScoreBoardManager()
@@ -20,7 +21,7 @@ bool dae::HighScoreBoardManager::CheckIfHighScore(int score) const
 
 	for (const auto& highScore : m_highScores)
 	{
-		if (highScore.score < score)
+		if (highScore.score <= score)
 		{
 			return true;
 		}
@@ -32,17 +33,15 @@ bool dae::HighScoreBoardManager::AddHighScore(const std::string& name, int score
 {
 	if (CheckIfHighScore(score))
 	{
-		if (m_highScores.size()>=m_maxScoresList)
+
+		m_highScores.push_back(ScoreRecord{ score,name });
+		SortHighScores();
+
+		if (m_highScores.size() > m_maxScoresList)
 		{
 			m_highScores.pop_back(); //erase lowest number
 		}
-	
-		m_highScores.push_back(ScoreRecord{ score,name });
-
-		if (m_highScores.size() > 1)
-		{
-			SortHighScores();
-		}
+		OutputDebugStringA(("size before save: " + std::to_string(m_highScores.size()) + "\n").c_str());
 		SaveFile();
 		return true;
 	}
@@ -66,6 +65,7 @@ void dae::HighScoreBoardManager::LoadFile(const std::string& filePath)
 	while (file >> name >> score)
 	{
 		m_highScores.push_back(ScoreRecord{ score,name });
+		OutputDebugStringA((name + std::to_string(score) + "\n").c_str());
 	}
 	
 }
