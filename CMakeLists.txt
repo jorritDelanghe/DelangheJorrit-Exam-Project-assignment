@@ -30,12 +30,11 @@ add_library(MiniginEngine STATIC
   Minigin/FPSComponent.cpp
   Minigin/TextComponent.cpp
   Minigin/RenderComponent.cpp 
-  Minigin/RotatorComponent.cpp 
-   
+  Minigin/RotatorComponent.cpp    
   
   Minigin/Controller.cpp
   Minigin/ServiceLocator.cpp
-  Minigin/SDLSoundSystem.cpp)
+  Minigin/SDLSoundSystem.cpp )
 
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
@@ -44,15 +43,20 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
 
   Digger/Scene/LevelLoader.cpp
   Digger/Scene/DiggerScene.cpp
-  Digger/Scene/Commands/GameObjectCommand.cpp
+  
   Digger/Scene/UI/LivesDisplayComponent.cpp
   Digger/Scene/PointsComponent.cpp
   Digger/Scene/UI/PointsDisplayComponent.cpp
   Digger/Scene/DiggerSceneManager.cpp
 
-  Digger/Scene/Commands/SkipToNextLevelCommand.cpp
+  Digger/Scene/ScoreBoard/HighScoreBoardManager.cpp
+
+  Digger/Scene/Commands/GameObjectCommand.cpp
   Digger/Scene/Commands/MuteSoundCommand.cpp
   Digger/Scene/Commands/SetNewGameStateCommand.cpp
+  Digger/Scene/Commands/SkipToNextLevelCommand.cpp
+  Digger/Scene/Commands/ChangeLetterCommand.cpp
+  Digger/Scene/Commands/ConfirmNameCommand.cpp
 
   Digger/Scene/GameState/StartScreenState.cpp
   Digger/Scene/GameState/PlayingState.cpp
@@ -81,9 +85,8 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
 
   Digger/Collision/RectColliderComponent.cpp
   Digger/Collision/CollisionSystem.cpp
-  Digger/Collision/CollisionUpdaterComponent.cpp
-)
-
+  Digger/Collision/CollisionUpdaterComponent.cpp)
+ 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
 
