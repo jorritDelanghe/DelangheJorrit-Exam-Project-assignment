@@ -15,9 +15,8 @@
 #include "Scene/PointsComponent.h"
 #include "Player/HealthComponent.h"
 
-#include "TextComponent.h"
-#include"Scene.h"
-#include "ResourceManager.h"
+#include <SDL3/SDL.h>
+#include "InputManager.h"
 void dae::PlayingState::OnEnter(DiggerSceneManager* pDiggerSceneManager)
 {
 	m_pDiggerSceneManager = pDiggerSceneManager;
@@ -26,20 +25,12 @@ void dae::PlayingState::OnEnter(DiggerSceneManager* pDiggerSceneManager)
 void dae::PlayingState::LoadScene(DiggerSceneManager*)
 {
 	LoadNextLevel();
-
-	//auto& scene = dae::SceneManager::GetInstance().CreateScene();
-	//auto font = dae::ResourceManager::GetInstance().LoadFont("Resources/GameFont.ttf", 36);
-	////instructions
-	//SDL_Color white{ 255, 255, 255, 255 };
-	//auto instructionP2 = std::make_unique<GameObject>();
-	//instructionP2->SetLocalPosition({ 10.f, 500.f, 0.f });
-	//auto* textP2 = instructionP2->AddComponent<TextComponent>(font, white);
-	//textP2->SetText("Playing");
-	//scene.Add(std::move(instructionP2));
 }
 
 void dae::PlayingState::OnExit(DiggerSceneManager* )
 {
+	InputManager::GetInstance().UnbindAll();
+	SceneManager::GetInstance().CreateScene(); //change still dirty trick
 }
 
 void dae::PlayingState::LoadNextLevel()
