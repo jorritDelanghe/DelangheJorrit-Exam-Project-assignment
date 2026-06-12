@@ -15,7 +15,11 @@ namespace dae
 		StartScreenState& operator=( StartScreenState&& other) = delete;
 
 		virtual void OnEnter(DiggerSceneManager* pDiggerSceneManager) override;
+		virtual void LoadScene(DiggerSceneManager* pDiggerSceneManager) override;
 		virtual void OnExit(DiggerSceneManager* pDiggerSceneManager) override;
+
+	private:
+		void initInput(DiggerSceneManager* pDiggerSceneManger);
 	};
 
 }

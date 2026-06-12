@@ -1,5 +1,6 @@
 #include "SkipToNextLevelCommand.h"
 #include "Scene/DiggerSceneManager.h"
+#include "SceneManager.h"
 
 dae::SkipToNextLevelCommand::SkipToNextLevelCommand(DiggerSceneManager* sceneManager)
 	:m_sceneManager(sceneManager)
@@ -8,5 +9,7 @@ dae::SkipToNextLevelCommand::SkipToNextLevelCommand(DiggerSceneManager* sceneMan
 
 void dae::SkipToNextLevelCommand::Execute()
 {
-	m_sceneManager->LoadNextLevel();
+	SceneManager::GetInstance().SetPendingAction([this]() {
+		m_sceneManager->Notify(GameEvent::AllEmeraldsCollected, nullptr);
+		});
 }

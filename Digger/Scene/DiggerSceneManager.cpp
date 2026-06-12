@@ -1,6 +1,5 @@
 
 #include "DiggerSceneManager.h"
-#include "DiggerScene.h"
 
 //sound
 #include "ServiceLocator.h"
@@ -13,15 +12,10 @@
 #include "Commands/SkipToNextLevelCommand.h"
 #include "SceneManager.h"
 
-//collision
-#include "Collision/CollisionSystem.h"
-#include "PointsComponent.h"
-#include "Player/HealthComponent.h"
-
 //gamestate
-#include "GameState/EndScreenState.h"
-#include "GameState/PlayingState.h"
-#include "GameState/StartScreenState.h"
+#include "Scene/GameState/EndScreenState.h"
+#include "Scene/GameState/PlayingState.h"
+#include "Scene/GameState/StartScreenState.h"
 
 dae::DiggerSceneManager::DiggerSceneManager()
 {
@@ -30,38 +24,10 @@ dae::DiggerSceneManager::DiggerSceneManager()
 	SetState(std::make_unique<StartScreenState>());
 }
 
-void dae::DiggerSceneManager::LoadNextLevel()
+
+void dae::DiggerSceneManager::LoadScreen()
 {
-	if(m_currentLevelIndex >= m_Levels.size())
-	{
-		m_currentLevelIndex = 0;
-	}
-
-	LoadDiggerLevel(m_Levels[m_currentLevelIndex]);
-	++m_currentLevelIndex;
-}
-
-void dae::DiggerSceneManager::ResetCurrentLevel()
-{
-	LoadDiggerLevel(m_Levels[m_currentLevelIndex]);
-}
-
-void dae::DiggerSceneManager::LoadDiggerLevel(const LevelData& levelData)
-{
-	DiggerScene diggerScene{ levelData, this };
-	diggerScene.LoadScene();
-	m_currentPlayer = diggerScene.GetPlayer();
-
-	if (m_currentPlayer)
-	{
-		if (auto* score = m_currentPlayer->GetComponent<PointsComponent>())
-			score ->AddScore(m_currentScore);
-
-		if (auto* health = m_currentPlayer->GetComponent<HealthComponent>())
-		{
-			health->Health(m_currentLives);
-		}
-	}
+	m_currentGameState->LoadScene(this);
 }
 void dae::DiggerSceneManager::InitSound() const
 {
@@ -84,49 +50,16 @@ void dae::DiggerSceneManager::InitInput()
 
 void dae::DiggerSceneManager::Notify(GameEvent event, GameObject*  )
 {
-	if (event == GameEvent::AllEmeraldsCollected)
-	{
-		SaveCurrentGameData();
-
-		if (m_currentLevelIndex >= m_Levels.size())
-		{
-			SetState(std::make_unique<EndScreenState>(true, m_currentScore));
-		}
-		else
-		{
-			SceneManager::GetInstance().SetPendingAction([this]() { LoadNextLevel(); });
-		}
-	}
-	if (event == GameEvent::PlayerDied)
-	{
-		SaveCurrentGameData();
-		if (m_currentLives <= 0)
-		{
-			SetState(std::make_unique<EndScreenState>(false, m_currentScore));
-		}
-		else
-		{
-			SceneManager::GetInstance().SetPendingAction([this]() { ResetCurrentLevel(); });
-		}
-	}
+	m_currentGameState->ProccessNotificationsScenes(event, this);
 }
 
 void dae::DiggerSceneManager::SetState(std::unique_ptr<GameState> newState)
 {
+	if(m_currentGameState)
 	m_currentGameState->OnExit(this);
+
 	m_currentGameState = std::move(newState);
 	m_currentGameState->OnEnter(this);
-}
 
-void dae::DiggerSceneManager::SaveCurrentGameData()
-{
-	if (m_currentPlayer)
-	{
-		if (auto* score = m_currentPlayer->GetComponent<PointsComponent>())
-			m_currentScore = score->GetScore();
-		if (auto* health = m_currentPlayer->GetComponent<HealthComponent>())
-		{
-			m_currentLives = health->GetLives();
-		}
-	}
+	LoadScreen();
 }

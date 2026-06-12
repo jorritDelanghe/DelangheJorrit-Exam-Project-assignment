@@ -6,10 +6,14 @@ dae::EndScreenState::EndScreenState(bool hasWon, int score)
 {
 }
 
-void dae::EndScreenState::OnEnter(DiggerSceneManager* pDiggerSceneManager)
+void dae::EndScreenState::OnEnter(DiggerSceneManager* )
 {
 }
 
-void dae::EndScreenState::OnExit(DiggerSceneManager* pDiggerSceneManager)
+void dae::EndScreenState::LoadScene(DiggerSceneManager*)
+{
+}
+
+void dae::EndScreenState::OnExit(DiggerSceneManager* )
 {
 }

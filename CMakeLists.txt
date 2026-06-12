@@ -49,11 +49,14 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Digger/Scene/PointsComponent.cpp
   Digger/Scene/UI/PointsDisplayComponent.cpp
   Digger/Scene/DiggerSceneManager.cpp
+
   Digger/Scene/Commands/SkipToNextLevelCommand.cpp
   Digger/Scene/Commands/MuteSoundCommand.cpp
-  Digger/Scene/GameState/EndScreenState.cpp
-  Digger/Scene/GameState/PlayingState.cpp
+  Digger/Scene/Commands/SetNewGameStateCommand.cpp
+
   Digger/Scene/GameState/StartScreenState.cpp
+  Digger/Scene/GameState/PlayingState.cpp
+  Digger/Scene/GameState/EndScreenState.cpp
 
   Digger/Player/MoveDiggerCommand.cpp
   Digger/Player/HealthComponent.cpp

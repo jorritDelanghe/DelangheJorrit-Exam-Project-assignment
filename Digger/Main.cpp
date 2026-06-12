@@ -27,7 +27,7 @@ int main(int, char*[]) {
 	DiggerSceneManager diggerSceneManager{};
 	engine.Run([&diggerSceneManager]()
 		{
-			diggerSceneManager.LoadNextLevel();
+			diggerSceneManager.LoadScreen();
 		});
     return 0;
 }
