@@ -31,7 +31,7 @@ dae::Scene& dae::SceneManager::CreateScene()
 	{
 		m_scenes.erase(m_scenes.begin(), m_scenes.end() - 1);
 	}
-
+	m_scenes.clear();
 	m_scenes.emplace_back(new Scene());
 	return *m_scenes.back();
 }

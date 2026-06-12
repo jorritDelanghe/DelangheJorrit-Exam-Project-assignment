@@ -57,7 +57,7 @@ void dae::EndScreenState::LoadScene(DiggerSceneManager* pDiggerSceneManger)
 		auto instrObj2 = std::make_unique<GameObject>();
 		instrObj2->SetLocalPosition({ 10.f, 170.f, 0.f });
 		auto* instructionText2 = instrObj2->AddComponent<TextComponent>(smallFont, white);
-		instructionText2->SetText(" (Arrows/DpadLeft-right: change letter, TAB/DpadDown next letter, X/DpadUp: confirm)");
+		instructionText2->SetText("Arrows/DpadL-R: change char, TAB/DpadDown next char, X/DpadUp: confirm");
 		scene.Add(std::move(instrObj2));
 
 		// Name entry display
@@ -97,7 +97,7 @@ void dae::EndScreenState::LoadScene(DiggerSceneManager* pDiggerSceneManger)
 
 	// go back To Start instuction
 	auto instrObj3 = std::make_unique<GameObject>();
-	instrObj3->SetLocalPosition({ 10.f, 170.f, 0.f });
+	instrObj3->SetLocalPosition({ 10.f, 270.f, 0.f });
 	auto* instructionText3 = instrObj3->AddComponent<TextComponent>(smallFont, white);
 	instructionText3->SetText(" Press Space To Go back To startScreen");
 	scene.Add(std::move(instrObj3));

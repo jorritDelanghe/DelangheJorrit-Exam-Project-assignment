@@ -33,9 +33,9 @@ namespace dae
 		GameObject* m_currentPlayer{ nullptr };
 		int m_currentLevelIndex{};
 		std::vector<LevelData> m_Levels{
-		LevelData{"Data/Resources/Level02Test.txt"}
-		,LevelData{"Data/Resources/Level02Test.txt"}
-		,LevelData{"Data/Resources/Level02Test.txt"}
+		LevelData{"Data/Resources/Level01.txt"}
+		,LevelData{"Data/Resources/Level02.txt"}
+		,LevelData{"Data/Resources/Level03.txt"}
 		};
 
 		void LoadNextLevel();

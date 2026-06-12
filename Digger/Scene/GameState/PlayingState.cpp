@@ -34,13 +34,7 @@ void dae::PlayingState::OnExit(DiggerSceneManager* )
 
 void dae::PlayingState::LoadNextLevel()
 {
-	if (m_currentLevelIndex >= m_Levels.size())
-	{
-		m_currentLevelIndex = 0;
-	}
-
 	LoadDiggerLevel(m_Levels[m_currentLevelIndex]);
-	++m_currentLevelIndex;
 }
 void dae::PlayingState::LoadDiggerLevel(const LevelData& levelData)
 {
@@ -71,11 +65,20 @@ void dae::PlayingState::ProccessNotificationsScenes(GameEvent event, DiggerScene
 
 		if (m_currentLevelIndex >= m_Levels.size())
 		{
-			pDiggerSceneManager->SetState(std::make_unique<EndScreenState>(true, m_currentScore));
+			SceneManager::GetInstance().SetPendingAction([this, pDiggerSceneManager]()
+				{
+					CollisionSystem::GetInstance().Clear();
+					pDiggerSceneManager->SetState(std::make_unique<EndScreenState>(true, m_currentScore));
+				});
 		}
 		else
 		{
-			SceneManager::GetInstance().SetPendingAction([this]() { LoadNextLevel(); });
+			++m_currentLevelIndex;
+			SceneManager::GetInstance().SetPendingAction([this]() 
+				{
+				CollisionSystem::GetInstance().Clear();
+				LoadNextLevel(); 
+				});
 		}
 	}
 	if (event == GameEvent::PlayerDied)
@@ -83,11 +86,17 @@ void dae::PlayingState::ProccessNotificationsScenes(GameEvent event, DiggerScene
 		SaveCurrentGameData();
 		if (m_currentLives <= 0)
 		{
-			pDiggerSceneManager->SetState(std::make_unique<EndScreenState>(false, m_currentScore));
+			SceneManager::GetInstance().SetPendingAction([this, pDiggerSceneManager]()
+				{
+					CollisionSystem::GetInstance().Clear();
+					pDiggerSceneManager->SetState(std::make_unique<EndScreenState>(false, m_currentScore));
+				});
 		}
 		else
 		{
-			SceneManager::GetInstance().SetPendingAction([this]() { ResetCurrentLevel(); });
+			SceneManager::GetInstance().SetPendingAction([this]() { 
+				CollisionSystem::GetInstance().Clear();
+				ResetCurrentLevel(); });
 		}
 	}
 }
