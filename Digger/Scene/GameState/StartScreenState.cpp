@@ -29,7 +29,7 @@ void dae::StartScreenState::LoadScene(DiggerSceneManager*)
 void dae::StartScreenState::OnExit(DiggerSceneManager* )
 {
 	SceneManager::GetInstance().SetPendingAction([this]() {
-		InputManager::GetInstance().UnbindAll();
+		InputManager::GetInstance().UnbindKeyboardCommand(SDL_SCANCODE_SPACE);
 		});
 }
 
