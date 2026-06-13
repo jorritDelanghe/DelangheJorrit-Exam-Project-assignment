@@ -17,7 +17,7 @@ dae::HighScoreBoardManager::~HighScoreBoardManager()
 
 bool dae::HighScoreBoardManager::CheckIfHighScore(int score) const
 {
-	if (m_highScores.empty()) return true;
+	if (m_highScores.size() < m_maxScoresList) return true;
 
 	for (const auto& highScore : m_highScores)
 	{
