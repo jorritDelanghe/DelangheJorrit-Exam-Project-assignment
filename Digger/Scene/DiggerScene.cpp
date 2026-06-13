@@ -80,7 +80,7 @@ namespace dae
 
 	GameObject* DiggerScene::InitPlayer(Scene& scene, const std::string& filepath)
 	{
-		constexpr int numLives{ 3 };
+		constexpr int numLives{ 4 };
 
 		auto diggerPlayer{ std::make_unique<GameObject>() };
 		m_player = diggerPlayer.get(); //used to remember score and lives
@@ -264,7 +264,7 @@ namespace dae
 		// lives display object
 		auto font = dae::ResourceManager::GetInstance().LoadFont("Resources/GameFont.ttf", 36);
 		auto livesDisplayObj = std::make_unique<GameObject>();
-		auto* livesDisplay = livesDisplayObj->AddComponent<LivesDisplayComponent>("digger2.png", 40.f, 5.f, 3);
+		auto* livesDisplay = livesDisplayObj->AddComponent<LivesDisplayComponent>("digger2.png", 40.f, 5.f, 4);
 		livesDisplayObj->SetLocalPosition({ 110.f, 0.f, 0.f });
 		scene.Add(std::move(livesDisplayObj));
 

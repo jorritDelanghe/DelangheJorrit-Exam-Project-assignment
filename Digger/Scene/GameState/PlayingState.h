@@ -28,7 +28,7 @@ namespace dae
 		DiggerSceneManager* m_pDiggerSceneManager{ nullptr };
 
 		int m_currentScore{};
-		int m_currentLives{ 3 };
+		int m_currentLives{ 4 };
 
 		GameObject* m_currentPlayer{ nullptr };
 		int m_currentLevelIndex{};
