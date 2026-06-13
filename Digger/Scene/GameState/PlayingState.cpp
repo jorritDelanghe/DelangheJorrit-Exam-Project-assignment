@@ -63,6 +63,7 @@ void dae::PlayingState::ProccessNotificationsScenes(GameEvent event, DiggerScene
 	{
 		SaveCurrentGameData();
 		++m_currentLevelIndex;
+
 		if (m_currentLevelIndex >= m_Levels.size())
 		{
 			SceneManager::GetInstance().SetPendingAction([this, pDiggerSceneManager]()
